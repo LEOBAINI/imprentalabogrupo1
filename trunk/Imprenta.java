@@ -1,4 +1,3 @@
-
 public  class Imprenta {
 	
 	
@@ -10,7 +9,7 @@ public  class Imprenta {
 		//completar en base de datos
 	}
 	public static void verEstadoDeTrabajo(OrdenDeTrabajo ot){
-		//consultar con la bd
+		//consultar con la bd..
 	}
 	public static void modificarPrecioIva(double numero){
 		
