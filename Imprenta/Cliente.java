@@ -13,10 +13,22 @@ public class Cliente {
 	private String telefonoContacto;
 	private String mailContacto;
 	private String direccionDeEntraga;
-	public Cliente() {
-		
-		
-		
+	
+	public Cliente(String razonSocial, String cuit, Iva iva, String direccion,
+			String telefono, String mail, String nombreContacto,
+			String telefonoContacto, String mailContacto,
+			String direccionDeEntraga) {
+		super();
+		this.razonSocial = razonSocial;
+		this.cuit = cuit;
+		this.iva = iva;
+		this.direccion = direccion;
+		this.telefono = telefono;
+		this.mail = mail;
+		this.nombreContacto = nombreContacto;
+		this.telefonoContacto = telefonoContacto;
+		this.mailContacto = mailContacto;
+		this.direccionDeEntraga = direccionDeEntraga;
 	}
 	public String getRazonSocial() {
 		return razonSocial;

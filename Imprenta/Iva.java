@@ -4,9 +4,9 @@ public class Iva {
 
 	private double valor;
 
-	public Iva(double valor) {
+	public Iva(double PrimaryKey) {
 		super();
-		this.valor = valor;
+		this.valor = PrimaryKey;
 	}
 
 	public double getValor() {
