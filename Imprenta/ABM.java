@@ -1,6 +1,5 @@
 package Imprenta;
 
-import Formateador.Formato;
 import Base.metodosSql;
 
 public class ABM  {
@@ -85,5 +84,97 @@ public void modificarCliente(int primaryKeyCliente,Cliente c){
 	
 }
 //*********************************************FIN ABM CLIENTES*******************************************************************
+//*********************************************ABM MARCA PAPEL********************************************************************
+public void darAltAMarcaPapel(String marca){
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`marcapapel` ( `Marca`) VALUES ('"+marca+"');");
+	
+}
+public void darBajaMarcaPapel(int PkMarcaPapel){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`marcapapel` WHERE `idMarcaPapel`='"+PkMarcaPapel+"';");
+	
+}
+public void modificarMarcaPapel(int idAmodificar,String marcaModificada){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`marcapapel` SET `Marca`='"+marcaModificada+"' WHERE `idMarcaPapel`='"+idAmodificar+"';");
+	
+	
+}
+//********************************************FIN ABM MARCA PAPEL****************************************************************
+//********************************************ABM CALIDAD************************************************************************
+public void darAltaCalidad(String descripcion){
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`calidad` ( `descripcion`) VALUES ('"+descripcion+"');");
+	
+}
+public void darBajaCalidad(int PkCalidad){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`calidad` WHERE `idCalidad`='"+PkCalidad+"';");
+	
+}
+public void modificarCalidad(int idAmodificar,String calidadModificada){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`calidad` SET `descripcion`='"+calidadModificada+"' WHERE `idCalidad`='"+idAmodificar+"';");
+	
+		
+}
+
+//**********************************************FIN ABM CALIDAD******************************************************************
+//**********************************************ABM FORMATO PAPEL****************************************************************
+public void darAltaFormatoPapel(String alto,String ancho){
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`formatopapel` ( `alto`,`ancho`) VALUES ('"+alto+"','"+ancho+"');");
+	
+}
+public void darBajaFormatoPapel(int PkformatoPapel){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`formatopapel` WHERE `idformatopapel`='"+PkformatoPapel+"';");
+	
+}
+public void modificarFormatoPapel(int idAmodificar,int alto,int ancho){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`formatopapel` SET `Ancho`="+ancho+", `Alto`="+alto+" WHERE `idFormatopapel`="+idAmodificar+";");
+			
+}
+//***********************************************FIN ABM FORMATO PAPEL***********************************************************
+//***********************************************ABM VARIANTE********************************************************************
+public void darAltaVariante(String descripcionVariante){
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`variante` ( `descripcion`) VALUES ('"+descripcionVariante+"');");
+	
+}
+public void darBajaVariante(int PkVariante){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`variante` WHERE `idVariante`='"+PkVariante+"';");
+	
+}
+public void modificarVariante(int idAmodificar,String nuevaDescripcion){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`variante` SET  `descripcion`= '"+nuevaDescripcion+"' WHERE `idVariante`="+idAmodificar+";");
+			
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
