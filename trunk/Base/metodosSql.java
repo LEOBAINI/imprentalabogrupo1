@@ -13,45 +13,7 @@ public class metodosSql extends ConexionMySql {
 	public metodosSql() {
 	}
 	
-	public String dameHorasTrabajadas(String fecha,String usuario){
-		String horas="0";
-		String dni="0";
-		dni=consultarUnaColumna("select dni from proyectoweb.userlogin where usuario='"+usuario+"'").get(0);
-		horas=consultarUnaColumna("SELECT SUM(HORASTRABAJADAS) FROM proyectoweb.registrogral "+
-        " WHERE DNIPERSONAL="+dni+" AND FECHA='"+fecha+"';").get(0);
-		
-		return horas;
-	}
 	
-	public String damePeriodo(int periodo,int anio,String atributoTabla){
-	
-		
-		String SQLperiodo = null;
-		String anioString=String.valueOf(anio);
-		switch(periodo){
-			case 1:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"01-01' and "+atributoTabla+" < ' "+anioString+"-02-01'";break;
-			case 2:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"02-01' and "+atributoTabla+" < ' "+anioString+"-03-01'";break;
-			case 3:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"03-01' and "+atributoTabla+" < ' "+anioString+"-04-01'";break;
-			case 4:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"04-01' and "+atributoTabla+"  < ' "+anioString+"-05-01'";break;
-			case 5:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"05-01' and "+atributoTabla+"  < ' "+anioString+"-06-01'";break;
-			case 6:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"06-01' and "+atributoTabla+"  < ' "+anioString+"-07-01'";break;
-			case 7:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"07-01' and "+atributoTabla+"  < ' "+anioString+"-08-01'";break;
-			case 8:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"08-01' and "+atributoTabla+"  < ' "+anioString+"-09-01'";break;
-			case 9:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"09-01' and "+atributoTabla+"  < ' "+anioString+"-10-01'";break;
-			case 10:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"10-01' and "+atributoTabla+"  < ' "+anioString+"-11-01'";break;
-			case 11:SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"11-01' and "+atributoTabla+"  < ' "+anioString+"-12-01'";break;
-			
-			
-			case 12:
-				int anioMasUno=Integer.parseInt(anioString);
-				anioMasUno=anioMasUno+1;
-				SQLperiodo=atributoTabla+" >= '"+anioString+"-"+"12-01' and "+atributoTabla+"  < ' "+anioMasUno+"-01-01'";break;
-		}
-		
-		
-		return SQLperiodo;
-		
-	}
 		
 	public String dameFechaDeHoy(){
 		 SimpleDateFormat formateador = new SimpleDateFormat("yyyy'-'MM'-'dd", new Locale("es_ES"));
@@ -60,6 +22,7 @@ public class metodosSql extends ConexionMySql {
 	
 	return fecha;
 	}
+	
 	public String dameAnio(){
 		 SimpleDateFormat formateador = new SimpleDateFormat("yyyy", new Locale("es_ES"));
 		 Date fechaDate = new Date();
@@ -186,95 +149,9 @@ public class metodosSql extends ConexionMySql {
 		return mes;
 	}
 	
-	private boolean estaUsuarioEnMesesEstado(String usuario,int anio){
-		ArrayList<String> usuarios=new ArrayList<String>(); 
-		usuarios=consultarUnaColumna("select usuario from MesesEstado where ANIO ="+anio);
-		if(usuarios.contains(usuario)){
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public int cerrarMes(String usuario,int mes,int anio) {
-		int status=0;
-		String auxdni=null;
-		String periodo=damePeriodo(mes, anio, "fecha");
-		
-		
-		int dni=0;
-		//cerrar todos los registros que estén dentro del periodo "mes" o sea del 1 de este mes al 1 del otro mes y sean de usuario
-		//y tambien actualizar el estado global del usuario en la tabla MesesEstado
-		try{
-		auxdni=consultarUnaColumna("select dni from userlogin where usuario = '"+usuario+"'").get(0).toString();//correcto
-		
-		dni=Integer.parseInt(auxdni);
-		//
-		insertarOmodif("update registrogral set estado = 'CERRADO' where dniPersonal = "+dni+" and "+periodo);//correcto
-		
-		if(estaUsuarioEnMesesEstado(usuario, anio)){
-			
-		insertarOmodif("update MesesEstado set "+dameNroTeDoyMes(mes)+" ='CERRADO' where usuario= '"+usuario+"' and ANIO= "+anio);
-		
-		}else{
-			//CORRECTO
-		insertarOmodif("insert into MesesEstado (usuario,anio)values ('"+usuario+"',"+Integer.parseInt(dameAnio())+")");
-		
-		insertarOmodif("update MesesEstado set "+dameNroTeDoyMes(mes)+" ='CERRADO' where usuario = '"+usuario+"' and ANIO= "+anio);
-			
-			
-			
-		}
-		status=1;
-		
-		}catch(Exception e){
-			System.out.println(e.getMessage());
-			System.out.println("Problema en metodos.cerrarMes(String usuario,int mes)");
-			status=-1;
-		}
-		return status;
-
-	}
 	
 	
-	public int abrirMes(String usuario,int mes,int anio) {
-		int status=0;
-		String auxdni=null;
-		String periodo=damePeriodo(mes, anio, "fecha");
-		
-		
-		int dni=0;
-		//abrir todos los registros que estén dentro del periodo "mes" o sea del 1 de este mes al 1 del otro mes y sean de usuario
-		//y tambien actualizar el estado global del usuario en la tabla MesesEstado
-		try{
-		auxdni=consultarUnaColumna("select dni from userlogin where usuario = '"+usuario+"'").get(0).toString();//correcto
-		
-		dni=Integer.parseInt(auxdni);
-		//
-		insertarOmodif("update registrogral set estado = 'ABIERTO' where dniPersonal = "+dni+" and "+periodo);//correcto
-		if(estaUsuarioEnMesesEstado(usuario, anio)){
-			
-		insertarOmodif("update MesesEstado set "+dameNroTeDoyMes(mes)+" ='ABIERTO' where usuario= '"+usuario+"' and ANIO= "+anio);
-		
-		}else{
-			//CORRECTO
-		insertarOmodif("insert into MesesEstado (usuario,anio)values ('"+usuario+"',"+anio+")");
-		
-		insertarOmodif("update MesesEstado set "+dameNroTeDoyMes(mes)+" ='ABIERTO' where usuario = '"+usuario+"' and ANIO= "+anio);
-			
-			
-			
-		}
-		status=1;
-		
-		}catch(Exception e){
-			System.out.println(e.getMessage());
-			System.out.println("Problema en metodos.abrirMes(String usuario,int mes,int anio)");
-			status=-1;
-		}
-		return status;
-
-	}
+	
 	
 
 }
