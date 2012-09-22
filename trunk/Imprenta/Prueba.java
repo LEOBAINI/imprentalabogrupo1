@@ -43,6 +43,16 @@ public class Prueba {
 		 * abms.darBajaVariante(1); abms.darBajaVariante(2);
 		 * abms.darBajaVariante(3);
 		 */
+		//abms.darAltaGramaje(1, 1, 1, 50.5,1 );
+		//abms.darBajaGramaje(3);
+		//abms.modificarGramaje(4, 4, 4, 4, 40, 40);
+		//abms.darAltaiva("prueba Alta", 26.5, "es un varchar");
+		//abms.darBajaiva(4);
+		//abms.modificariva(3, "iva modificado", 440.01, "es un varchar");
+		//abms.darAltaProveedor("razo","cuitxxx", 1, "direccion", "telefono"," mail"," nombreContacto"," telefonoContacto"," mailContacto"," direccionRetiro");
+		//abms.darBajaProveedor(3);
+		//abms.modificarProveedor(2,"razona","cuityyxxx", 2, "direccionnnnnnnnnn", "telefonosss"," mails"," nombreContactossss"," telefonoContactossss"," mailContactosss"," direccionRetirossssss");
+		
 
 	}
 

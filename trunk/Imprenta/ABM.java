@@ -4,7 +4,7 @@ import Base.metodosSql;
 
 public class ABM  {
 	
-	
+	//ALT 96 = ` comilla para consulta SQL 
 	
 	public ABM(){
 		
@@ -159,9 +159,70 @@ public void modificarVariante(int idAmodificar,String nuevaDescripcion){
 			
 }
 
+//**********************************************FIN ABM VARIANTE*****************************************************************
+//**********************************************ABM GRAMAJE**********************************************************************
+public void darAltaGramaje( int idFormatoPapel , int idCalidad, int idVariante , double peso ,int papel_idPapel){
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`gramaje` ( `idFormatoPapel`,`idCalidad`,`idVariante`,`peso`,`papel_idPapel`)" +
+			" VALUES ("+idFormatoPapel+","+idCalidad+","+idVariante+","+peso+","+papel_idPapel+");");
+	
+	
+}
 
+public void darBajaGramaje(int PkGramaje){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`gramaje` WHERE `idGramaje`='"+PkGramaje+"';");
+	
+}
+public void modificarGramaje(int idAmodificar,int idFormatoPapel , int idCalidad, int idVariante , double peso ,int papel_idPapel){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`gramaje` SET  `idFormatoPapel`= "+idFormatoPapel+"," +
+			"`idCalidad`="+idCalidad+",`idVariante`= "+idVariante+",`peso`="+peso+",`papel_idPapel`="+papel_idPapel+" WHERE `idGramaje`="+idAmodificar+";");
+			
+}
+//**********************************************FIN ABM GRAMAJE******************************************************************
+//**********************************************ABM IVA**************************************************************************
+public void darAltaiva( String descripcion,double ivaInscripto, String ivaNoInscripto){
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`iva` ( `descripcion`,`ivaInscripto`,`ivaNoInscripto`)" +
+			" VALUES ('"+descripcion+"',"+ivaInscripto+",'"+ivaNoInscripto+"');");
+	
+}
 
+public void darBajaiva(int Pkiva){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`iva` WHERE `idiva`='"+Pkiva+"';");
+	
+}
+public void modificariva(int idAmodificar,String descripcion, double  ivaInscripto ,String ivaNoInscripto){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`iva` SET  `descripcion`= '"+descripcion+"',`ivaInscripto`="+ivaInscripto+",`ivaNoInscripto`= '"+ivaNoInscripto+"' 	WHERE `idiva`="+idAmodificar+";");
+			
+}
+//**********************************************FIN ABM IVA**************************************************************************
+//**********************************************ABM PROVEEDOR************************************************************************
+public void darAltaProveedor(String razonsocial,String cuit,int idIva, String direccion,String telefono,String mail,String nombreContacto,String telefonoContacto,String mailContacto,String direccionRetiro){
+	//razonsocial,cuit,idIva,direccion,telefono,mail, nombreContacto,telefonoContacto,mailContacto,direccionRetiro
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`Proveedor` ( `razonsocial`,`cuit`,`idIva`,`direccion`,`telefono`,`mail`,` nombreContacto`,`telefonoContacto`,`mailContacto`,`direccionRetiro`)" +
+			" VALUES ('"+razonsocial+"','"+cuit+"',"+idIva+",'"+direccion+"','"+telefono+"','"+mail+"','"+ nombreContacto+"','"+telefonoContacto+"','"+mailContacto+"','"+direccionRetiro+"');");
+	
+}
 
+public void darBajaProveedor(int PkProveedor){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`Proveedor` WHERE `idProveedor`='"+PkProveedor+"';");
+	
+}
+public void modificarProveedor(int idAmodificar,String razonsocial,String cuit,int idIva, String direccion,String telefono,String mail,String nombreContacto,String telefonoContacto,String mailContacto,String direccionRetiro){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`Proveedor` SET  `razonsocial`='"+razonsocial+"',`cuit`='"+cuit+"',`idIva`="+idIva+",`direccion`='"+direccion+"',`telefono`='"+telefono+"',`mail`='"+mail+"',` nombreContacto`='"+nombreContacto+"',`telefonoContacto`='"+telefonoContacto+"',`mailContacto`='"+mailContacto+"',`direccionRetiro`='"+direccionRetiro+"' 	WHERE `idProveedor`='"+idAmodificar+"';");
+			
+}
+//**********************************************FIN ABM PROVEEDOR************************************************************************
 
 
 
