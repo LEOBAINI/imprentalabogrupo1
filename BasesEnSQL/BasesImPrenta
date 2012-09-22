@@ -212,12 +212,13 @@ DROP TABLE IF EXISTS `tarea_has_proveedor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tarea_has_proveedor` (
-  `idTarea` int(11) NOT NULL AUTO_INCREMENT,
+  `idtarea_proveedor` int(11) NOT NULL AUTO_INCREMENT,
   `Proveedor_idProveedor` int(11) DEFAULT NULL,
   `tarea_idTarea` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idTarea`),
+  `precioDeLaTarea` double DEFAULT NULL,
+  PRIMARY KEY (`idtarea_proveedor`),
   KEY `fk_Tarea_has_Proveedor_Proveedor1` (`Proveedor_idProveedor`),
-  KEY `fk_Tarea_has_Proveedor_Tarea1` (`idTarea`),
+  KEY `fk_Tarea_has_Proveedor_Tarea1` (`idtarea_proveedor`),
   KEY `tarea` (`tarea_idTarea`),
   KEY `proveedor` (`Proveedor_idProveedor`),
   CONSTRAINT `proveedor` FOREIGN KEY (`Proveedor_idProveedor`) REFERENCES `proveedor` (`idProveedor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -235,30 +236,27 @@ LOCK TABLES `tarea_has_proveedor` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `registrocompra`
+-- Table structure for table `calidad`
 --
 
-DROP TABLE IF EXISTS `registrocompra`;
+DROP TABLE IF EXISTS `calidad`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `registrocompra` (
-  `idRegistroCompra` int(11) NOT NULL,
-  `idPapel` int(11) DEFAULT NULL,
-  `cantidadPedida` int(11) DEFAULT NULL,
-  `partida_idpartida` int(11) NOT NULL,
-  PRIMARY KEY (`idRegistroCompra`),
-  KEY `fk_RegistroCompra_partida1` (`partida_idpartida`),
-  CONSTRAINT `fk_RegistroCompra_partida1` FOREIGN KEY (`partida_idpartida`) REFERENCES `partida` (`idpartida`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `calidad` (
+  `idCalidad` int(11) NOT NULL AUTO_INCREMENT,
+  `Descripcion` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idCalidad`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `registrocompra`
+-- Dumping data for table `calidad`
 --
 
-LOCK TABLES `registrocompra` WRITE;
-/*!40000 ALTER TABLE `registrocompra` DISABLE KEYS */;
-/*!40000 ALTER TABLE `registrocompra` ENABLE KEYS */;
+LOCK TABLES `calidad` WRITE;
+/*!40000 ALTER TABLE `calidad` DISABLE KEYS */;
+INSERT INTO `calidad` VALUES (2,'ta gueno el pelpa'),(3,'mediana calidad');
+/*!40000 ALTER TABLE `calidad` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -394,30 +392,6 @@ LOCK TABLES `insumosutilizados` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `proveedorinsumos`
---
-
-DROP TABLE IF EXISTS `proveedorinsumos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `proveedorinsumos` (
-  `idProveedorInsumos` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`idProveedorInsumos`),
-  KEY `idProveedor` (`idProveedorInsumos`),
-  CONSTRAINT `idProveedor` FOREIGN KEY (`idProveedorInsumos`) REFERENCES `proveedor` (`idProveedor`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `proveedorinsumos`
---
-
-LOCK TABLES `proveedorinsumos` WRITE;
-/*!40000 ALTER TABLE `proveedorinsumos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `proveedorinsumos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `formatopapel`
 --
 
@@ -443,27 +417,30 @@ INSERT INTO `formatopapel` VALUES (2,3000,2000),(3,3000,2000);
 UNLOCK TABLES;
 
 --
--- Table structure for table `calidad`
+-- Table structure for table `registrocompra`
 --
 
-DROP TABLE IF EXISTS `calidad`;
+DROP TABLE IF EXISTS `registrocompra`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `calidad` (
-  `idCalidad` int(11) NOT NULL AUTO_INCREMENT,
-  `Descripcion` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idCalidad`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+CREATE TABLE `registrocompra` (
+  `idRegistroCompra` int(11) NOT NULL,
+  `idPapel` int(11) DEFAULT NULL,
+  `cantidadPedida` int(11) DEFAULT NULL,
+  `partida_idpartida` int(11) NOT NULL,
+  PRIMARY KEY (`idRegistroCompra`),
+  KEY `fk_RegistroCompra_partida1` (`partida_idpartida`),
+  CONSTRAINT `fk_RegistroCompra_partida1` FOREIGN KEY (`partida_idpartida`) REFERENCES `partida` (`idpartida`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `calidad`
+-- Dumping data for table `registrocompra`
 --
 
-LOCK TABLES `calidad` WRITE;
-/*!40000 ALTER TABLE `calidad` DISABLE KEYS */;
-INSERT INTO `calidad` VALUES (2,'ta gueno el pelpa'),(3,'mediana calidad');
-/*!40000 ALTER TABLE `calidad` ENABLE KEYS */;
+LOCK TABLES `registrocompra` WRITE;
+/*!40000 ALTER TABLE `registrocompra` DISABLE KEYS */;
+/*!40000 ALTER TABLE `registrocompra` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -507,14 +484,16 @@ DROP TABLE IF EXISTS `proveedorinsumos_has_papel`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `proveedorinsumos_has_papel` (
-  `proveedorinsumos_idProveedorInsumos` int(11) NOT NULL,
+  `idproveedorConPapel` int(11) NOT NULL AUTO_INCREMENT,
   `papel_idPapel` int(11) NOT NULL,
   `precio` decimal(11,0) DEFAULT NULL,
-  PRIMARY KEY (`proveedorinsumos_idProveedorInsumos`,`papel_idPapel`),
+  `idProveedor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idproveedorConPapel`,`papel_idPapel`),
   KEY `fk_proveedorinsumos_has_papel_papel1` (`papel_idPapel`),
-  KEY `fk_proveedorinsumos_has_papel_proveedorinsumos1` (`proveedorinsumos_idProveedorInsumos`),
-  CONSTRAINT `fk_proveedorinsumos_has_papel_papel1` FOREIGN KEY (`papel_idPapel`) REFERENCES `papel` (`idPapel`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_proveedorinsumos_has_papel_proveedorinsumos1` FOREIGN KEY (`proveedorinsumos_idProveedorInsumos`) REFERENCES `proveedorinsumos` (`idProveedorInsumos`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_proveedorinsumos_has_papel_proveedorinsumos1` (`idproveedorConPapel`),
+  KEY `fk_provvedor_papel` (`idProveedor`),
+  CONSTRAINT `fk_provvedor_papel` FOREIGN KEY (`idProveedor`) REFERENCES `proveedor` (`idProveedor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_proveedorinsumos_has_papel_papel1` FOREIGN KEY (`papel_idPapel`) REFERENCES `papel` (`idPapel`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -525,34 +504,6 @@ CREATE TABLE `proveedorinsumos_has_papel` (
 LOCK TABLES `proveedorinsumos_has_papel` WRITE;
 /*!40000 ALTER TABLE `proveedorinsumos_has_papel` DISABLE KEYS */;
 /*!40000 ALTER TABLE `proveedorinsumos_has_papel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `proveedorservicios`
---
-
-DROP TABLE IF EXISTS `proveedorservicios`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `proveedorservicios` (
-  `idProveedor` int(11) NOT NULL,
-  `idTarea` int(11) DEFAULT NULL,
-  `fechaDeFinalizacion` date DEFAULT NULL,
-  PRIMARY KEY (`idProveedor`),
-  KEY `idProveedorServ` (`idProveedor`),
-  KEY `idTarea2` (`idTarea`),
-  CONSTRAINT `idProveedorServ` FOREIGN KEY (`idProveedor`) REFERENCES `proveedor` (`idProveedor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `idTarea2` FOREIGN KEY (`idTarea`) REFERENCES `tarea` (`idTarea`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `proveedorservicios`
---
-
-LOCK TABLES `proveedorservicios` WRITE;
-/*!40000 ALTER TABLE `proveedorservicios` DISABLE KEYS */;
-/*!40000 ALTER TABLE `proveedorservicios` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -663,4 +614,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-22 17:27:06
+-- Dump completed on 2012-09-22 18:08:41
