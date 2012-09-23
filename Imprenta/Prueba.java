@@ -5,8 +5,9 @@ public class Prueba {
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		@SuppressWarnings("unused")
+		
 		ABM abms = new ABM();
 		// Tarea t=new Tarea("Plegadito", "1100");
 		// abms.darAltaTarea(t);
@@ -52,8 +53,16 @@ public class Prueba {
 		//abms.darAltaProveedor("razo","cuitxxx", 1, "direccion", "telefono"," mail"," nombreContacto"," telefonoContacto"," mailContacto"," direccionRetiro");
 		//abms.darBajaProveedor(3);
 		//abms.modificarProveedor(2,"razona","cuityyxxx", 2, "direccionnnnnnnnnn", "telefonosss"," mails"," nombreContactossss"," telefonoContactossss"," mailContactosss"," direccionRetirossssss");
+		// abms.darAltaTareaProveedor(2, 1, 23.40);
+		//abms.darBajaTareaProveedor(1,1);
+		//abms.modificarTareaProveedor(1, 2, 200,1 ,3);
+		//abms.darAltaOT(4, "2012-06-03", "Revistas cómicas", "ACTIVO");
+		//abms.modificarOT(1, 4, "2013-09-06", "comics", "FINALIZADO");
+		//abms.darAltaTareaDeOT(2, 1, 2, "no", "Activa");
+		//abms.modificarTareaDeOT(2, 1, 1, "si", "Terminado");
+		//abms.darBajaTareaDeOT(2, 1);
 		
-
+		
 	}
 
 }
