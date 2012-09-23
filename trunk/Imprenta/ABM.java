@@ -223,7 +223,106 @@ public void modificarProveedor(int idAmodificar,String razonsocial,String cuit,i
 			
 }
 //**********************************************FIN ABM PROVEEDOR************************************************************************
+//**********************************************ABM TAREA DEL PROVEEDOR******************************************************************
 
+public void darAltaTareaProveedor(int idProveedor,int idTarea,double precio){
+	
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`tarea_has_proveedor` ( `idproveedor`,`idtarea`,`precioDeLaTarea`)" +
+			" VALUES ("+idProveedor+","+idTarea+","+precio+");");
+	
+}
+
+public void darBajaTareaProveedor(int idProveedor,int idTarea){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`tarea_has_proveedor` WHERE `idProveedor`='"+idProveedor+"'" +
+			"AND `idTarea`='"+idTarea+"';");
+	
+}
+public void modificarTareaProveedor(int idProveedor,int idTarea,double precioMod,int idProveedorMod,int idTareaMod){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`tarea_has_proveedor` SET  `idProveedor`="+idProveedorMod+",`idTarea`="+idTareaMod+",`precioDeLaTarea`="+precioMod+" " +
+			"where `idProveedor`= '"+idProveedor+"' AND `idTarea`= '"+idTarea+"';");
+	
+			
+}
+
+//**********************************************FIN ABM TAREA DEL PROVEEDOR**************************************************************
+//**********************************************ABM INSUMOS DEL PROVEEDOR******************************************************************
+
+public void darAltaInsumoProveedor(int idProveedor,int idInsumo ,double precio){
+	
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`proveedorinsumos_has_papel` ( `idproveedor`,`papel_idPapel`,`precio`)" +
+			" VALUES ("+idProveedor+","+idInsumo+","+precio+");");
+	
+}
+
+public void darBajaInsumoProveedor(int idProveedor,int idInsumo){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`proveedorinsumos_has_papel` WHERE `idProveedor`='"+idProveedor+"'" +
+			"AND `papel_idPapel`='"+idInsumo+"';");
+	
+}
+public void modificarInsumoProveedor(int idProveedor,int idInsumo,double precioMod){
+	darBajaInsumoProveedor(idProveedor, idInsumo);
+	darAltaInsumoProveedor(idProveedor, idInsumo, precioMod);
+	
+			
+}
+
+//**********************************************FIN ABM INSUMOS DEL PROVEEDOR**************************************************************
+//********************************************** ABM ORDEN DE TRABAJO**************************************************************
+
+public void darAltaOT(int cliente, String fechaEntrPautada,String descripcion,String estado){
+	
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`ordentrabajo` ( `Cliente`,`FechaEntrPautada`,`Descripcion`,`Estado`)" +
+			" VALUES ("+cliente+",'"+fechaEntrPautada+"','"+descripcion+"','"+estado+"');");
+	
+}
+//
+public void darBajaOT(int idProveedor,int idTarea){
+	
+}
+public void modificarOT(int nroOrden, int cliente, String fechaEntrPautada,String descripcion,String estado){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("UPDATE `imprenta`.`ordentrabajo` SET  `Cliente`="+cliente+",`FechaEntrPautada`='"+fechaEntrPautada+"',`Descripcion`='"+descripcion+"',`Estado`='"+estado+"' "+
+			"where `NroOrden`= '"+nroOrden+"';");
+	
+			
+}
+//**********************************************FIN ABM ORDEN TRABAJO**************************************************************
+//********************************************** ABM TAREAS DE UNA ORDEN DE TRABAJO**************************************************************
+
+public void darAltaTareaDeOT(int nroOrdTrabajo,int nroTarea, int idProveedor,String EsTercerizada,String Estado){
+	
+	
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`tareaordtrabajo` ( `iDOrdTrabajo`,`iDTarea`,`idProveedor`,`EsTercerizada`,`Estado`)" +
+			" VALUES ("+nroOrdTrabajo+","+nroTarea+","+idProveedor+",'"+EsTercerizada+"','"+Estado+"');");
+	
+}
+//
+public void darBajaTareaDeOT(int nroOrdTrabajo,int nroTarea){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`tareaordtrabajo` WHERE `idOrdTrabajo`='"+nroOrdTrabajo+"'" +
+			"AND `idTarea`='"+nroTarea+"';");
+	
+}
+public void modificarTareaDeOT(int nroOrdTrabajo,int nroTarea, int idProveedor,String EsTercerizada,String Estado){
+	darBajaTareaDeOT(nroOrdTrabajo, nroTarea);
+	darAltaTareaDeOT(nroOrdTrabajo, nroTarea, idProveedor, EsTercerizada, Estado);
+	
+	
+	
+			
+}
+//**********************************************FIN ABM TAREAS DE UNA  ORDEN TRABAJO**************************************************************
 
 
 
