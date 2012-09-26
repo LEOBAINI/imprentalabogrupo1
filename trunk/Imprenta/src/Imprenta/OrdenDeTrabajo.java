@@ -15,7 +15,7 @@ public class OrdenDeTrabajo {
 	private String nombreTrabajo;
 	private String detalleTrabajo;
 	private String medidaFinal;
-	private boolean apaisado;
+	private String apaisado;
 	private String cantidadAentregar;
 	private TipoProducto tipoProducto;
 	private String detalleProducto;
@@ -141,11 +141,11 @@ public class OrdenDeTrabajo {
 		this.medidaFinal = medidaFinal;
 	}
 
-	public boolean isApaisado() {
+	public String getEsApaisado() {
 		return apaisado;
 	}
 
-	public void setApaisado(boolean apaisado) {
+	public void setApaisado(String apaisado) {
 		this.apaisado = apaisado;
 	}
 

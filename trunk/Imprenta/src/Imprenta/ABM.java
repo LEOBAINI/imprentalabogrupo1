@@ -12,7 +12,7 @@ public class ABM  {
 		
 	}
 //*************************************TAREAS***************************************************************************
-	public void darAltaTarea(Tarea c){
+	/*public void darAltaTarea(Tarea c){
 		metodosSql metodos=new metodosSql();
 		
 		String atr1=c.getNombre();
@@ -32,7 +32,7 @@ public class ABM  {
 		
 		
 	}
-
+*/
 //***********************************FIN ABM TAREAS*****************************************************************************
 
 //***********************************ABM CLIENTES*******************************************************************************
@@ -284,16 +284,21 @@ public void modificarInsumoProveedor(int idProveedor,int idInsumo,double precioM
 
 
 public void darAltaOT(OrdenDeTrabajo OT){
-/*	int cliente=Integer.parseInt(OT.getCliente());
-	String fechaEntrPautada=OT.getFechaEntrega();
-	String descripcion=OT.getDescripcion();
-	String estado=OT.getEstado();
-	metodosSql metodos=new metodosSql();
+
+	CargarMaterialesAOT(OT.getMateriales(), OT.getId());
+	CargarTareasAOT(OT.getTareas(), OT.getId());
+	CargarTipoProducto(OT);
+	CargarOrdenTrabajo(OT);
 	
-	metodos.insertarOmodif("INSERT INTO `imprenta`.`ordentrabajo` ( `Cliente`,`FechaEntrPautada`,`Descripcion`,`Estado`)" +
-			" VALUES ("+cliente+",'"+fechaEntrPautada+"','"+descripcion+"','"+estado+"');");*/
+	
+	
 	
 }
+
+
+
+
+
 //
 public void darBajaOT(int idProveedor,int idTarea){
 	
@@ -360,40 +365,73 @@ public void modificarOC(int idSolicitud,int idOrdTrabajo,String Observacion,Stri
 }
 //**********************************************FIN ABM SOLICITUD DE COMPRA**************************************************************
 
-public void CargarTareasAOT(ArrayList<Tarea> arrayList) {
-	// TODO Auto-generated method stub
+public void CargarTareasAOT(ArrayList<Tarea> tareas,int ordenTrabajo) {
+	
+	int idTarea=0;
+	int idProveedor=0;
+	String Estado=null;
+	metodosSql metodos=new metodosSql();
+	
+	for(int i=0;i<tareas.size();i++){
+		idTarea=tareas.get(i).getIdTarea();
+		idProveedor=tareas.get(i).getIdProveedor();
+		Estado=tareas.get(i).getEstado();
+		
+		metodos.insertarOmodif("insert into `imprenta`.`tareaordtrabajo`(`idOrdTrabajo`,`idTarea`,`idProveedor`,`Estado`) " +
+				"values("+ordenTrabajo+","+idTarea+","+idProveedor+",'"+Estado+"');");	
+		
+	}
 	
 }
-public void CargarMaterialesAOT(ArrayList<Material> materiales, int id) {
-	/*idMateriales
-	OrdenTrabajo
-	idPapel
-	poseXpliego
-	plegosNetos
-	pliegosDemasia
-	pliegosXhoja
-	cantHojas*/
+public void CargarMaterialesAOT(ArrayList<Material> materiales, int ordenTrabajo) {
+	
 	metodosSql metodos=new metodosSql();
 	
 	for(int i=0;i<materiales.size();i++){
 		metodos.insertarOmodif("insert into `imprenta`.`material` (`OrdenTrabajo`,`idPapel`,`poseXpliego`,`plegosNetos`,`pliegosDemasia`,`pliegosXhoja`,`cantHojas`) " +
-				" values("+id+","+materiales.get(i).getIdPapel()+","+materiales.get(i).getPosesXpliego()+","+materiales.get(i).getPliegosnetos()+","+materiales.get(i).getPliegosEnDemasia()+"," +
+				" values("+ordenTrabajo+","+materiales.get(i).getIdPapel()+","+materiales.get(i).getPosesXpliego()+","+materiales.get(i).getPliegosnetos()+","+materiales.get(i).getPliegosEnDemasia()+"," +
 						" "+materiales.get(i).getPliegosXhoja()+","+materiales.get(i).getCantHojas()+");");
 		
 		
 	}
 	
-	// TODO Auto-generated method stub
+	
 	
 }
-public void CargarTipoProducto(int id) {
-	// TODO Auto-generated method stub
+public void CargarTipoProducto(OrdenDeTrabajo OT) {
+	metodosSql metodos=new metodosSql();
+	/*Tabla=imprenta.elementosproducto*/
+	/*Atributos*/
+	int idTipoProducto=OT.getTipoProducto().getIdProducto();	
+	String descripcion=OT.getTipoProducto().getDescripcion();	
+	int cantidadXunidad=OT.getTipoProducto().getCantXunidad();	
+	int idOrdenTrabajo=OT.getId();
+	
+	metodos.insertarOmodif("insert into `imprenta`.`elementosproducto`(`idTipoProducto`,`descripcion`,`cantidadXunidad`,`idOrdenTrabajo`)  " +
+			"values ("+idTipoProducto+", "+descripcion+", '"+cantidadXunidad+"', "+idOrdenTrabajo+");");
+	
+	
+	
+	
 	
 }
-public void CargarClienteAOT(Cliente cliente) {
-	// TODO Auto-generated method stub
+public void CargarOrdenTrabajo(OrdenDeTrabajo OT){
+	/*Tablas que involucra: imprenta.ordentrabajo */
+	metodosSql metodos=new metodosSql();
+	
+	int NroOrden=OT.getId();
+	int Cliente=OT.getCliente().getId();
+	String FechaEntrPautada=OT.getFechaEntrega();
+	String Descripcion=OT.getDescripcion();
+	String Estado=OT.getEstado();
+	String EsApaisado=OT.getEsApaisado();
+	
+	metodos.insertarOmodif("insert into `imprenta`.`ordentrabajo`(`NroOrden`,`Cliente`,`FechaEntrPautada`,`Descripcion`,`Estado`,`EsApaisado`) values(" +
+			" "+NroOrden+","+Cliente+", '"+FechaEntrPautada+"', '"+Descripcion+"','"+Estado+"','"+EsApaisado+"');");
+	
 	
 }
+
 
 
 
