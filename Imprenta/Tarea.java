@@ -1,39 +1,44 @@
 package Imprenta;
 
 public class Tarea {
-	private String clase="Tarea";
-	private String nombre;
-	private String tiempoEstimado;
 	
-	public Tarea(String nombre, String tiempoEstimado) {
+	private int idOrdTrabajo;
+	private int idTarea;
+	private int idProveedor;
+	private String Estado;
+	public Tarea(int idOrdTrabajo, int idTarea, int idProveedor, String estado) {
 		super();
-		this.nombre = nombre;
-		this.tiempoEstimado = tiempoEstimado;
+		this.idOrdTrabajo = idOrdTrabajo;
+		this.idTarea = idTarea;
+		this.idProveedor = idProveedor;
+		Estado = estado;
 	}
-
-	public String getClase() {
-		return clase;
+	public int getIdOrdTrabajo() {
+		return idOrdTrabajo;
 	}
-
-	public void setClase(String clase) {
-		this.clase = clase;
+	public void setIdOrdTrabajo(int idOrdTrabajo) {
+		this.idOrdTrabajo = idOrdTrabajo;
 	}
-
-	public String getNombre() {
-		return nombre;
+	public int getIdTarea() {
+		return idTarea;
 	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setIdTarea(int idTarea) {
+		this.idTarea = idTarea;
 	}
-
-	public String getTiempoEstimado() {
-		return tiempoEstimado;
+	public int getIdProveedor() {
+		return idProveedor;
 	}
-
-	public void setTiempoEstimado(String tiempoEstimado) {
-		this.tiempoEstimado = tiempoEstimado;
+	public void setIdProveedor(int idProveedor) {
+		this.idProveedor = idProveedor;
 	}
+	public String getEstado() {
+		return Estado;
+	}
+	public void setEstado(String estado) {
+		Estado = estado;
+	}
+	
+	
 	
 	
 	

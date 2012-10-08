@@ -19,8 +19,28 @@ public class metodosSql extends ConexionMySql {
 		 SimpleDateFormat formateador = new SimpleDateFormat("yyyy'-'MM'-'dd", new Locale("es_ES"));
 		 Date fechaDate = new Date();
           String fecha=formateador.format(fechaDate);
+          
 	
 	return fecha;
+	}
+	public int dameTareaTedoyElId(String tarea){
+		int idTarea=0;
+		ArrayList<String> consulta=consultarUnaColumna("select idtarea from imprenta.tarea where Descripcion= '"+tarea+"';");
+		if(consulta.size()>0){
+			idTarea=Integer.parseInt(consulta.get(0));
+			
+		}
+		return idTarea;
+		
+	}
+	public int dameProveedorTeDoyId(String proveedor){
+		int idProveedor=0;
+		ArrayList<String> consulta=consultarUnaColumna("select idproveedor from imprenta.proveedor where razonsocial= '"+proveedor+"';");
+		if(consulta.size()>0){
+		idProveedor=Integer.parseInt(consulta.get(0));
+		}
+		return idProveedor;
+		
 	}
 	
 	public String dameAnio(){
@@ -32,6 +52,8 @@ public class metodosSql extends ConexionMySql {
 	}
 
 	public int insertarOmodif(String sentenciaSql) {
+		System.out.println(sentenciaSql);
+		System.out.println("Luego borrar este syso, solo es para mostrar los datos enviados a la base, (metodosSql linea 34 y 35)");
 		int status=0;
 		ConexionMySql con = new ConexionMySql();
 
@@ -101,7 +123,7 @@ public class metodosSql extends ConexionMySql {
 		
 		
 		ConexionMySql con = new ConexionMySql();
-		
+		System.out.println(SentenciaSql);
 		
 		try {
 			con.conectar();
@@ -120,6 +142,7 @@ public class metodosSql extends ConexionMySql {
 
 		} catch (Exception e) {
 			System.out.println("Error en metodosSql.consultarUnaColumna"+e.getMessage());
+			con.desconectar();
 			
 		}
 

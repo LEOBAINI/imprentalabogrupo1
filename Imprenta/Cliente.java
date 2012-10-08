@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 
 public class Cliente {
+	private int Id;
 	private String razonSocial;
 	private String cuit;
 	private Iva iva;
@@ -29,6 +30,9 @@ public class Cliente {
 		this.telefonoContacto = telefonoContacto;
 		this.mailContacto = mailContacto;
 		this.direccionDeEntraga = direccionDeEntraga;
+	}
+	public Cliente() {
+		// TODO Auto-generated constructor stub
 	}
 	public String getRazonSocial() {
 		return razonSocial;
@@ -105,6 +109,12 @@ public class Cliente {
 		atributos.add("direccionDeEntraga");
 		
 		return atributos;
+	}
+	public int getId() {
+		return Id;
+	}
+	public void setId(int id) {
+		Id = id;
 	}
 	
 	
