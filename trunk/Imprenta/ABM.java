@@ -1,5 +1,7 @@
 package Imprenta;
 
+import java.util.ArrayList;
+
 import Base.metodosSql;
 
 public class ABM  {
@@ -10,7 +12,7 @@ public class ABM  {
 		
 	}
 //*************************************TAREAS***************************************************************************
-	public void darAltaTarea(Tarea c){
+	/*public void darAltaTarea(Tarea c){
 		metodosSql metodos=new metodosSql();
 		
 		String atr1=c.getNombre();
@@ -30,7 +32,7 @@ public class ABM  {
 		
 		
 	}
-
+*/
 //***********************************FIN ABM TAREAS*****************************************************************************
 
 //***********************************ABM CLIENTES*******************************************************************************
@@ -276,14 +278,132 @@ public void modificarInsumoProveedor(int idProveedor,int idInsumo,double precioM
 //**********************************************FIN ABM INSUMOS DEL PROVEEDOR**************************************************************
 //********************************************** ABM ORDEN DE TRABAJO**************************************************************
 
-public void darAltaOT(int cliente, String fechaEntrPautada,String descripcion,String estado){
+
+
+
+
+
+public void darAltaOT(OrdenDeTrabajo OT){
+	int mat = 0,tar = 0,tip = 0,ot = 0;
+try{
 	
-	metodosSql metodos=new metodosSql();
+	ot=CargarOrdenTrabajo(OT);
 	
-	metodos.insertarOmodif("INSERT INTO `imprenta`.`ordentrabajo` ( `Cliente`,`FechaEntrPautada`,`Descripcion`,`Estado`)" +
-			" VALUES ("+cliente+",'"+fechaEntrPautada+"','"+descripcion+"','"+estado+"');");
+	mat=CargarMaterialesAOT(OT);
+	
+	tar=CargarTareasAOT(OT);
+	
+//	tip=CargarTipoProducto(OT);
+	
+	
+	
+}catch(Exception e){
+	System.out.println(e.getMessage());
+	System.out.println("Falla en el método darAltaOT linea 294 ABM");
+	if(mat!=1){
+		System.out.println("Falla al cargar Materiales linea 289 ABM");
+	}
+	if(tar!=1){
+		System.out.println("Falla al cargar Tareas linea 290 ABM");
+	}
+	/*if(tip!=1){
+		System.out.println("Falla al cargar Tipo producto linea 291 ABM");
+		
+	}*/
+	if(ot!=1){
+		System.out.println("Fallan al cargar ordenTrabajo linea 292 ABM");
+		
+		
+	}
+}
+	
+	
+	
 	
 }
+public int CargarMaterialesAOT(OrdenDeTrabajo OT) {
+	ArrayList<Material> materiales=OT.getMateriales();
+	int ordenTrabajo=OT.getId();
+	int status=0;
+	metodosSql metodos=new metodosSql();
+	
+	for(int i=0;i<materiales.size();i++){
+		status=status+metodos.insertarOmodif("insert into `imprenta`.`material` (`OrdenTrabajo`,`idPapel`,`poseXpliego`,`plegosNetos`,`pliegosDemasia`,`pliegosXhoja`,`cantHojas`) " +
+				" values("+ordenTrabajo+","+materiales.get(i).getIdPapel()+","+materiales.get(i).getPosesXpliego()+","+materiales.get(i).getPliegosnetos()+","+materiales.get(i).getPliegosEnDemasia()+"," +
+						" "+materiales.get(i).getPliegosXhoja()+","+materiales.get(i).getCantHojas()+");");
+		
+		
+	}if(status==materiales.size()){
+		return 1;
+	}else{
+		return -1;
+	}
+	
+	
+	
+}
+/*public int CargarTipoProducto(OrdenDeTrabajo OT) {
+	metodosSql metodos=new metodosSql();
+	int status=0;
+	//Tabla=imprenta.elementosproducto
+	///Atributos
+	int idTipoProducto=OT.getTipoProducto().getIdProducto();	
+	String descripcion=OT.getTipoProducto().getDescripcion();	
+	int cantidadXunidad=OT.getTipoProducto().getCantXunidad();	
+	int idOrdenTrabajo=OT.getId();
+	
+	status=metodos.insertarOmodif("insert into `imprenta`.`elementosproducto`(`idTipoProducto`,`descripcion`,`cantidadXunidad`,`idOrdenTrabajo`)  " +
+			"values ("+idTipoProducto+", '"+descripcion+"', "+cantidadXunidad+", "+idOrdenTrabajo+");");
+	
+	return status;
+	
+	
+	
+	
+}*/
+public int  CargarOrdenTrabajo(OrdenDeTrabajo OT){
+	/*Tablas que involucra: imprenta.ordentrabajo */
+	int status=0;
+	metodosSql metodos=new metodosSql();
+	
+	int NroOrden=OT.getId();
+	int Cliente=OT.getCliente().getId();
+	String FechaEntrPautada=OT.getFechaEntrega();
+	String Descripcion=OT.getDescripcion();
+	String Estado=OT.getEstado();
+	String EsApaisado=OT.getEsApaisado();
+	int tipoProducto=OT.getTipoProducto().getIdProducto();
+	
+	status=metodos.insertarOmodif("insert into `imprenta`.`ordentrabajo`(`NroOrden`,`Cliente`,`FechaEntrPautada`,`Descripcion`,`Estado`,`EsApaisado`,`iDTipoProducto`) values(" +
+			" "+NroOrden+","+Cliente+", '"+FechaEntrPautada+"', '"+Descripcion+"','"+Estado+"','"+EsApaisado+"',"+tipoProducto+");");
+	
+	return status;
+}
+public int CargarTareasAOT(OrdenDeTrabajo OT) {
+	ArrayList<Tarea> tareas=OT.getTareas();
+	int ordenTrabajo=OT.getId();
+	int status=0;
+	int idTarea=0;
+	int idProveedor=0;
+	String Estado=null;
+	metodosSql metodos=new metodosSql();
+	
+	for(int i=0;i<tareas.size();i++){
+		idTarea=tareas.get(i).getIdTarea();
+		idProveedor=tareas.get(i).getIdProveedor();
+		Estado=tareas.get(i).getEstado();
+		
+		status=metodos.insertarOmodif("insert into `imprenta`.`tareaordtrabajo`(`idOrdTrabajo`,`idTarea`,`idProveedor`,`Estado`) " +
+				"values("+ordenTrabajo+","+idTarea+","+idProveedor+",'"+Estado+"');");	
+		
+	}
+	return status;
+}
+
+
+
+
+
 //
 public void darBajaOT(int idProveedor,int idTarea){
 	
@@ -323,6 +443,34 @@ public void modificarTareaDeOT(int nroOrdTrabajo,int nroTarea, int idProveedor,S
 			
 }
 //**********************************************FIN ABM TAREAS DE UNA  ORDEN TRABAJO**************************************************************
+//********************************************** ABM SOLICITUD DE COMPRA**************************************************************
+
+public void darAltaOC(int idOrdTrabajo,String Observacion,String FechaPedidoAAAAMMDD,String FechaEntregaAAAAMMDD){
+	
+	
+	metodosSql metodos=new metodosSql();
+	
+	metodos.insertarOmodif("INSERT INTO `imprenta`.`solicitudcompra` ( `idOrdTrabajo`,`Observacion`,`FechaPedido`,`FechaEntrega`)" +
+			" VALUES ("+idOrdTrabajo+",'"+Observacion+"','"+FechaPedidoAAAAMMDD+"','"+FechaEntregaAAAAMMDD+"');");
+	
+}
+//
+public void darBajaOC(int idsolicitudCompra){
+	metodosSql metodos=new metodosSql();
+	metodos.insertarOmodif("DELETE FROM `imprenta`.`solicitudcompra` WHERE `idsolicitudCompra`='"+idsolicitudCompra+"';");
+	
+}
+public void modificarOC(int idSolicitud,int idOrdTrabajo,String Observacion,String FechaPedidoAAAAMMDD,String FechaEntregaAAAAMMDD){
+	darBajaOC(idSolicitud);
+	darAltaOC(idOrdTrabajo, Observacion, FechaPedidoAAAAMMDD, FechaEntregaAAAAMMDD);
+	
+	
+	
+			
+}
+//**********************************************FIN ABM SOLICITUD DE COMPRA**************************************************************
+
+
 
 
 
