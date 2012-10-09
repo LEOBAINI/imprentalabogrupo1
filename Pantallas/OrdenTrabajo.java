@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
@@ -17,13 +18,23 @@ import javax.swing.BorderFactory;
 import java.awt.SystemColor;
 import javax.swing.JButton;
 
+import com.jpcomponents.JPCalendar;
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
+
+import Base.metodosSql;
+
+import java.awt.Choice;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 public class OrdenTrabajo extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField jTextField = null;
+	public static JTextField FechaConfeccion = null;
 	private JLabel jLabel = null;
-	private JTextField jTextField1 = null;
-	private JTextField jTextField2 = null;
+	private JTextField OrdenNro = null;
 	private JLabel jLabel1 = null;
 	private JLabel jLabel2 = null;
 	private JLabel jLabel3 = null;
@@ -59,16 +70,21 @@ public class OrdenTrabajo extends JPanel {
 	private JList jList2 = null;
 	private JButton jButton = null;
 	private JButton jButton1 = null;
-	
-
-	
-
+	private Choice choiceCliente = null;
+	private JButton jButton2 = null;
 	/**
 	 * This is the default constructor
 	 */
 	public OrdenTrabajo() {
 		super();
 		initialize();
+		inicializarCampos();
+	}
+	private void inicializarCampos(){
+		ArrayList<String >datos=null;
+		metodosSql metodos=new metodosSql();
+		datos=metodos.consultarUnaColumna("Select nombreContacto from imprenta.cliente");//llenar select cliente
+		for(int i=0;i<datos.size();i++)choiceCliente.add(datos.get(i));
 	}
 
 	/**
@@ -120,7 +136,7 @@ public class OrdenTrabajo extends JPanel {
 		jLabel6.setBounds(new Rectangle(50, 160, 141, 16));
 		jLabel6.setText("Medida Final.");
 		jLabel5 = new JLabel();
-		jLabel5.setBounds(new Rectangle(429, 42, 76, 16));
+		jLabel5.setBounds(new Rectangle(751, 44, 76, 16));
 		jLabel5.setText("Descripción");
 		jLabel4 = new JLabel();
 		jLabel4.setBounds(new Rectangle(50, 135, 144, 16));
@@ -141,10 +157,9 @@ public class OrdenTrabajo extends JPanel {
 		this.setLayout(null);
 		this.setBackground(SystemColor.activeCaption);
 		this.setBorder(BorderFactory.createCompoundBorder(null, BorderFactory.createCompoundBorder(null, null)));
-		this.add(getJTextField(), null);
+		this.add(getFechaConfeccion(), null);
 		this.add(jLabel, null);
-		this.add(getJTextField1(), null);
-		this.add(getJTextField2(), null);
+		this.add(getOrdenNro(), null);
 		this.add(jLabel1, null);
 		this.add(jLabel2, null);
 		this.add(jLabel3, null);
@@ -179,46 +194,35 @@ public class OrdenTrabajo extends JPanel {
 		this.add(getJList2(), null);
 		this.add(getJButton(), null);
 		this.add(getJButton1(), null);
+		this.add(getChoiceCliente(), null);
+		this.add(getJButton2(), null);
 		
 	}
 
 	/**
-	 * This method initializes jTextField	
+	 * This method initializes FechaConfeccion	
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getJTextField() {
-		if (jTextField == null) {
-			jTextField = new JTextField();
-			jTextField.setBounds(new Rectangle(244, 90, 122, 20));
+	private JTextField getFechaConfeccion() {
+		if (FechaConfeccion == null) {
+			FechaConfeccion = new JTextField();
+			FechaConfeccion.setBounds(new Rectangle(244, 90, 122, 20));
 		}
-		return jTextField;
+		return FechaConfeccion;
 	}
 
 	/**
-	 * This method initializes jTextField1	
+	 * This method initializes OrdenNro	
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getJTextField1() {
-		if (jTextField1 == null) {
-			jTextField1 = new JTextField();
-			jTextField1.setBounds(new Rectangle(244, 68, 122, 20));
+	private JTextField getOrdenNro() {
+		if (OrdenNro == null) {
+			OrdenNro = new JTextField();
+			OrdenNro.setBounds(new Rectangle(244, 46, 122, 20));
 		}
-		return jTextField1;
-	}
-
-	/**
-	 * This method initializes jTextField2	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getJTextField2() {
-		if (jTextField2 == null) {
-			jTextField2 = new JTextField();
-			jTextField2.setBounds(new Rectangle(244, 46, 122, 20));
-		}
-		return jTextField2;
+		return OrdenNro;
 	}
 
 	/**
@@ -333,7 +337,7 @@ public class OrdenTrabajo extends JPanel {
 	private JEditorPane getJEditorPane() {
 		if (jEditorPane == null) {
 			jEditorPane = new JEditorPane();
-			jEditorPane.setBounds(new Rectangle(508, 40, 357, 125));
+			jEditorPane.setBounds(new Rectangle(832, 43, 357, 125));
 		}
 		return jEditorPane;
 	}
@@ -421,6 +425,15 @@ public class OrdenTrabajo extends JPanel {
 			jButton = new JButton();
 			jButton.setBounds(new Rectangle(374, 341, 129, 25));
 			jButton.setText("Agregar Tarea");
+			jButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()");
+					JPCalendar cal=new JPCalendar();
+					cal.setVisible(true);// TODO Auto-generated Event stub actionPerformed()
+					JCalendar j=new JCalendar();
+					j.setVisible(true);
+				}
+			});
 		}
 		return jButton;
 	}
@@ -435,8 +448,68 @@ public class OrdenTrabajo extends JPanel {
 			jButton1 = new JButton();
 			jButton1.setBounds(new Rectangle(1006, 439, 179, 40));
 			jButton1.setText("Finalizar carga de OT");
+			jButton1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					
+					JOptionPane.showMessageDialog(null,getOrdenNro().getText() );
+				}
+			});
 		}
 		return jButton1;
 	}
+
+	/**
+	 * This method initializes choiceCliente	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceCliente() {
+		
+		if (choiceCliente == null) {
+			choiceCliente = new Choice();
+			choiceCliente.setBounds(new Rectangle(244, 68, 121, 21));
+			choiceCliente.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					System.out.println(choiceCliente.getSelectedItem().toString());
+				}
+			});
+			
+			
+		}
+		return choiceCliente;
+	}
+	/**
+	 * This method initializes jButton2	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton2() {
+		if (jButton2 == null) {
+			jButton2 = new JButton();
+			jButton2.setBounds(new Rectangle(374, 90, 20, 18));
+			jButton2.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Calendario c=new Calendario();
+					c.setVisible(true);
+				
+					//FechaConfeccion.setText();
+
+				
+				/*-	SimpleDateFormat fechaforma = new SimpleDateFormat("dd/MM/yyyy");
+					String FfechaSystemA = fechaforma.format(fecha);
+
+
+					//String f=fecha.toString();
+					FechaConfeccion.setText(FfechaSystemA);*/
+
+				
+					
+								
+				}
+			});
+		}
+		return jButton2;
+	}
+	
 
 }  //  @jve:decl-index=0:visual-constraint="-2,58"

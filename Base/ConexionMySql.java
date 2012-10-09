@@ -10,7 +10,7 @@ public class ConexionMySql {
         private  Connection c;
         protected  Statement statemente;
         protected  ResultSet resulsete;
-        private static String cadena="jdbc:mysql://localhost/imprenta";
+        private static String cadena="jdbc:mysql://localhost/proyectoweb";
         private static String driver="com.mysql.jdbc.Driver";
        
         
@@ -48,7 +48,7 @@ public class ConexionMySql {
 						
 						
 						
-					//	System.out.println("ConexiÃ³n liberada OK");
+					//	System.out.println("Conexión liberada OK");
 					}
 					else{
 						System.out.println("Ya estaba desconectado");
