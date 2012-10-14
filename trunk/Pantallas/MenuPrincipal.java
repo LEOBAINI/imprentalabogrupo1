@@ -22,16 +22,13 @@ public class MenuPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JPanel jPanel = null;
-	private void setJPanel(JPanel panel) {
-		jPanel = panel;
-	}
-
 	private JMenuBar jJMenuBar = null;
 	private JMenu jMenu = null;
 	private JMenu jMenu1 = null;
 	private JMenuItem jMenuItem = null;
 	private JMenuItem jMenuItem1 = null;
 	private JMenuItem jMenuItem2 = null;
+	private JMenuItem Salir = null;
 
 	/**
 	 * This method initializes jPanel	
@@ -72,6 +69,7 @@ public class MenuPrincipal extends JFrame {
 			jMenu.setText("Tareas");
 			jMenu.add(getJMenuItem());
 			jMenu.add(getJMenuItem1());
+			jMenu.add(getSalir());
 		}
 		return jMenu;
 	}
@@ -121,7 +119,6 @@ public class MenuPrincipal extends JFrame {
 	
 	
 	private OrdenTrabajo setContentPane() {
-		this.jContentPane=null;
 		if (jContentPane == null) {
 			jContentPane = new OrdenTrabajo();
 			jContentPane.setLayout(new BorderLayout());
@@ -189,7 +186,6 @@ public class MenuPrincipal extends JFrame {
 		return (FondoMenuPpal) jContentPane;
 	}
 	private OrdenTrabajo getJContentPaneOT() {
-			jContentPane=null;
 			jContentPane = new OrdenTrabajo();
 			jContentPane.setLayout(new BorderLayout());
 			//jContentPane.add(getJPanel(), null);
@@ -207,11 +203,35 @@ public class MenuPrincipal extends JFrame {
 		if (jMenuItem2 == null) {
 			jMenuItem2 = new JMenuItem();
 			jMenuItem2.setText("Consultar OT cargadas");
+			jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ConsultaDeOT con=new ConsultaDeOT();
+					con.setVisible(true);
+				}
+			});
 		}
 		return jMenuItem2;
 	}
 
-	public static void main(String[] args) {
+	/**
+	 * This method initializes Salir	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getSalir() {
+		if (Salir == null) {
+			Salir = new JMenuItem();
+			Salir.setText("Salir");
+			Salir.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.exit(0);
+				}
+			});
+		}
+		return Salir;
+	}
+
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -220,6 +240,6 @@ public class MenuPrincipal extends JFrame {
 				thisClass.setVisible(true);
 			}
 		});
-	}
+	}*/
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

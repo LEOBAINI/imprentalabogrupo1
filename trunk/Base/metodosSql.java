@@ -8,6 +8,10 @@ import java.util.Date;
 
 import java.util.Locale;
 
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 public class metodosSql extends ConexionMySql {
 	
 	public metodosSql() {
@@ -53,7 +57,7 @@ public class metodosSql extends ConexionMySql {
 
 	public int insertarOmodif(String sentenciaSql) {
 		System.out.println(sentenciaSql);
-		System.out.println("Luego borrar este syso, solo es para mostrar los datos enviados a la base, (metodosSql linea 34 y 35)");
+		//System.out.println("Luego borrar este syso, solo es para mostrar los datos enviados a la base, (metodosSql linea 34 y 35)");
 		int status=0;
 		ConexionMySql con = new ConexionMySql();
 
@@ -63,10 +67,12 @@ public class metodosSql extends ConexionMySql {
 
 			con.desconectar();
 			status=1;
+			
 
 		} catch (SQLException e) {
 			System.out.println("Error en insertarOmodificar");
 			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
 			con.desconectar();
 			status=-1;
@@ -171,10 +177,152 @@ public class metodosSql extends ConexionMySql {
 		
 		return mes;
 	}
+	public static JTable llenarJtable(String sentencia ){
+		ConexionMySql con = new ConexionMySql();
+		//TableColumnModel modeloColumnas = null;
+		java.sql.ResultSetMetaData metadatos;
+		
+		DefaultTableModel modelo=new DefaultTableModel();//voy a modelar mi jtable
+		
+		JTable tablaDatos=new JTable(modelo);
+		
+		try {
+		
+		con.conectar();
+		con.resulsete = con.statemente.executeQuery(sentencia);
+		metadatos=con.resulsete.getMetaData();//extraigo datos sobre el resulset
+		
+		int cantColumnas=metadatos.getColumnCount();// pido cant columnas
+		//no se como modelar tamaño de las columnas
+		//modeloColumnas.setSelectionModel((ListSelectionModel) tablaDatos);
+		
+		
+		
+		for(int i=1;i<=cantColumnas;i++){
+		modelo.addColumn(metadatos.getColumnName(i));
+		
+		
+		}
+		//avanzo por el resulset para mostrar resultado de consultas
+		  while(con.resulsete.next()){
+			// Bucle para cada resultado en la consulta
+			 
+			     // Se crea un array que será una de las filas de la tabla. 
+			     Object [] fila = new Object[cantColumnas]; // Hay tres columnas en la tabla
+
+			     // Se rellena cada posición del array con una de las columnas de la tabla en base de datos.
+			     for (int i=0;i<cantColumnas;i++)
+			        fila[i] = con.resulsete.getObject(i+1); // El primer indice en rs es el 1, no el cero, por eso se suma 1.
+
+			     // Se añade al modelo la fila completa.
+			     modelo.addRow(fila); 
+			  }
+
+		
+		} 
+		catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			e.printStackTrace();
+		}
+		con.desconectar();
+		return tablaDatos;
+		
+
+	}
+	public int teDoyNombreProductoDameNumeroID(String nombreProducto){
+		int resultado=0;
+		metodosSql metodos=new metodosSql();
+		resultado=Integer.parseInt(metodos.consultarUnaColumna("SELECT idProducto  FROM imprenta.producto where nombreproducto= '"+nombreProducto+"';").get(0));
+		return resultado;
+	}
+
+
+
+	public int dameQuePapelUsa(String descripcionElementoProducto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public int dameIdCalidadPapel(int idPapel) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public int dameIdVariantePapel(int idPapel) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public int dameIdFormatoPapel(int idPapel) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public int dameGramajePapel(int idPapel) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public ArrayList<String> dameCalidades() {
+		ArrayList<String>calidadesPosibles=null;
+		calidadesPosibles=consultarUnaColumna("select descripcion from imprenta.calidad");
+		
+		
+		
+		// TODO Auto-generated method stub
+		return calidadesPosibles;
+	}
+
+
+
+	public ArrayList<String> dameVariantes() {
+		ArrayList<String>variantesPosibles=null;
+		variantesPosibles=consultarUnaColumna("select descripcion from imprenta.variante");
+		
+		return variantesPosibles;
+	}
+
+
+
+	public ArrayList<String> dameFormatos() {
+		ArrayList<String>formatos=null;
+		formatos=consultarUnaColumna("select descripcion from imprenta.formatopapel");
+		
+		return formatos;
+	}
 	
-	
-	
-	
+	public int dameNroProducto(String nombreProducto){
+		int resultado=0;
+		
+		resultado=Integer.parseInt(consultarUnaColumna("SELECT idproducto FROM imprenta.producto where nombreproducto='"+nombreProducto+"';").get(0));
+		return resultado;
+	}
+
+
+
+	public int dameNroElementoproducto(String tipoProducto) {
+		int resultado=0;
+		
+		resultado=Integer.parseInt(consultarUnaColumna("SELECT  idElementoDelProducto FROM imprenta.elementosproducto where descripcion='"+tipoProducto+"';").get(0));
+		return resultado;
+	}
+	public int dameNombreTareaTeDoySuId(String nombreTarea){
+		int resultado=0;
+		resultado=Integer.parseInt(consultarUnaColumna("SELECT idTarea FROM imprenta.tarea where descripcion='"+nombreTarea+"';").get(0));
+		
+		return resultado;
+		
+	}
 	
 
 }

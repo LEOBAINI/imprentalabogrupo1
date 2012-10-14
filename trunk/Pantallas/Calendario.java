@@ -8,23 +8,30 @@ import java.util.Locale;
 
 import javax.swing.JPanel;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import com.jpcomponents.JPCalendar;
 import com.jpcomponents.events.IJPCalendarDateListener;
 import com.jpcomponents.events.JPCalendarEvent;
 import com.toedter.calendar.JCalendar;
 import javax.swing.JButton;
+import javax.swing.text.JTextComponent;
 
 public class Calendario extends JFrame {
 
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JPCalendar cal=null;
+	private String fecha;
+	private String nombreCampo;
 	/**
 	 * This is the default constructor
 	 */
-	public Calendario() {
+	public Calendario(JTextField campo) {
 		super();
+		this.nombreCampo=campo.getName();
+		
 		initialize();
 	}
 
@@ -42,45 +49,44 @@ public class Calendario extends JFrame {
 		
 		this.setTitle("Calendario");
 	}
+	
+	
 	private JPCalendar getCalendarioII(){
 		cal=new JPCalendar();
 		cal.addDateChangeListener(new IJPCalendarDateListener() {
 
-			@Override
+			
 			public void onDateChanged(JPCalendarEvent arg0) {
-				SimpleDateFormat formateador = new SimpleDateFormat("dd'-'MM'-'yyyy", new Locale("es_ES"));
+				SimpleDateFormat formateador = new SimpleDateFormat("yyyy'-'MM'-'dd", new Locale("es_ES"));
 				
-		          String fecha=formateador.format(arg0.getCalendar().getTime());
+		         fecha =formateador.format(arg0.getCalendar().getTime());
+		        
 				System.out.println(fecha);
+				if(nombreCampo.equals("FechaConfeccion")){
 				OrdenTrabajo.FechaConfeccion.setText(fecha);
-				
-				
+				dispose();
+				}
+				if(nombreCampo.equals("Fechaprometida")){
+					OrdenTrabajo.FechaPrometida.setText(fecha);
+					dispose();
+					}
+		         
 				
 			}
-		
-           
-
-			
-			
-
-			
+				
 });
 
-
-		
 		return cal;
 		
 	}
-	private JCalendar calendario(){
-		JCalendar cal=new JCalendar();
 	
-		return cal;
+	
+	String getFecha(){
+		return this.fecha;
 	}
-	/**
-	 * This method initializes jContentPane
-	 * 
-	 * @return javax.swing.JPanel
-	 */
+	
+	
+
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();

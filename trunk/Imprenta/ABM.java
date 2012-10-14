@@ -283,13 +283,13 @@ public void modificarInsumoProveedor(int idProveedor,int idInsumo,double precioM
 
 
 
-public void darAltaOT(OrdenDeTrabajo OT){
+/*public void darAltaOT(OrdenDeTrabajo OT){
 	int mat = 0,tar = 0,tip = 0,ot = 0;
 try{
 	
-	ot=CargarOrdenTrabajo(OT);
+	ot=CargarOrdenTrabajo(OT);//carga en tabla orden de trabajo
 	
-	mat=CargarMaterialesAOT(OT);
+//	mat=CargarMaterialesAOT(OT);
 	
 	tar=CargarTareasAOT(OT);
 	
@@ -306,10 +306,10 @@ try{
 	if(tar!=1){
 		System.out.println("Falla al cargar Tareas linea 290 ABM");
 	}
-	/*if(tip!=1){
+	if(tip!=1){
 		System.out.println("Falla al cargar Tipo producto linea 291 ABM");
 		
-	}*/
+	}
 	if(ot!=1){
 		System.out.println("Fallan al cargar ordenTrabajo linea 292 ABM");
 		
@@ -318,30 +318,30 @@ try{
 }
 	
 	
+	*/
 	
-	
-}
-public int CargarMaterialesAOT(OrdenDeTrabajo OT) {
-	ArrayList<Material> materiales=OT.getMateriales();
-	int ordenTrabajo=OT.getId();
-	int status=0;
-	metodosSql metodos=new metodosSql();
-	
-	for(int i=0;i<materiales.size();i++){
-		status=status+metodos.insertarOmodif("insert into `imprenta`.`material` (`OrdenTrabajo`,`idPapel`,`poseXpliego`,`plegosNetos`,`pliegosDemasia`,`pliegosXhoja`,`cantHojas`) " +
-				" values("+ordenTrabajo+","+materiales.get(i).getIdPapel()+","+materiales.get(i).getPosesXpliego()+","+materiales.get(i).getPliegosnetos()+","+materiales.get(i).getPliegosEnDemasia()+"," +
-						" "+materiales.get(i).getPliegosXhoja()+","+materiales.get(i).getCantHojas()+");");
-		
-		
-	}if(status==materiales.size()){
-		return 1;
-	}else{
-		return -1;
-	}
-	
-	
-	
-}
+
+//public int CargarMaterialesAOT(OrdenDeTrabajo OT) {
+//	ArrayList<Material> materiales=OT.getMateriales();
+//	int ordenTrabajo=OT.getId();
+//	int status=0;
+//	metodosSql metodos=new metodosSql();
+//	
+//	for(int i=0;i<materiales.size();i++){
+//		status=status+metodos.insertarOmodif("insert into `imprenta`.`material` (`OrdenTrabajo`,`idPapel`,`poseXpliego`,`plegosNetos`,`pliegosDemasia`,`pliegosXhoja`,`cantHojas`) " +
+//				" values("+ordenTrabajo+","+materiales.get(i).getIdPapel()+","+materiales.get(i).getPosesXpliego()+","+materiales.get(i).getPliegosnetos()+","+materiales.get(i).getPliegosEnDemasia()+"," +
+//						" "+materiales.get(i).getPliegosXhoja()+","+materiales.get(i).getCantHojas()+");");
+//		
+//		
+//	}if(status==materiales.size()){
+//		return 1;
+//	}else{
+//		return -1;
+//	}
+//	
+//	
+//	
+//}
 /*public int CargarTipoProducto(OrdenDeTrabajo OT) {
 	metodosSql metodos=new metodosSql();
 	int status=0;
@@ -361,8 +361,8 @@ public int CargarMaterialesAOT(OrdenDeTrabajo OT) {
 	
 	
 }*/
-public int  CargarOrdenTrabajo(OrdenDeTrabajo OT){
-	/*Tablas que involucra: imprenta.ordentrabajo */
+/*public int  CargarOrdenTrabajo(OrdenDeTrabajo OT){
+	Tablas que involucra: imprenta.ordentrabajo 
 	int status=0;
 	metodosSql metodos=new metodosSql();
 	
@@ -378,8 +378,8 @@ public int  CargarOrdenTrabajo(OrdenDeTrabajo OT){
 			" "+NroOrden+","+Cliente+", '"+FechaEntrPautada+"', '"+Descripcion+"','"+Estado+"','"+EsApaisado+"',"+tipoProducto+");");
 	
 	return status;
-}
-public int CargarTareasAOT(OrdenDeTrabajo OT) {
+}*/
+/*public int CargarTareasAOT(OrdenDeTrabajo OT) {
 	ArrayList<Tarea> tareas=OT.getTareas();
 	int ordenTrabajo=OT.getId();
 	int status=0;
@@ -397,8 +397,8 @@ public int CargarTareasAOT(OrdenDeTrabajo OT) {
 				"values("+ordenTrabajo+","+idTarea+","+idProveedor+",'"+Estado+"');");	
 		
 	}
-	return status;
-}
+	return status;}
+}*/
 
 
 
