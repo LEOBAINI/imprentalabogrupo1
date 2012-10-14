@@ -26,7 +26,7 @@ En elementos de producto cargo sin problema, no deberia haber cargado nada.	En e
 //si esto está correcto y además los datos que entran están en el dominio de los datos previamente cargados, la base va a dar error.
 	
 	//va a devolver una lista de errores si es que los hay
-	public ArrayList<String> controlarCargaDeOT(OrdenDeTrabajo OT){
+	/*public ArrayList<String> controlarCargaDeOT(OrdenDeTrabajo OT){
 		Formato format=new Formato();
 		
 		ArrayList<String >errores=new ArrayList<String>();
@@ -100,6 +100,36 @@ En elementos de producto cargo sin problema, no deberia haber cargado nada.	En e
 		
 		
 		return errores;
+	}
+	*/
+	public boolean esNumero(char caracter){
+		int maxError=0;
+		char cara[] = new char[10];
+		cara[0]='0';
+		cara[1]='1';
+		cara[2]='2';
+		cara[3]='3';
+		cara[4]='4';
+		cara[5]='5';
+		cara[6]='6';
+		cara[7]='7';
+		cara[8]='8';
+		cara[9]='9';
+		
+		
+		
+		for(int i=0;i< cara.length;i++){
+			
+			if((caracter!=cara[i])){
+				maxError++;
+				
+			}			
+		}
+		if(maxError==10){
+			return false;
+		}
+		System.out.println(maxError);
+		return true;
 	}
 
 

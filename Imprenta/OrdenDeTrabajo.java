@@ -1,87 +1,68 @@
 package Imprenta;
-import java.util.ArrayList;
+
+
+import javax.swing.JTable;
 public class OrdenDeTrabajo {
-	private int Id;//
-	private Cliente cliente;//
+	private int numeroOrdenDeTrabajo;//
+	private String cliente;//
 	private String estado;//
-	//private int nroOrden;//de mas!!
-	//private double iva;
-	private ArrayList<Tarea> tareas;//
-	private ArrayList<Material> materiales;
+	private JTable tareas;//
+	private JTable materiales;
 	private String fechaEntrega;
 	private String fechaConfeccion;
 	private String descripcion;
-	private String cantidadMatprima;
 	private String nombreTrabajo;
-	private String detalleTrabajo;
 	private String medidaFinal;
 	private String apaisado;
 	private String cantidadAentregar;
-	private TipoProducto tipoProducto;//
-	private String detalleProducto;
+	private String producto;
+	private String elementoDelProducto;//
 	private int cantidadPlanchas;
-	private Papel papel;
+	private int ancho;
+	private int alto;
 	
-	
-	
-	public Papel getPapel() {
-		return papel;
+	public OrdenDeTrabajo(int numeroOrdenDeTrabajo) {
+		super();
+		this.numeroOrdenDeTrabajo = numeroOrdenDeTrabajo;
 	}
 
-
-	public void setPapel(Papel papel) {
-		this.papel = papel;
+	public int getNumeroOrdenDeTrabajo() {
+		return numeroOrdenDeTrabajo;
 	}
 
-
-	public OrdenDeTrabajo(int nroOrden) {
-		this.Id=nroOrden;
-		
-		
+	public void setNumeroOrdenDeTrabajo(int numeroOrdenDeTrabajo) {
+		this.numeroOrdenDeTrabajo = numeroOrdenDeTrabajo;
 	}
-	
-	
-	public Cliente getCliente() {
+
+	public String getCliente() {
 		return cliente;
 	}
 
-
-	public void setCliente(Cliente cliente) {
+	public void setCliente(String cliente) {
 		this.cliente = cliente;
 	}
-
 
 	public String getEstado() {
 		return estado;
 	}
 
-
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 
+	public JTable getTareas() {
+		return tareas;
+	}
 
-	public void agregarTareas(ArrayList <Tarea>tareas){
-		this.tareas=tareas;
+	public void setTareas(JTable tareas) {
+		this.tareas = tareas;
 	}
-	public void agregarMateriales(ArrayList<Material>materiales){
-		this.materiales=materiales;
-		
-	}
-	
-	public ArrayList<Tarea>getTareas(){
-		return this.tareas;
-	}
-	
-	
-	
-	
-	
-	public ArrayList<Material> getMateriales() {
+
+	public JTable getMateriales() {
 		return materiales;
 	}
 
-	public void setMateriales(ArrayList<Material> materiales) {
+	public void setMateriales(JTable materiales) {
 		this.materiales = materiales;
 	}
 
@@ -109,28 +90,12 @@ public class OrdenDeTrabajo {
 		this.descripcion = descripcion;
 	}
 
-	public String getCantidadMatprima() {
-		return cantidadMatprima;
-	}
-
-	public void setCantidadMatprima(String cantidadMatprima) {
-		this.cantidadMatprima = cantidadMatprima;
-	}
-
 	public String getNombreTrabajo() {
 		return nombreTrabajo;
 	}
 
 	public void setNombreTrabajo(String nombreTrabajo) {
 		this.nombreTrabajo = nombreTrabajo;
-	}
-
-	public String getDetalleTrabajo() {
-		return detalleTrabajo;
-	}
-
-	public void setDetalleTrabajo(String detalleTrabajo) {
-		this.detalleTrabajo = detalleTrabajo;
 	}
 
 	public String getMedidaFinal() {
@@ -141,7 +106,7 @@ public class OrdenDeTrabajo {
 		this.medidaFinal = medidaFinal;
 	}
 
-	public String getEsApaisado() {
+	public String getApaisado() {
 		return apaisado;
 	}
 
@@ -157,21 +122,19 @@ public class OrdenDeTrabajo {
 		this.cantidadAentregar = cantidadAentregar;
 	}
 
-	public TipoProducto getTipoProducto() {
-		return tipoProducto;
+	public String getProducto() {
+		return producto;
 	}
 
-	public void setTipoProducto(TipoProducto tipoProducto) {
-		this.tipoProducto = tipoProducto;
+	public void setProducto(String producto) {
+		this.producto = producto;
 	}
 
-	public String getDetalleProducto() {
-		return detalleProducto;
+	public String getTipoProducto() {
+		return elementoDelProducto;
 	}
 
-	public void setDetalleProducto(String detalleProducto) {
-		this.detalleProducto = detalleProducto;
-	}
+	
 
 	public int getCantidadPlanchas() {
 		return cantidadPlanchas;
@@ -181,25 +144,42 @@ public class OrdenDeTrabajo {
 		this.cantidadPlanchas = cantidadPlanchas;
 	}
 
-	public void setTareas(ArrayList<Tarea> tareas) {
-		this.tareas = tareas;
+	public int getAncho() {
+		return ancho;
 	}
+
+	public void setAncho(int ancho) {
+		this.ancho = ancho;
+	}
+
+	public int getAlto() {
+		return alto;
+	}
+
+	public void setAlto(int alto) {
+		this.alto = alto;
+	}
+
+	public void setElementoDelProducto( String elementoDelProducto) {
+		this.elementoDelProducto = elementoDelProducto;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	
-	/*public double getIva() {
-		return iva;
-	}
-	public void setIva(double iva) {
-		this.iva = iva;
-	}*/
-	public int getId() {
-		return Id;
-	}
+
+	
+
+	
 
 
-	public void setId(int id) {
-		Id = id;
-	}
 	
 
 }
