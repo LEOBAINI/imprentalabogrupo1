@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="D:/Desktop/Herramientas j2ee/eclipse/mysql-connector-java-3.1.7-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Desktop/JPComponents_1.0_b1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Desktop/jcalendar-1.4/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
