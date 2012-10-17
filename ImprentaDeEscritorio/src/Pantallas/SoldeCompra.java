@@ -22,7 +22,10 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class SoldeCompra extends JFrame {
 
@@ -31,13 +34,10 @@ public class SoldeCompra extends JFrame {
 	private JLabel NroSolicitudCompra = null;
 	private JEditorPane nrosc = null;
 	private JLabel NumeroOT = null;
-	private JLabel NrodeStokeo = null;
-	private JList NumStokeo = null;
 	private JLabel Fecha = null;
 	private JEditorPane Fechadeldìa = null;
 	private JLabel Proveedor = null;
 	private JLabel Vendedor = null;
-	private JEditorPane NVendedor = null;
 	private JPanel jPanel = null;
 	private JCheckBox EnviaProv = null;
 	private JLabel EnvVendedor = null;
@@ -46,47 +46,49 @@ public class SoldeCompra extends JFrame {
 	private JEditorPane DomiciliodeRetiro = null;
 	private JLabel Dom = null;
 	private JLabel FecEntrega = null;
-	private JEditorPane FechadeEntrega = null;
 	private JLabel Horario = null;
 	private JCheckBox TildeMañana = null;
 	private JCheckBox TildeTarde = null;
 	private JLabel Mañana = null;
 	private JLabel Tarde = null;
 	private JPanel jPanel1 = null;
-	private JLabel Cantidad = null;
-	private JLabel Marca = null;
-	private JLabel jLabel222 = null;
-	private JLabel jLabel2212 = null;
-	private JLabel jLabel22112 = null;
-	private JLabel jLabel221111 = null;
-	private JLabel jLabel2211112 = null;
-	private JLabel jLabel2211113 = null;
-	private JLabel jLabel2211114 = null;
-	private JEditorPane Cantid = null;
-	private JEditorPane DesMArca = null;
-	private JEditorPane jEditorPane2212 = null;
-	private JEditorPane jEditorPane22121 = null;
-	private JEditorPane jEditorPane221211 = null;
-	private JEditorPane jEditorPane2212111 = null;
-	private JLabel por = null;
-	private JEditorPane Sedoformato = null;
-	private JEditorPane jEditorPane221211111 = null;
-	private JEditorPane jEditorPane2212111111 = null;
-	private JEditorPane jEditorPane2212111112 = null;
 	private JButton jButton = null;
 	private JButton jButton1 = null;
 	private JButton jButton11 = null;
 	private JLabel jLabel22111121 = null;
-	private JEditorPane jEditorPane22121111121 = null;
 	private JLabel jLabel22111122 = null;
-	private JEditorPane jEditorPane221211111211 = null;
 	private JLabel jLabel221111221 = null;
-	private JEditorPane jEditorPane221211111212 = null;
 	private Choice choiceRazonSocialproveedor = null;
-	private Choice choiceNroOrdenTrabajo = null;
-	private Choice choiceVendedor = null;
 	public static JTextField jTextFieldfechaEntrega = null;
 	private JButton jButtonCalendario = null;
+	private Choice choiceMarca = null;
+	private Choice choiceCalidad = null;
+	private Choice choiceVariante = null;
+	private JTextField campoGramaje = null;
+	private JTextField campoImporte = null;
+	private JTextField campoImporteTotal = null;
+	private JTextField campoAlto = null;
+	private JTextField campoAncho = null;
+	private JLabel jLabel = null;
+	private JLabel marca = null;
+	private JLabel Calidad = null;
+	private JLabel Variante = null;
+	private JLabel jLabelGramaje = null;
+	private JLabel jLabelformato = null;
+	private JLabel jLabelImporte = null;
+	private JLabel jLabelUmedida = null;
+	private JLabel jLabelimporteTotal = null;
+	private JPanel jPanel2 = null;
+	private JTextField campoCantidad = null;
+	private JLabel jLabel1 = null;
+	private Choice choiceIva = null;
+	private JTextField campoSubTotal = null;
+	private JTextField campoIva = null;
+	private JTextField campoTotal = null;
+	private JButton cargar = null;
+	private JScrollPane jScrollPane = null;
+	private JTable jTableMateriales = null;
+	private JTextField campoUnidadDeMedida = null;
 	/**
 	* This is the default constructor
 	*/
@@ -112,13 +114,57 @@ public class SoldeCompra extends JFrame {
 		setChoiceRazonSocialproveedor(metodos.consultarUnaColumna("select razonSocial from imprenta.proveedor"));
 		//modificar este select porque arrojará todos los proveedores y falta filtrar solo
 		//los que proveen papel...
-		setChoiceNroOrdenTrabajo(metodos.consultarUnaColumna("SELECT NroOrden FROM imprenta.ordentrabajo ;"));
+		
 		//esto deberia solo mostrar las ot que no tienen oc hecha.
-		setChoiceVendedor(metodos.consultarUnaColumna("SELECT nombre FROM imprenta.vendedor;"));
+		//setChoiceVendedor(metodos.consultarUnaColumna("SELECT nombre FROM imprenta.vendedor;"));
 		setFechadeldìa(metodos.dameFechaDeHoyConFormatoX("dd'-'MM'-'yyyy"));
+		setChoiceMarca(metodos.consultarUnaColumna("select marca from imprenta.marcapapel"));
+		setChoiceCalidad(metodos.consultarUnaColumna("select descripcion from imprenta.calidad"));
+		setChoiceVariante(metodos.consultarUnaColumna("select descripcion from imprenta.variante"));
+		setChoiceNroOrden(metodos.consultarUnaColumna("select nombre from imprenta.ordenTrabajo"));
+		int max=0;
+		ArrayList <String> aux=metodos.consultarUnaColumna("SELECT max(idsolicitudCompra) FROM imprenta.solicitudcompra;");
+		if(aux.get(0)==null){
+			max=1;
+			setNrosc(max);
+		}else{
+			max=Integer.parseInt(aux.get(0));
+			max=max+1;
+			setNrosc(max);
+			
+			
+		}
+	
+	}
+	private void setChoiceMarca(ArrayList<String>marcas) {
+		for(int i=0;i<marcas.size();i++){
+			this.choiceMarca.add(marcas.get(i));	
+		}
+		
+	}
+
+	private void setChoiceCalidad(ArrayList<String>calidades) {
+		for(int i=0;i<calidades.size();i++){
+
+			this.choiceCalidad.add(calidades.get(i));	
+		}
 		
 		
 	}
+
+	private void setChoiceVariante(ArrayList<String>variantes) {
+		for(int i=0;i<variantes.size();i++){
+			
+			this.choiceVariante.add(variantes.get(i));
+		}	
+		
+	}
+	
+
+	private void setChoiceIva(Choice choiceIva) {
+		this.choiceIva = choiceIva;
+	}
+
 	private void setFechadeldìa(String fecha) {
 		this.Fechadeldìa.setText(fecha);
 	}
@@ -142,18 +188,18 @@ public class SoldeCompra extends JFrame {
 	*/
 	private JPanel getJContentPane1() {
 		if (jContentPane1 == null) {
+			jLabel2 = new JLabel();
+			jLabel2.setBounds(new Rectangle(414, 10, 142, 14));
+			jLabel2.setText("Es compra para Stock");
 			jLabel221111221 = new JLabel();
-			jLabel221111221.setBounds(new Rectangle(869, 363, 71, 16));
 			jLabel221111221.setText("Total");
+			jLabel221111221.setBounds(new Rectangle(17, 58, 71, 17));
 			jLabel22111122 = new JLabel();
-			jLabel22111122.setBounds(new Rectangle(869, 339, 68, 16));
-			jLabel22111122.setText(" IVA 21 %");
+			jLabel22111122.setText(" IVA ");
+			jLabel22111122.setBounds(new Rectangle(19, 32, 33, 19));
 			jLabel22111121 = new JLabel();
-			jLabel22111121.setBounds(new Rectangle(870, 313, 67, 16));
 			jLabel22111121.setText("Subtotal");
-			jLabel222 = new JLabel();
-			jLabel222.setText("Calidad");
-			jLabel222.setBounds(new Rectangle(225, 3, 136, 16));
+			jLabel22111121.setBounds(new Rectangle(18, 10, 67, 20));
 			Vendedor = new JLabel();
 			Vendedor.setBounds(new Rectangle(657, 33, 92, 16));
 			Vendedor.setText("Vendedor");
@@ -163,14 +209,11 @@ public class SoldeCompra extends JFrame {
 			Fecha = new JLabel();
 			Fecha.setBounds(new Rectangle(17, 34, 46, 16));
 			Fecha.setText("Fecha");
-			NrodeStokeo = new JLabel();
-			NrodeStokeo.setBounds(new Rectangle(658, 15, 90, 16));
-			NrodeStokeo.setText("Nro de Stockeo");
 			NumeroOT = new JLabel();
-			NumeroOT.setBounds(new Rectangle(294, 12, 139, 16));
-			NumeroOT.setText("Orden de Trabajo");
+			NumeroOT.setBounds(new Rectangle(656, 10, 162, 17));
+			NumeroOT.setText("Nombre Orden de Trabajo");
 			NroSolicitudCompra = new JLabel();
-			NroSolicitudCompra.setBounds(new Rectangle(15, 10, 45, 16));
+			NroSolicitudCompra.setBounds(new Rectangle(15, 10, 45, 17));
 			NroSolicitudCompra.setText("Numero");
 			jContentPane1 = new JPanel();
 			jContentPane1.setLayout(null);
@@ -178,26 +221,23 @@ public class SoldeCompra extends JFrame {
 			jContentPane1.add(NroSolicitudCompra, null);
 			jContentPane1.add(getNrosc(), null);
 			jContentPane1.add(NumeroOT, null);
-			jContentPane1.add(NrodeStokeo, null);
-			jContentPane1.add(getNumStokeo(), null);
 			jContentPane1.add(Fecha, null);
 			jContentPane1.add(getFechadeldìa(), null);
 			jContentPane1.add(Proveedor, null);
 			jContentPane1.add(Vendedor, null);
 			jContentPane1.add(getJPanel(), null);
-			jContentPane1.add(getJPanel1(), null);
 			jContentPane1.add(getJButton(), null);
 			jContentPane1.add(getJButton1(), null);
 			jContentPane1.add(getJButton11(), null);
-			jContentPane1.add(jLabel22111121, null);
-			jContentPane1.add(getJEditorPane22121111121(), null);
-			jContentPane1.add(jLabel22111122, null);
-			jContentPane1.add(getJEditorPane221211111211(), null);
-			jContentPane1.add(jLabel221111221, null);
-			jContentPane1.add(getJEditorPane221211111212(), null);
 			jContentPane1.add(getChoiceRazonSocialproveedor(), null);
-			jContentPane1.add(getChoiceNroOrdenTrabajo(), null);
-			jContentPane1.add(getChoiceVendedor(), null);
+			jContentPane1.add(getJPanel1(), null);
+			jContentPane1.add(getJPanel2(), null);
+			jContentPane1.add(getCargar(), null);
+			jContentPane1.add(getJScrollPane(), null);
+			jContentPane1.add(getChoiceNroOrden(), null);
+			jContentPane1.add(getJCheckBoxParaStock(), null);
+			jContentPane1.add(jLabel2, null);
+			jContentPane1.add(getCampoVendedor(), null);
 		}
 		return jContentPane1;
 	}
@@ -210,23 +250,15 @@ public class SoldeCompra extends JFrame {
 	private JEditorPane getNrosc() {
 		if (nrosc == null) {
 			nrosc = new JEditorPane();
-			nrosc.setBounds(new Rectangle(74, 10, 156, 16));
-			nrosc.setText("Aca va el número de SC autonu");
+			nrosc.setBounds(new Rectangle(74, 10, 156, 17));
+			nrosc.setEditable(false);
+			nrosc.setText("");
 		}
 		return nrosc;
 	}
 
-	/**
-	* This method initializes NumStokeo	
-	* 	
-	* @return javax.swing.JList	
-	*/
-	private JList getNumStokeo() {
-		if (NumStokeo == null) {
-			NumStokeo = new JList();
-			NumStokeo.setBounds(new Rectangle(778, 11, 173, 15));
-		}
-		return NumStokeo;
+	private void setNrosc(int numeroMax) {
+		this.nrosc.setText(String.valueOf(numeroMax));
 	}
 
 	/**
@@ -243,20 +275,6 @@ public class SoldeCompra extends JFrame {
 			Fechadeldìa.setText("Fecha del día DD/MM/AAAA");
 		}
 		return Fechadeldìa;
-	}
-
-	/**
-	* This method initializes NVendedor	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getNVendedor() {
-		if (NVendedor == null) {
-			NVendedor = new JEditorPane();
-			NVendedor.setText("Ingresa Nombre de Vendedor");
-			NVendedor.setBounds(new Rectangle(644, 101, 240, 18));
-		}
-		return NVendedor;
 	}
 
 	/**
@@ -289,7 +307,7 @@ public class SoldeCompra extends JFrame {
 			EnvVendedor.setText("Envia Proveedor");
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
-			jPanel.setBounds(new Rectangle(16, 61, 1008, 41));
+			jPanel.setBounds(new Rectangle(16, 61, 1003, 41));
 			jPanel.setBackground(SystemColor.controlHighlight);
 			jPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jPanel.add(getEnviaProv(), null);
@@ -392,20 +410,6 @@ public class SoldeCompra extends JFrame {
 	}
 
 	/**
-	* This method initializes FechadeEntrega	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getFechadeEntrega() {
-		if (FechadeEntrega == null) {
-			FechadeEntrega = new JEditorPane();
-			FechadeEntrega.setText(" DD/MM/AAAA");
-			FechadeEntrega.setBounds(new Rectangle(608, 130, 106, 22));
-		}
-		return FechadeEntrega;
-	}
-
-	/**
 	* This method initializes TildeMañana	
 	* 	
 	* @return javax.swing.JCheckBox	
@@ -425,14 +429,6 @@ public class SoldeCompra extends JFrame {
 			});
 		}
 		return TildeMañana;
-	}
-
-	private void setTildeMañana(JCheckBox tildeMañana) {
-		TildeMañana = tildeMañana;
-	}
-
-	private void setTildeTarde(JCheckBox tildeTarde) {
-		TildeTarde = tildeTarde;
 	}
 
 	/**
@@ -455,210 +451,67 @@ public class SoldeCompra extends JFrame {
 	*/
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
-			por = new JLabel();
-			por.setBounds(new Rectangle(677, 30, 11, 16));
-			por.setText("X");
-			jLabel2211114 = new JLabel();
-			jLabel2211114.setBounds(new Rectangle(916, 2, 86, 16));
-			jLabel2211114.setText("ImporteTotal");
-			jLabel2211113 = new JLabel();
-			jLabel2211113.setBounds(new Rectangle(821, 2, 87, 16));
-			jLabel2211113.setText("UnidadMedida");
-			jLabel2211112 = new JLabel();
-			jLabel2211112.setBounds(new Rectangle(733, 2, 81, 16));
-			jLabel2211112.setText("Importe");
-			jLabel221111 = new JLabel();
-			jLabel221111.setBounds(new Rectangle(639, 3, 77, 16));
-			jLabel221111.setText("Formato");
-			jLabel22112 = new JLabel();
-			jLabel22112.setBounds(new Rectangle(502, 1, 126, 16));
-			jLabel22112.setText("Gramaje");
-			jLabel2212 = new JLabel();
-			jLabel2212.setBounds(new Rectangle(370, 2, 121, 16));
-			jLabel2212.setText("Variante");
-			Marca = new JLabel();
-			Marca.setBounds(new Rectangle(73, 4, 140, 16));
-			Marca.setText("Marca");
-			Cantidad = new JLabel();
-			Cantidad.setBounds(new Rectangle(9, 5, 53, 16));
-			Cantidad.setText("Cantidad");
+			jLabel1 = new JLabel();
+			jLabel1.setBounds(new Rectangle(5, 2, 55, 21));
+			jLabel1.setText("Cantidad");
+			jLabelimporteTotal = new JLabel();
+			jLabelimporteTotal.setBounds(new Rectangle(917, 2, 85, 21));
+			jLabelimporteTotal.setText("Importe Total");
+			jLabelUmedida = new JLabel();
+			jLabelUmedida.setBounds(new Rectangle(795, 2, 107, 21));
+			jLabelUmedida.setText("Unidad de medida");
+			jLabelImporte = new JLabel();
+			jLabelImporte.setBounds(new Rectangle(694, 2, 88, 21));
+			jLabelImporte.setText("Importe");
+			jLabelformato = new JLabel();
+			jLabelformato.setBounds(new Rectangle(575, 2, 52, 21));
+			jLabelformato.setText("Formato");
+			jLabelGramaje = new JLabel();
+			jLabelGramaje.setBounds(new Rectangle(445, 2, 71, 21));
+			jLabelGramaje.setText("Gramaje");
+			Variante = new JLabel();
+			Variante.setBounds(new Rectangle(310, 2, 120, 21));
+			Variante.setText("Variante");
+			Calidad = new JLabel();
+			Calidad.setBounds(new Rectangle(160, 2, 134, 21));
+			Calidad.setText("Calidad");
+			marca = new JLabel();
+			marca.setBounds(new Rectangle(64, 2, 80, 21));
+			marca.setText("Marca");
+			jLabel = new JLabel();
+			jLabel.setBounds(new Rectangle(593, 22, 26, 17));
+			jLabel.setText("X");
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(null);
-			jPanel1.setBounds(new Rectangle(15, 106, 1007, 204));
 			jPanel1.setBackground(SystemColor.controlHighlight);
 			jPanel1.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-			jPanel1.add(Cantidad, null);
-			jPanel1.add(Marca, null);
-			jPanel1.add(jLabel222, null);
-			jPanel1.add(jLabel2212, null);
-			jPanel1.add(jLabel22112, null);
-			jPanel1.add(jLabel221111, null);
-			jPanel1.add(jLabel2211112, null);
-			jPanel1.add(jLabel2211113, null);
-			jPanel1.add(jLabel2211114, null);
-			jPanel1.add(getCantid(), null);
-			jPanel1.add(getDesMArca(), null);
-			jPanel1.add(getJEditorPane2212(), null);
-			jPanel1.add(getJEditorPane22121(), null);
-			jPanel1.add(getJEditorPane221211(), null);
-			jPanel1.add(getJEditorPane2212111(), null);
-			jPanel1.add(por, null);
-			jPanel1.add(getSedoformato(), null);
-			jPanel1.add(getJEditorPane221211111(), null);
-			jPanel1.add(getJEditorPane2212111111(), null);
-			jPanel1.add(getJEditorPane2212111112(), null);
-			jPanel1.add(getNVendedor(), null);
-			jPanel1.add(getFechadeEntrega(), null);
+			jPanel1.setBounds(new Rectangle(17, 109, 1003, 46));
+			
+			jPanel1.add(getChoiceMarca(), null);
+			jPanel1.add(getChoiceCalidad(), null);
+			jPanel1.add(getChoiceVariante(), null);
+			jPanel1.add(getCampoGramaje(), null);
+			jPanel1.add(getCampoImporte(), null);
+			jPanel1.add(getCampoImporteTotal(), null);
+			jPanel1.add(getCampoAlto(), null);
+			jPanel1.add(getCampoAncho(), null);
+			jPanel1.add(jLabel, null);
+			jPanel1.add(marca, null);
+			jPanel1.add(Calidad, null);
+			jPanel1.add(Variante, null);
+			jPanel1.add(jLabelGramaje, null);
+			jPanel1.add(jLabelformato, null);
+			jPanel1.add(jLabelImporte, null);
+			jPanel1.add(jLabelUmedida, null);
+			jPanel1.add(jLabelimporteTotal, null);
+			jPanel1.add(getCampoCantidad(), null);
+			jPanel1.add(jLabel1, null);
+			jPanel1.add(getCampoUnidadDeMedida(), null);
 		}
 		return jPanel1;
 	}
 
-	private void setChoiceNroOrdenTrabajo(ArrayList<String> NrosOrdenesTrabajo) {
-		for(int i=0;i<NrosOrdenesTrabajo.size();i++){
-			this.choiceNroOrdenTrabajo.add(NrosOrdenesTrabajo.get(i));
-		}
-		
-	}
-
-	/**
-	* This method initializes Cantid	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getCantid() {
-		if (Cantid == null) {
-			Cantid = new JEditorPane();
-			Cantid.setBounds(new Rectangle(11, 29, 52, 15));
-			Cantid.setText("#");
-		}
-		return Cantid;
-	}
-
-	/**
-	* This method initializes DesMArca	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getDesMArca() {
-		if (DesMArca == null) {
-			DesMArca = new JEditorPane();
-			DesMArca.setBounds(new Rectangle(75, 28, 139, 16));
-			DesMArca.setText("De la tabla de Marca");
-		}
-		return DesMArca;
-	}
-
-	/**
-	* This method initializes jEditorPane2212	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane2212() {
-		if (jEditorPane2212 == null) {
-			jEditorPane2212 = new JEditorPane();
-			jEditorPane2212.setBounds(new Rectangle(227, 29, 134, 18));
-			jEditorPane2212.setText("De la tabla de Calidad");
-		}
-		return jEditorPane2212;
-	}
-
-	/**
-	* This method initializes jEditorPane22121	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane22121() {
-		if (jEditorPane22121 == null) {
-			jEditorPane22121 = new JEditorPane();
-			jEditorPane22121.setBounds(new Rectangle(368, 30, 125, 17));
-			jEditorPane22121.setText("De la tabla de Variante");
-		}
-		return jEditorPane22121;
-	}
-
-	/**
-	* This method initializes jEditorPane221211	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane221211() {
-		if (jEditorPane221211 == null) {
-			jEditorPane221211 = new JEditorPane();
-			jEditorPane221211.setBounds(new Rectangle(510, 30, 119, 16));
-			jEditorPane221211.setText("Carga a mano");
-		}
-		return jEditorPane221211;
-	}
-
-	/**
-	* This method initializes jEditorPane2212111	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane2212111() {
-		if (jEditorPane2212111 == null) {
-			jEditorPane2212111 = new JEditorPane();
-			jEditorPane2212111.setBounds(new Rectangle(643, 29, 29, 18));
-			jEditorPane2212111.setText("999");
-		}
-		return jEditorPane2212111;
-	}
-
-	/**
-	* This method initializes Sedoformato	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getSedoformato() {
-		if (Sedoformato == null) {
-			Sedoformato = new JEditorPane();
-			Sedoformato.setBounds(new Rectangle(694, 27, 27, 17));
-			Sedoformato.setText("999");
-		}
-		return Sedoformato;
-	}
-
-	/**
-	* This method initializes jEditorPane221211111	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane221211111() {
-		if (jEditorPane221211111 == null) {
-			jEditorPane221211111 = new JEditorPane();
-			jEditorPane221211111.setBounds(new Rectangle(737, 31, 79, 17));
-			jEditorPane221211111.setText("999,999.99");
-		}
-		return jEditorPane221211111;
-	}
-
-	/**
-	* This method initializes jEditorPane2212111111	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane2212111111() {
-		if (jEditorPane2212111111 == null) {
-			jEditorPane2212111111 = new JEditorPane();
-			jEditorPane2212111111.setBounds(new Rectangle(827, 31, 80, 17));
-			jEditorPane2212111111.setText("999,999.99");
-		}
-		return jEditorPane2212111111;
-	}
-
-	/**
-	* This method initializes jEditorPane2212111112	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane2212111112() {
-		if (jEditorPane2212111112 == null) {
-			jEditorPane2212111112 = new JEditorPane();
-			jEditorPane2212111112.setBounds(new Rectangle(913, 26, 90, 22));
-			jEditorPane2212111112.setText("999,999.99");
-		}
-		return jEditorPane2212111112;
-	}
+	
 
 	/**
 	* This method initializes jButton	
@@ -680,7 +533,7 @@ public class SoldeCompra extends JFrame {
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setBounds(new Rectangle(32, 334, 77, 26));
+			jButton1.setBounds(new Rectangle(32, 333, 77, 26));
 			jButton1.setText("Limpiar");
 		}
 		return jButton1;
@@ -701,48 +554,6 @@ public class SoldeCompra extends JFrame {
 	}
 
 	/**
-	* This method initializes jEditorPane22121111121	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane22121111121() {
-		if (jEditorPane22121111121 == null) {
-			jEditorPane22121111121 = new JEditorPane();
-			jEditorPane22121111121.setBounds(new Rectangle(946, 312, 73, 22));
-			jEditorPane22121111121.setText("999,999.99");
-		}
-		return jEditorPane22121111121;
-	}
-
-	/**
-	* This method initializes jEditorPane221211111211	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane221211111211() {
-		if (jEditorPane221211111211 == null) {
-			jEditorPane221211111211 = new JEditorPane();
-			jEditorPane221211111211.setBounds(new Rectangle(943, 334, 78, 22));
-			jEditorPane221211111211.setText("999,999.99");
-		}
-		return jEditorPane221211111211;
-	}
-
-	/**
-	* This method initializes jEditorPane221211111212	
-	* 	
-	* @return javax.swing.JEditorPane	
-	*/
-	private JEditorPane getJEditorPane221211111212() {
-		if (jEditorPane221211111212 == null) {
-			jEditorPane221211111212 = new JEditorPane();
-			jEditorPane221211111212.setBounds(new Rectangle(944, 361, 78, 20));
-			jEditorPane221211111212.setText("999,999.99");
-		}
-		return jEditorPane221211111212;
-	}
-
-	/**
 	 * This method initializes choiceRazonSocialproveedor	
 	 * 	
 	 * @return java.awt.Choice	
@@ -755,41 +566,7 @@ public class SoldeCompra extends JFrame {
 		return choiceRazonSocialproveedor;
 	}
 
-	/**
-	 * This method initializes choiceNroOrdenTrabajo	
-	 * 	
-	 * @return java.awt.Choice	
-	 */
-	private Choice getChoiceNroOrdenTrabajo() {
-		if (choiceNroOrdenTrabajo == null) {
-			choiceNroOrdenTrabajo = new Choice();
-			choiceNroOrdenTrabajo.setBounds(new Rectangle(438, 13, 191, 17));
-		}
-		return choiceNroOrdenTrabajo;
-	}
-
-	/**
-	 * This method initializes choiceVendedor	
-	 * 	
-	 * @return java.awt.Choice	
-	 */
-	private Choice getChoiceVendedor() {
-		if (choiceVendedor == null) {
-			choiceVendedor = new Choice();
-			choiceVendedor.setBounds(new Rectangle(778, 31, 172, 16));
-		}
-		return choiceVendedor;
-	}
-
-	private void setChoiceVendedor(ArrayList<String> vendedores) {
-		try{
-			for(int i=0;i<vendedores.size();i++){
-		this.choiceVendedor.add(vendedores.get(i));
-			}
-		}catch(Exception e){
-			JOptionPane.showMessageDialog(null, "No tengo acceso a los vendedores, chequeá la conexión, o si hay datos");
-		}
-	}
+	
 
 	/**
 	 * This method initializes jTextFieldfechaEntrega	
@@ -824,6 +601,386 @@ public class SoldeCompra extends JFrame {
 			});
 		}
 		return jButtonCalendario;
+	}
+
+	/**
+	 * This method initializes choiceMarca	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceMarca() {
+		if (choiceMarca == null) {
+			choiceMarca = new Choice();
+			choiceMarca.setBounds(new Rectangle(64, 20, 80, 21));
+			
+			
+			
+			
+			
+		}
+		return choiceMarca;
+	}
+
+	/**
+	 * This method initializes choiceCalidad	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceCalidad() {
+		if (choiceCalidad == null) {
+			choiceCalidad = new Choice();
+			choiceCalidad.setBounds(new Rectangle(159, 20, 135, 20));
+		}
+		return choiceCalidad;
+	}
+
+	/**
+	 * This method initializes choiceVariante	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceVariante() {
+		if (choiceVariante == null) {
+			choiceVariante = new Choice();
+			choiceVariante.setBounds(new Rectangle(309, 20, 121, 20));
+		}
+		return choiceVariante;
+	}
+
+	/**
+	 * This method initializes campoGramaje	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoGramaje() {
+		Dimension gramaje=new Dimension();
+		gramaje.setSize(3, 4);
+		
+		if (campoGramaje == null) {
+			campoGramaje = new JTextField();
+			campoGramaje.setBounds(new Rectangle(445, 21, 70, 20));
+			campoGramaje.setMaximumSize(gramaje);
+		}
+		return campoGramaje;
+	}
+
+	/**
+	 * This method initializes campoImporte	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoImporte() {
+		if (campoImporte == null) {
+			campoImporte = new JTextField();
+			campoImporte.setBounds(new Rectangle(693, 21, 90, 20));
+		}
+		return campoImporte;
+	}
+
+	/**
+	 * This method initializes campoImporteTotal	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoImporteTotal() {
+		if (campoImporteTotal == null) {
+			campoImporteTotal = new JTextField();
+			campoImporteTotal.setBounds(new Rectangle(917, 21, 87, 20));
+		}
+		return campoImporteTotal;
+	}
+
+	/**
+	 * This method initializes campoAlto	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoAlto() {
+		if (campoAlto == null) {
+			campoAlto = new JTextField();
+			campoAlto.setBounds(new Rectangle(541, 21, 42, 20));
+			campoAlto.setText("Alto");
+			campoAlto.addFocusListener(new java.awt.event.FocusAdapter() {
+				public void focusGained(java.awt.event.FocusEvent e) {
+					campoAlto.setText("");
+				}
+			});
+		}
+		return campoAlto;
+	}
+
+	/**
+	 * This method initializes campoAncho	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoAncho() {
+		if (campoAncho == null) {
+			campoAncho = new JTextField();
+			campoAncho.setBounds(new Rectangle(626, 21, 54, 20));
+			campoAncho.setText("Ancho");
+			campoAncho.addFocusListener(new java.awt.event.FocusAdapter() {
+				public void focusGained(java.awt.event.FocusEvent e) {
+				campoAncho.setText("");
+				}
+			});
+		}
+		return campoAncho;
+	}
+
+	/**
+	 * This method initializes jPanel2	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel2() {
+		if (jPanel2 == null) {
+			jPanel2 = new JPanel();
+			jPanel2.setLayout(null);
+			jPanel2.setBounds(new Rectangle(787, 273, 233, 97));
+			jPanel2.add(jLabel22111121, null);
+			jPanel2.add(jLabel22111122, null);
+			jPanel2.add(jLabel221111221, null);
+			jPanel2.add(getChoiceIva(), null);
+			jPanel2.add(getCampoSubTotal(), null);
+			jPanel2.add(getCampoIva(), null);
+			jPanel2.add(getCampoTotal(), null);
+		}
+		return jPanel2;
+	}
+
+	/**
+	 * This method initializes campoCantidad	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoCantidad() {
+		if (campoCantidad == null) {
+			campoCantidad = new JTextField();
+			campoCantidad.setBounds(new Rectangle(3, 20, 59, 21));
+		}
+		return campoCantidad;
+	}
+
+	/**
+	 * This method initializes choiceIva	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceIva() {
+		if (choiceIva == null) {
+			choiceIva = new Choice();
+			choiceIva.setBounds(new Rectangle(59, 32, 50, 19));
+		}
+		return choiceIva;
+	}
+
+	/**
+	 * This method initializes campoSubTotal	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoSubTotal() {
+		if (campoSubTotal == null) {
+			campoSubTotal = new JTextField();
+			campoSubTotal.setBounds(new Rectangle(134, 10, 86, 20));
+		}
+		return campoSubTotal;
+	}
+
+	/**
+	 * This method initializes campoIva	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoIva() {
+		if (campoIva == null) {
+			campoIva = new JTextField();
+			campoIva.setBounds(new Rectangle(135, 32, 85, 19));
+		}
+		return campoIva;
+	}
+
+	/**
+	 * This method initializes campoTotal	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoTotal() {
+		if (campoTotal == null) {
+			campoTotal = new JTextField();
+			campoTotal.setBounds(new Rectangle(136, 58, 86, 17));
+		}
+		return campoTotal;
+	}
+
+	/**
+	 * This method initializes cargar	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCargar() {
+		if (cargar == null) {
+			cargar = new JButton();
+			cargar.setBounds(new Rectangle(1025, 109, 90, 46));
+			cargar.setText("Agregar");
+			cargar.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+				Object[]fila=new Object[10];
+				fila[0]=campoCantidad.getText();
+			    fila[1]=choiceMarca.getSelectedItem();
+			    fila[2]=choiceCalidad.getSelectedItem();
+			    fila[3]=choiceVariante.getSelectedItem();	
+			    fila[4]=campoGramaje.getText();
+			    fila[5]=campoAlto.getText();
+			    fila[6]=campoAncho.getText();
+			    fila[7]=campoImporte.getText();
+			    fila[8]=campoUnidadDeMedida.getText();
+			    fila[9]=campoImporteTotal.getText();
+				modeloTabla.addRow(fila);
+				}
+			});
+		}
+		return cargar;
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setBounds(new Rectangle(17, 159, 1004, 104));
+			jScrollPane.setViewportView(getJTableMateriales());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes jTableMateriales	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	DefaultTableModel modeloTabla=new DefaultTableModel();
+	private Choice choiceNroOrden = null;
+	private JCheckBox jCheckBoxParaStock = null;
+	private JLabel jLabel2 = null;
+	private JTextField campoVendedor = null;
+	private JTable getJTableMateriales() {
+		modeloTabla.addColumn("Cantidad");
+		modeloTabla.addColumn("Marca");
+		modeloTabla.addColumn("Calidad");
+		modeloTabla.addColumn("Variante");
+		modeloTabla.addColumn("Gramaje");
+		modeloTabla.addColumn("Alto");
+		modeloTabla.addColumn("Ancho");
+		modeloTabla.addColumn("Importe");
+		modeloTabla.addColumn("Unidad de medida");
+		modeloTabla.addColumn("Importe total");
+		
+		
+		if (jTableMateriales == null) {
+			jTableMateriales = new JTable(modeloTabla);
+		}
+		return jTableMateriales;
+	}
+
+	/**
+	 * This method initializes campoUnidadDeMedida	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoUnidadDeMedida() {
+		if (campoUnidadDeMedida == null) {
+			campoUnidadDeMedida = new JTextField();
+			campoUnidadDeMedida.setBounds(new Rectangle(796, 22, 106, 20));
+			campoUnidadDeMedida.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyTyped(java.awt.event.KeyEvent e) {
+					double cantidad=Double.parseDouble(getCampoCantidad().getText());
+					double importe=Double.parseDouble(getCampoImporte().getText());
+					double importeTotal=cantidad*importe;
+					campoImporteTotal.setText(String.valueOf(importeTotal));
+					/*if(getCampoCantidad().getText().equals("0") || getCampoCantidad().getText().equals("")){
+						
+						JOptionPane.showMessageDialog(null, "Corrija la cantidad");
+						
+						campoCantidad.requestFocus();
+						
+						campoUnidadDeMedida=new JTextField();
+						
+						}*/
+				}
+			});
+			
+			
+					
+			
+					
+						
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				
+			
+		}
+		return campoUnidadDeMedida;
+	}
+
+	private void setChoiceNroOrden(ArrayList<String>nrosOrden) {
+		for(int i=0;i<nrosOrden.size();i++){
+			
+			this.choiceNroOrden.add(nrosOrden.get(i));	
+		}
+		
+		
+		
+	}
+
+	/**
+	 * This method initializes choiceNroOrden	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceNroOrden() {
+		if (choiceNroOrden == null) {
+			choiceNroOrden = new Choice();
+			choiceNroOrden.setBounds(new Rectangle(844, 10, 172, 21));
+		}
+		return choiceNroOrden;
+	}
+
+	/**
+	 * This method initializes jCheckBoxParaStock	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getJCheckBoxParaStock() {
+		if (jCheckBoxParaStock == null) {
+			jCheckBoxParaStock = new JCheckBox();
+			jCheckBoxParaStock.setBounds(new Rectangle(571, 8, 23, 16));
+		}
+		return jCheckBoxParaStock;
+	}
+
+	/**
+	 * This method initializes campoVendedor	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCampoVendedor() {
+		if (campoVendedor == null) {
+			campoVendedor = new JTextField();
+			campoVendedor.setBounds(new Rectangle(846, 32, 168, 19));
+		}
+		return campoVendedor;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="-1,-3"
