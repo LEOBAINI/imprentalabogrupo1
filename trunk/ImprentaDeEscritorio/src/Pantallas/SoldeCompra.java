@@ -405,7 +405,7 @@ public class SoldeCompra extends JFrame {
 			DomiciliodeRetiro.setBounds(new Rectangle(325, 5, 299, 22));
 			DomiciliodeRetiro.setText("Si tilde en Retirar entonces escribir domicilio de retiro");
 			DomiciliodeRetiro.setEnabled(false);
-		}
+		}//
 		return DomiciliodeRetiro;
 	}
 
