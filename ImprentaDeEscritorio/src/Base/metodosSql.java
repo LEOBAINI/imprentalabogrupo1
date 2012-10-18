@@ -332,6 +332,16 @@ public class metodosSql extends ConexionMySql {
 		return resultado;
 		
 	}
+
+
+
+	public int dameNombreOTteDoyNroOT(String nombreOT) {
+
+		int resultado=0;
+		resultado=Integer.parseInt(consultarUnaColumna("select nroorden from imprenta.ordentrabajo where nombre = '"+nombreOT+"';").get(0));
+
+		return resultado;
+	}
 	
 
 }

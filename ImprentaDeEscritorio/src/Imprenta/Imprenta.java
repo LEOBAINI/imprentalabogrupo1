@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import Base.metodosSql;
 
@@ -152,8 +154,82 @@ public  class Imprenta {
 		
 	}	
 	
-	public static void llenarOrdenCompra(){
+	public static int llenarOrdenCompra(OrdenDeCompra OC){
+		metodosSql metodos=new metodosSql();
+		
+		
+		
+		
+		int nroOc=OC.getNroOrdenCompra();
+		String nombreOt=OC.getNombreDeLaOT();
+		int nroOT=metodos.dameNombreOTteDoyNroOT(nombreOt); 
+		String fechaConfeccion=OC.getFechaConfeccion();
+		String fechaEntrega=OC.getFechaEntrega();
+		String proveedor=OC.getProveedor();
+		String vendedor=OC.getVendedor();
+		String domicilioEntrega=OC.getDomicilioEntrega();
+		String horario=OC.getHorarioEntrega();
+		double total=OC.getTotal();
+		double iva=OC.getIva();
+		
+		
+		
+		/*boolean paraStock=OC.getEsParaStock();
+		boolean loEnviaProveedor=OC.getLoEnviaProveedor();*/
+		
+		
+		
+		JTable materiales=OC.getMateriales();
+		
+		
+		
+		metodos.insertarOmodif("INSERT INTO `imprenta`.`solicitudcompra` "+
+				 " (`idsolicitudCompra`, `idOrdTrabajo`, `FechaPedido`, `FechaEntrega`,"+
+						 "  `proveedor`, `vendedor`, `lugarDeEntrega`, `horarioDeEntrega`, `total`,`iva`) VALUES "+
+						 "  ("+nroOc+", "+nroOT+", '"+fechaConfeccion+"', '"+fechaEntrega+"', '"+proveedor+"', '"+vendedor+"', " +
+						 "'"+domicilioEntrega+"', '"+horario+"'"+
+						 "  , "+total+","+iva+");");
+		
+	/*INSERT INTO `imprenta`.`solicitudcompra` 
+	 * (`idsolicitudCompra`, `idOrdTrabajo`, `Observacion`, `FechaPedido`, `FechaEntrega`,
+	 *  `proveedor`, `vendedor`, `lugarDeEntrega`, `horarioDeEntrega`, `total`) VALUES 
+	 *  (1, 1, 'observ', 'fechped', 'FechEntr', 'proveed', 'vendedor', 'lugarEntrega', 'horarioEntrega'
+	 *  , total);*/	
+		
+		TableModel modelo; 
+		modelo=materiales.getModel();
+		int filas=modelo.getRowCount();
+		
+		for(int i=0;i<filas;i++){
+		int cantidad=Integer.parseInt(modelo.getValueAt(i, 0).toString());
+		String marca=modelo.getValueAt(i, 1).toString();
+		String calidad=modelo.getValueAt(i, 2).toString();
+		String variante=modelo.getValueAt(i,3).toString();
+		String gramaje=modelo.getValueAt(i, 4).toString();
+		int alto=Integer.parseInt(modelo.getValueAt(i, 5).toString());
+		int ancho=Integer.parseInt(modelo.getValueAt(i, 6).toString());
+		//double importe=Double.parseDouble(modelo.getValueAt(i, 7).toString());
+		String unidadMedida=modelo.getValueAt(i, 8).toString();
+		double importeTotal=Double.parseDouble(modelo.getValueAt(i, 9).toString());
+		metodos.insertarOmodif("INSERT INTO `imprenta`.`MaterialesDeLaSolicitudDeCompra` "+
+	 " (`nroSolicitudDeCompra`, `Cantidad`, `Marca`, `Calidad`, `Variante`, `Gramaje`, `Alto`, `Ancho`,"+ 
+	 " `Umedida`, `costoTotal`, `entregado`)" +
+	 " VALUES  ("+OC.getNroOrdenCompra()+", "+cantidad+", '"+marca+"', '"+calidad+"', '"+variante+"', '"+gramaje+"',  "+
+	 " "+alto+", "+ancho+", '"+unidadMedida+"', "+importeTotal+", 'PENDIENTE');");
+		}
+		
+		
+	
+		
+	/*INSERT INTO `imprenta`.`MaterialesDeLaSolicitudDeCompra` 
+	 * (`nroSolicitudDeCompra`, `Cantidad`, `Marca`, `Calidad`, `Variante`, `Gramaje`, `Alto`, `Ancho`, 
+	 * `Umedida`, `costoTotal`, `entregado`) VALUES  (1, canti, 'marca', 'cali', 'varian', 'gramaje', 
+	 * alto, ancho, 'umdida', costotal, 'entregado');*/
+		
+		
+		
 		//completar en base de datos
+		return 0;
 	}
 	public static void verEstadoDeTrabajo(OrdenDeTrabajo ot){
 		//consultar con la bd..
