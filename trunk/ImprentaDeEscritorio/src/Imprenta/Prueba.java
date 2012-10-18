@@ -8,6 +8,11 @@ import Consulta.Consultas;
 import Formateador.Formato;
 
 public class Prueba {
+	
+	public static void main(String[] args) {
+		Formato f=new Formato();
+		System.out.println(f.dameFechaConFormatoX("yyyy'-'MM'-'dd"));
+	}
 		
 		
 	}

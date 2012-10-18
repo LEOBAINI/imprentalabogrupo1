@@ -1,6 +1,9 @@
 package Formateador;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 
 import Base.metodosSql;
@@ -88,6 +91,27 @@ public class Formato {
         	 
           return tar;
     	  
+      }
+      
+      public String dameFechaConFormatoX(String formatoFechaseparadoXguionyGuionEntreComillas){//el MM va con mayuscula
+ 		 SimpleDateFormat formateador = new SimpleDateFormat(formatoFechaseparadoXguionyGuionEntreComillas, new Locale("es_ES"));
+ 		 Date fechaDate = new Date();
+          String fecha=formateador.format(fechaDate);
+          
+ 	
+ 	  return fecha;
+ 	}
+      
+      
+     
+      
+      public String ParseaFechaDeInglesACastellano(String fechaInglesa){
+    	  
+    	String resultado=null;
+    	
+    	
+    	
+    	return resultado;
       }
        
 

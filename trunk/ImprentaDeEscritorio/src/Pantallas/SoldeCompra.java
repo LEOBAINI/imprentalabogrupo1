@@ -15,6 +15,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JButton;
 
 import Base.metodosSql;
+import Imprenta.Imprenta;
+import Imprenta.OrdenDeCompra;
 
 import java.awt.Choice;
 import java.util.ArrayList;
@@ -53,8 +55,6 @@ public class SoldeCompra extends JFrame {
 	private JLabel Tarde = null;
 	private JPanel jPanel1 = null;
 	private JButton jButton = null;
-	private JButton jButton1 = null;
-	private JButton jButton11 = null;
 	private JLabel jLabel22111121 = null;
 	private JLabel jLabel22111122 = null;
 	private JLabel jLabel221111221 = null;
@@ -117,7 +117,7 @@ public class SoldeCompra extends JFrame {
 		
 		//esto deberia solo mostrar las ot que no tienen oc hecha.
 		//setChoiceVendedor(metodos.consultarUnaColumna("SELECT nombre FROM imprenta.vendedor;"));
-		setFechadeldìa(metodos.dameFechaDeHoyConFormatoX("dd'-'MM'-'yyyy"));
+		setFechadeldìa(metodos.dameFechaDeHoyConFormatoX("yyyy'-'MM'-'dd"));
 		setChoiceMarca(metodos.consultarUnaColumna("select marca from imprenta.marcapapel"));
 		setChoiceCalidad(metodos.consultarUnaColumna("select descripcion from imprenta.calidad"));
 		setChoiceVariante(metodos.consultarUnaColumna("select descripcion from imprenta.variante"));
@@ -161,10 +161,7 @@ public class SoldeCompra extends JFrame {
 	}
 	
 
-	private void setChoiceIva(Choice choiceIva) {
-		this.choiceIva = choiceIva;
-	}
-
+	
 	private void setFechadeldìa(String fecha) {
 		this.Fechadeldìa.setText(fecha);
 	}
@@ -227,8 +224,7 @@ public class SoldeCompra extends JFrame {
 			jContentPane1.add(Vendedor, null);
 			jContentPane1.add(getJPanel(), null);
 			jContentPane1.add(getJButton(), null);
-			jContentPane1.add(getJButton1(), null);
-			jContentPane1.add(getJButton11(), null);
+			
 			jContentPane1.add(getChoiceRazonSocialproveedor(), null);
 			jContentPane1.add(getJPanel1(), null);
 			jContentPane1.add(getJPanel2(), null);
@@ -238,6 +234,7 @@ public class SoldeCompra extends JFrame {
 			jContentPane1.add(getJCheckBoxParaStock(), null);
 			jContentPane1.add(jLabel2, null);
 			jContentPane1.add(getCampoVendedor(), null);
+			jContentPane1.add(getGuardar(), null);
 		}
 		return jContentPane1;
 	}
@@ -405,7 +402,7 @@ public class SoldeCompra extends JFrame {
 			DomiciliodeRetiro.setBounds(new Rectangle(325, 5, 299, 22));
 			DomiciliodeRetiro.setText("Si tilde en Retirar entonces escribir domicilio de retiro");
 			DomiciliodeRetiro.setEnabled(false);
-		}//
+		}
 		return DomiciliodeRetiro;
 	}
 
@@ -523,34 +520,6 @@ public class SoldeCompra extends JFrame {
 			jButton = new JButton();
 		}
 		return jButton;
-	}
-
-	/**
-	* This method initializes jButton1	
-	* 	
-	* @return javax.swing.JButton	
-	*/
-	private JButton getJButton1() {
-		if (jButton1 == null) {
-			jButton1 = new JButton();
-			jButton1.setBounds(new Rectangle(32, 333, 77, 26));
-			jButton1.setText("Limpiar");
-		}
-		return jButton1;
-	}
-
-	/**
-	* This method initializes jButton11	
-	* 	
-	* @return javax.swing.JButton	
-	*/
-	private JButton getJButton11() {
-		if (jButton11 == null) {
-			jButton11 = new JButton();
-			jButton11.setBounds(new Rectangle(122, 333, 87, 26));
-			jButton11.setText("Guardar");
-		}
-		return jButton11;
 	}
 
 	/**
@@ -741,10 +710,10 @@ public class SoldeCompra extends JFrame {
 			jPanel2.add(jLabel22111121, null);
 			jPanel2.add(jLabel22111122, null);
 			jPanel2.add(jLabel221111221, null);
-			jPanel2.add(getChoiceIva(), null);
 			jPanel2.add(getCampoSubTotal(), null);
 			jPanel2.add(getCampoIva(), null);
 			jPanel2.add(getCampoTotal(), null);
+			jPanel2.add(getJTextFieldIva(), null);
 		}
 		return jPanel2;
 	}
@@ -760,19 +729,6 @@ public class SoldeCompra extends JFrame {
 			campoCantidad.setBounds(new Rectangle(3, 20, 59, 21));
 		}
 		return campoCantidad;
-	}
-
-	/**
-	 * This method initializes choiceIva	
-	 * 	
-	 * @return java.awt.Choice	
-	 */
-	private Choice getChoiceIva() {
-		if (choiceIva == null) {
-			choiceIva = new Choice();
-			choiceIva.setBounds(new Rectangle(59, 32, 50, 19));
-		}
-		return choiceIva;
 	}
 
 	/**
@@ -826,6 +782,7 @@ public class SoldeCompra extends JFrame {
 			cargar.setText("Agregar");
 			cargar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+				double sumaSubtotal=0;
 				Object[]fila=new Object[10];
 				fila[0]=campoCantidad.getText();
 			    fila[1]=choiceMarca.getSelectedItem();
@@ -838,8 +795,14 @@ public class SoldeCompra extends JFrame {
 			    fila[8]=campoUnidadDeMedida.getText();
 			    fila[9]=campoImporteTotal.getText();
 				modeloTabla.addRow(fila);
+				for(int i=0;i<modeloTabla.getRowCount();i++){
+					sumaSubtotal=sumaSubtotal+Integer.parseInt(modeloTabla.getValueAt(i, 9).toString());
+					
+				}
+				campoSubTotal.setText(String.valueOf(sumaSubtotal));
 				}
 			});
+			
 		}
 		return cargar;
 	}
@@ -868,6 +831,8 @@ public class SoldeCompra extends JFrame {
 	private JCheckBox jCheckBoxParaStock = null;
 	private JLabel jLabel2 = null;
 	private JTextField campoVendedor = null;
+	private JTextField jTextFieldIva = null;
+	private JButton guardar = null;
 	private JTable getJTableMateriales() {
 		modeloTabla.addColumn("Cantidad");
 		modeloTabla.addColumn("Marca");
@@ -981,6 +946,94 @@ public class SoldeCompra extends JFrame {
 			campoVendedor.setBounds(new Rectangle(846, 32, 168, 19));
 		}
 		return campoVendedor;
+	}
+
+	/**
+	 * This method initializes jTextFieldIva	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getJTextFieldIva() {
+		if (jTextFieldIva == null) {
+			jTextFieldIva = new JTextField();
+			jTextFieldIva.setBounds(new Rectangle(55, 32, 29, 19));
+			jTextFieldIva.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyReleased(java.awt.event.KeyEvent e) {
+					try{
+						double subtotal=0;
+						double _campoIva=0;
+						double iva=0;
+						double total=0;
+						iva=Double.parseDouble(getJTextFieldIva().getText());
+						subtotal=Double.parseDouble(getCampoSubTotal().getText());
+						_campoIva=(subtotal*(iva/100));
+						campoIva.setText(String.valueOf(_campoIva));
+						total=subtotal+_campoIva;
+						campoTotal.setText(String.valueOf(total));
+						
+						
+						
+						
+						
+						
+						
+						}catch(Exception er){
+							System.out.println(er.getMessage());
+						}
+						
+					
+				}
+			});
+			
+				
+			
+		}
+		return jTextFieldIva;
+	}
+
+	/**
+	 * This method initializes guardar	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getGuardar() {
+		if (guardar == null) {
+			guardar = new JButton();
+			guardar.setBounds(new Rectangle(16, 331, 93, 47));
+			guardar.setText("Guardar");
+			guardar.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Imprenta imp=new Imprenta();
+					
+					//OrdenDeCompra OC=new OrdenDeCompra(getChoiceNroOrden().getSelectedItem().toString(), Integer.parseInt(getNrosc().toString()), getFechadeldìa().toString());
+					OrdenDeCompra OC=new OrdenDeCompra();
+					
+					OC.setNombreDeLaOT(getChoiceNroOrden().getSelectedItem().toString());
+					
+					OC.setNroOrdenCompra(Integer.parseInt(getNrosc().getText()));
+					
+					OC.setFechaConfeccion(getFechadeldìa().getText());
+					
+					OC.setMateriales(getJTableMateriales());
+					OC.setDomicilioEntrega(getDomiciliodeRetiro().getText());
+					OC.setEsParaStock(getJCheckBoxParaStock().isSelected());
+					OC.setFechaEntrega(getJTextFieldfechaEntrega().getText());
+					if(getTildeMañana().isSelected()){
+					OC.setHorarioEntrega("MAÑANA");
+					}else{
+						OC.setHorarioEntrega("TARDE");
+					}
+					OC.setIva(Double.parseDouble(getJTextFieldIva().getText()));
+					OC.setLoEnviaProveedor(getEnviaProv().isSelected());
+					OC.setProveedor(getChoiceRazonSocialproveedor().getSelectedItem());
+					OC.setTotal(Double.parseDouble(getCampoTotal().getText()));
+					OC.setVendedor(getCampoVendedor().getText());
+					imp.llenarOrdenCompra(OC);
+					
+				}
+			});
+		}
+		return guardar;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="-1,-3"

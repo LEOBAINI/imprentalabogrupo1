@@ -30,6 +30,7 @@ import java.awt.GridBagConstraints;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
 import javax.swing.JCheckBox;
+import java.awt.Dimension;
 
 public class OrdenTrabajo extends JPanel {
 
@@ -98,6 +99,14 @@ public class OrdenTrabajo extends JPanel {
 	private JLabel jLabel25 = null;
 	private JLabel jLabel26 = null;
 	private JLabel jLabel27 = null;
+	private JScrollPane jScrollPane1 = null;
+	private JTable jTableElementos = null;
+	private JLabel SecciónElementos = null;
+	private JLabel Elemento = null;
+	private JLabel Cantidad = null;
+	private JTextField jTextFieldElemento = null;
+	private JTextField jTextFieldCantidad = null;
+	private JButton jButtonCargarElemento = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -108,8 +117,10 @@ public class OrdenTrabajo extends JPanel {
 		inicializarCampos();
 	}
 	private void inicializarCampos(){
+		
 		ArrayList<String >datos=null;
 		metodosSql metodos=new metodosSql();
+		FechaConfeccion.setText(metodos.dameFechaDeHoyConFormatoX("yyyy'-'MM'-'dd"));
 		int maxNroOrden=1;
 		if(!metodos.consultarUnaColumna("SELECT count(nroOrden) FROM imprenta.ordentrabajo;").get(0).equals("0")){
 			maxNroOrden=maxNroOrden+Integer.parseInt(metodos.consultarUnaColumna("SELECT max(nroOrden) FROM imprenta.ordentrabajo;").get(0));
@@ -159,8 +170,17 @@ public class OrdenTrabajo extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		Cantidad = new JLabel();
+		Cantidad.setBounds(new Rectangle(124, 196, 53, 16));
+		Cantidad.setText("Cantidad");
+		Elemento = new JLabel();
+		Elemento.setBounds(new Rectangle(49, 196, 62, 16));
+		Elemento.setText("Elemento");
+		SecciónElementos = new JLabel();
+		SecciónElementos.setBounds(new Rectangle(50, 176, 112, 16));
+		SecciónElementos.setText("Sección elementos");
 		jLabel22 = new JLabel();
-		jLabel22.setBounds(new Rectangle(270, 235, 94, 19));
+		jLabel22.setBounds(new Rectangle(214, 323, 118, 19));
 		jLabel22.setText("Apaisado");
 		jLabel24 = new JLabel();
 		jLabel24.setText("Formato");
@@ -175,22 +195,22 @@ public class OrdenTrabajo extends JPanel {
 		jLabel20.setText("Calidad");
 		jLabel20.setBounds(new Rectangle(245, 24, 42, 16));
 		jLabel19 = new JLabel();
-		jLabel19.setBounds(new Rectangle(170, 320, 195, 17));
+		jLabel19.setBounds(new Rectangle(168, 401, 195, 17));
 		jLabel19.setText("Proveedor que realizará la tarea");
 		jLabel18 = new JLabel();
-		jLabel18.setBounds(new Rectangle(50, 320, 111, 17));
+		jLabel18.setBounds(new Rectangle(49, 401, 111, 17));
 		jLabel18.setText("Tareas del trabajo");
 		jLabel17 = new JLabel();
-		jLabel17.setBounds(new Rectangle(50, 300, 161, 17));
+		jLabel17.setBounds(new Rectangle(48, 380, 161, 17));
 		jLabel17.setText("Sección Orden de Ejecución");
 		jLabel16 = new JLabel();
-		jLabel16.setBounds(new Rectangle(50, 268, 161, 21));
+		jLabel16.setBounds(new Rectangle(47, 345, 161, 21));
 		jLabel16.setText("Cantidad de Planchas (nro)");
 		jLabel15 = new JLabel();
-		jLabel15.setBounds(new Rectangle(50, 244, 133, 21));
+		jLabel15.setBounds(new Rectangle(49, 319, 133, 21));
 		jLabel15.setText("Sección PreImpresión");
 		jLabel14 = new JLabel();
-		jLabel14.setBounds(new Rectangle(797, 169, 135, 23));
+		jLabel14.setBounds(new Rectangle(797, 215, 135, 23));
 		jLabel14.setText("Sección de Materiales");
 		jLabel13 = new JLabel();
 		jLabel13.setText("Cant X Unidad de trabajo");
@@ -199,39 +219,39 @@ public class OrdenTrabajo extends JPanel {
 		jLabel12.setText("Elemento");
 		jLabel12.setBounds(new Rectangle(5, 25, 113, 15));
 		jLabel10 = new JLabel();
-		jLabel10.setBounds(new Rectangle(50, 212, 142, 16));
+		jLabel10.setBounds(new Rectangle(205, 150, 120, 16));
 		jLabel10.setText("Cantidad a Entregar");
 		jLabel9 = new JLabel();
-		jLabel9.setBounds(new Rectangle(50, 188, 134, 16));
+		jLabel9.setBounds(new Rectangle(48, 146, 61, 16));
 		jLabel9.setText("Producto");
 		jLabel8 = new JLabel();
-		jLabel8.setBounds(new Rectangle(296, 160, 25, 16));
+		jLabel8.setBounds(new Rectangle(297, 122, 25, 16));
 		jLabel8.setText("Alto");
 		jLabel7 = new JLabel();
-		jLabel7.setBounds(new Rectangle(200, 160, 38, 16));
+		jLabel7.setBounds(new Rectangle(194, 120, 38, 16));
 		jLabel7.setText("Ancho");
 		jLabel6 = new JLabel();
-		jLabel6.setBounds(new Rectangle(50, 160, 141, 16));
+		jLabel6.setBounds(new Rectangle(45, 118, 141, 16));
 		jLabel6.setText("Medida Final.");
 		jLabel5 = new JLabel();
 		jLabel5.setBounds(new Rectangle(826, 41, 76, 16));
 		jLabel5.setText("Descripción");
 		jLabel4 = new JLabel();
-		jLabel4.setBounds(new Rectangle(50, 135, 144, 16));
+		jLabel4.setBounds(new Rectangle(46, 95, 144, 16));
 		jLabel4.setText("Nombre corto del trabajo.");
 		jLabel3 = new JLabel();
-		jLabel3.setBounds(new Rectangle(50, 112, 119, 16));
+		jLabel3.setBounds(new Rectangle(48, 74, 119, 16));
 		jLabel3.setText("Fecha Prometida");
 		jLabel2 = new JLabel();
-		jLabel2.setBounds(new Rectangle(50, 90, 117, 16));
+		jLabel2.setBounds(new Rectangle(48, 51, 117, 16));
 		jLabel2.setText("Fecha de confección");
 		jLabel1 = new JLabel();
-		jLabel1.setBounds(new Rectangle(50, 68, 78, 16));
+		jLabel1.setBounds(new Rectangle(45, 31, 78, 16));
 		jLabel1.setText("Cliente");
 		jLabel = new JLabel();
-		jLabel.setBounds(new Rectangle(50, 46, 78, 16));
+		jLabel.setBounds(new Rectangle(44, 10, 78, 16));
 		jLabel.setText("Orden N°");
-		this.setSize(1195, 568);
+		this.setSize(1195, 600);
 		this.setLayout(null);
 		this.setBackground(SystemColor.activeCaption);
 		this.setBackground(SystemColor.controlHighlight);
@@ -267,7 +287,7 @@ public class OrdenTrabajo extends JPanel {
 		this.add(getJButton(), null);
 		this.add(getJButton1(), null);
 		this.add(getChoiceCliente(), null);
-		this.add(getJButton2(), null);
+	//	this.add(getJButton2(), null);
 		this.add(getJButton3(), null);
 		this.add(getJScrollPaneTarea(), null);
 		this.add(getChoiceTareas(), null);
@@ -288,6 +308,13 @@ public class OrdenTrabajo extends JPanel {
 		this.add(getPosesXpliego(), null);
 		this.add(getPliegosEnDemasia(), null);
 		this.add(getPliegosXhoja(), null);
+		this.add(getJScrollPane1(), null);
+		this.add(SecciónElementos, null);
+		this.add(Elemento, null);
+		this.add(Cantidad, null);
+		this.add(getJTextFieldElemento(), null);
+		this.add(getJTextFieldCantidad(), null);
+		this.add(getJButtonCargarElemento(), null);
 		
 	}
 
@@ -299,7 +326,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getFechaConfeccion() {
 		if (FechaConfeccion == null) {
 			FechaConfeccion = new JTextField();
-			FechaConfeccion.setBounds(new Rectangle(244, 90, 122, 20));
+			FechaConfeccion.setBounds(new Rectangle(241, 52, 122, 20));
 			FechaConfeccion.setName("FechaConfeccion");
 			FechaConfeccion.setEditable(false);
 		}
@@ -314,7 +341,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getOrdenNro() {
 		if (OrdenNro == null) {
 			OrdenNro = new JTextField();
-			OrdenNro.setBounds(new Rectangle(244, 46, 122, 20));
+			OrdenNro.setBounds(new Rectangle(241, 6, 122, 20));
 			OrdenNro.setEditable(false);
 		}
 		return OrdenNro;
@@ -328,7 +355,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getFechaPrometida() {
 		if (FechaPrometida == null) {
 			FechaPrometida = new JTextField();
-			FechaPrometida.setBounds(new Rectangle(244, 112, 122, 20));
+			FechaPrometida.setBounds(new Rectangle(241, 75, 122, 20));
 			FechaPrometida.setName("Fechaprometida");
 			FechaPrometida.setEditable(false);
 		}
@@ -343,7 +370,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getNombreTrabajo() {
 		if (nombreTrabajo == null) {
 			nombreTrabajo = new JTextField();
-			nombreTrabajo.setBounds(new Rectangle(244, 134, 122, 21));
+			nombreTrabajo.setBounds(new Rectangle(240, 99, 122, 21));
 		}
 		return nombreTrabajo;
 	}
@@ -356,7 +383,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getAncho() {
 		if (ancho == null) {
 			ancho = new JTextField();
-			ancho.setBounds(new Rectangle(244, 160, 50, 22));
+			ancho.setBounds(new Rectangle(240, 122, 50, 22));
 			ancho.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
 					try{
@@ -383,7 +410,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getAlto() {
 		if (alto == null) {
 			alto = new JTextField();
-			alto.setBounds(new Rectangle(322, 160, 43, 21));
+			alto.setBounds(new Rectangle(325, 123, 43, 21));
 			alto.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
 					try{
@@ -410,7 +437,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getCantidadAEntregar() {
 		if (CantidadAEntregar == null) {
 			CantidadAEntregar = new JTextField();
-			CantidadAEntregar.setBounds(new Rectangle(244, 208, 121, 21));
+			CantidadAEntregar.setBounds(new Rectangle(328, 148, 121, 21));
 			CantidadAEntregar.addKeyListener(new java.awt.event.KeyAdapter() {   
 				 
 				   
@@ -449,7 +476,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getCantidadUniTrabajo() {
 		if (cantidadUniTrabajo == null) {
 			cantidadUniTrabajo = new JTextField();
-			cantidadUniTrabajo.setBounds(new Rectangle(664, 249, 42, 21));
+			cantidadUniTrabajo.setBounds(new Rectangle(641, 306, 42, 21));
 		}
 		return cantidadUniTrabajo;
 	}
@@ -475,7 +502,7 @@ public class OrdenTrabajo extends JPanel {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setBounds(new Rectangle(528, 348, 662, 112));
+			jScrollPane.setBounds(new Rectangle(533, 405, 662, 112));
 			jScrollPane.setViewportView(getJTable());
 		}
 		return jScrollPane;
@@ -503,7 +530,7 @@ public class OrdenTrabajo extends JPanel {
 	private JEditorPane getCantidadPlanchas() {
 		if (CantidadPlanchas == null) {
 			CantidadPlanchas = new JEditorPane();
-			CantidadPlanchas.setBounds(new Rectangle(246, 268, 119, 19));
+			CantidadPlanchas.setBounds(new Rectangle(214, 346, 119, 19));
 			CantidadPlanchas.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
 					try{
@@ -530,7 +557,7 @@ public class OrdenTrabajo extends JPanel {
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setBounds(new Rectangle(50, 465, 315, 21));
+			jButton.setBounds(new Rectangle(46, 542, 315, 21));
 			jButton.setText("Agregar Tarea con su proveedor asociado");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -561,7 +588,7 @@ public class OrdenTrabajo extends JPanel {
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setBounds(new Rectangle(1011, 519, 179, 40));
+			jButton1.setBounds(new Rectangle(531, 542, 659, 17));
 			jButton1.setText("Finalizar carga de OT");
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -630,7 +657,7 @@ public class OrdenTrabajo extends JPanel {
 		
 		if (choiceCliente == null) {
 			choiceCliente = new Choice();
-			choiceCliente.setBounds(new Rectangle(244, 68, 121, 21));
+			choiceCliente.setBounds(new Rectangle(240, 28, 121, 21));
 			choiceCliente.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					System.out.println(choiceCliente.getSelectedItem().toString());
@@ -646,35 +673,35 @@ public class OrdenTrabajo extends JPanel {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getJButton2() {
-		if (jButton2 == null) {
-			jButton2 = new JButton();
-			jButton2.setBounds(new Rectangle(373, 90, 20, 18));
-			jButton2.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Calendario c=new Calendario(FechaConfeccion);
-					
-					c.setVisible(true);
-					//FechaConfeccion.setText(c.getFecha());
-				
-					//FechaConfeccion.setText();
-
-				
-				/*-	SimpleDateFormat fechaforma = new SimpleDateFormat("dd/MM/yyyy");
-					String FfechaSystemA = fechaforma.format(fecha);
-
-
-					//String f=fecha.toString();
-					FechaConfeccion.setText(FfechaSystemA);*/
-
-				
-					
-								
-				}
-			});
-		}
-		return jButton2;
-	}
+//	/*private JButton getJButton2() {
+//		if (jButton2 == null) {
+//			jButton2 = new JButton();
+//			jButton2.setBounds(new Rectangle(373, 90, 20, 18));
+//			jButton2.addActionListener(new java.awt.event.ActionListener() {
+//				public void actionPerformed(java.awt.event.ActionEvent e) {
+//					Calendario c=new Calendario(FechaConfeccion);
+//					
+//					c.setVisible(true);
+//					//FechaConfeccion.setText(c.getFecha());
+//				
+//					//FechaConfeccion.setText();
+//
+//				
+//				/*-	SimpleDateFormat fechaforma = new SimpleDateFormat("dd/MM/yyyy");
+//					String FfechaSystemA = fechaforma.format(fecha);
+//
+//
+//					//String f=fecha.toString();
+//					FechaConfeccion.setText(FfechaSystemA);*/
+//
+//				
+//					
+//								
+//				}
+//			});
+//		}
+//		return jButton2;
+//	}
 	/**
 	 * This method initializes jButton3	
 	 * 	
@@ -683,7 +710,7 @@ public class OrdenTrabajo extends JPanel {
 	private JButton getJButton3() {
 		if (jButton3 == null) {
 			jButton3 = new JButton();
-			jButton3.setBounds(new Rectangle(373, 113, 20, 18));
+			jButton3.setBounds(new Rectangle(365, 77, 20, 18));
 			jButton3.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Calendario c=new Calendario(FechaPrometida);
@@ -717,7 +744,7 @@ public class OrdenTrabajo extends JPanel {
 	private JScrollPane getJScrollPaneTarea() {
 		if (jScrollPaneTarea == null) {
 			jScrollPaneTarea = new JScrollPane();
-			jScrollPaneTarea.setBounds(new Rectangle(51, 366, 315, 95));
+			jScrollPaneTarea.setBounds(new Rectangle(46, 443, 315, 95));
 			jScrollPaneTarea.setViewportView(getJTableTarea());
 		}
 		return jScrollPaneTarea;
@@ -746,7 +773,7 @@ public class OrdenTrabajo extends JPanel {
 	private Choice getChoiceTareas() {
 		if (choiceTareas == null) {
 			choiceTareas = new Choice();
-			choiceTareas.setBounds(new Rectangle(51, 342, 118, 27));
+			choiceTareas.setBounds(new Rectangle(48, 422, 118, 27));
 			choiceTareas.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyTyped(java.awt.event.KeyEvent e) {
 					jButton.doClick();
@@ -764,7 +791,7 @@ public class OrdenTrabajo extends JPanel {
 	private Choice getChoiceProveedor() {
 		if (choiceProveedor == null) {
 			choiceProveedor = new Choice();
-			choiceProveedor.setBounds(new Rectangle(170, 342, 194, 25));
+			choiceProveedor.setBounds(new Rectangle(167, 421, 194, 25));
 			choiceProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyTyped(java.awt.event.KeyEvent e) {
 					jButton.doClick();
@@ -782,7 +809,7 @@ public class OrdenTrabajo extends JPanel {
 	private Choice getProducto() {
 		if (Producto == null) {
 			Producto = new Choice();
-			Producto.setBounds(new Rectangle(244, 186, 120, 19));
+			Producto.setBounds(new Rectangle(115, 144, 87, 21));
 			Producto.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					
@@ -825,7 +852,7 @@ public class OrdenTrabajo extends JPanel {
 	private Choice getChoiceElementoDelProducto() {
 		if (choiceElementoDelProducto == null) {
 			choiceElementoDelProducto = new Choice();
-			choiceElementoDelProducto.setBounds(new Rectangle(532, 249, 96, 21));
+			choiceElementoDelProducto.setBounds(new Rectangle(533, 304, 96, 21));
 			choiceElementoDelProducto.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					//choiceCalidad
@@ -848,7 +875,7 @@ public class OrdenTrabajo extends JPanel {
 	private Choice getChoiceCalidad() {
 		if (choiceCalidad == null) {
 			choiceCalidad = new Choice();
-			choiceCalidad.setBounds(new Rectangle(739, 249, 100, 21));
+			choiceCalidad.setBounds(new Rectangle(759, 310, 100, 21));
 		}
 		return choiceCalidad;
 	}
@@ -860,7 +887,7 @@ public class OrdenTrabajo extends JPanel {
 	private Choice getChoiceVariante() {
 		if (choiceVariante == null) {
 			choiceVariante = new Choice();
-			choiceVariante.setBounds(new Rectangle(871, 249, 88, 21));
+			choiceVariante.setBounds(new Rectangle(871, 310, 88, 21));
 			choiceVariante.setBackground(Color.white);
 		}
 		return choiceVariante;
@@ -873,7 +900,7 @@ public class OrdenTrabajo extends JPanel {
 	private Choice getChoiceFormato() {
 		if (choiceFormato == null) {
 			choiceFormato = new Choice();
-			choiceFormato.setBounds(new Rectangle(1102, 249, 90, 21));
+			choiceFormato.setBounds(new Rectangle(1101, 309, 90, 21));
 		}
 		return choiceFormato;
 	}
@@ -886,7 +913,7 @@ public class OrdenTrabajo extends JPanel {
 		if (jPanelMateriales == null) {
 			jPanelMateriales = new JPanel();
 			jPanelMateriales.setLayout(null);
-			jPanelMateriales.setBounds(new Rectangle(526, 193, 666, 48));
+			jPanelMateriales.setBounds(new Rectangle(528, 244, 666, 48));
 			jPanelMateriales.setBackground(Color.lightGray);
 			jPanelMateriales.add(jLabel20, null);
 			jPanelMateriales.add(jLabel21, null);
@@ -906,7 +933,7 @@ public class OrdenTrabajo extends JPanel {
 		if (jButtonAgregarMaterial == null) {
 			jButtonAgregarMaterial = new JButton();
 			jButtonAgregarMaterial.setText("Agregar material");
-			jButtonAgregarMaterial.setBounds(new Rectangle(529, 465, 657, 21));
+			jButtonAgregarMaterial.setBounds(new Rectangle(532, 516, 657, 21));
 			jButtonAgregarMaterial.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Object[]fila=new Object[11];
@@ -974,7 +1001,7 @@ public class OrdenTrabajo extends JPanel {
 	private JCheckBox getApaisado() {
 		if (apaisado == null) {
 			apaisado = new JCheckBox();
-			apaisado.setBounds(new Rectangle(245, 236, 19, 17));
+			apaisado.setBounds(new Rectangle(185, 321, 19, 17));
 		}
 		return apaisado;
 	}
@@ -986,7 +1013,7 @@ public class OrdenTrabajo extends JPanel {
 	private JEditorPane getGramaje() {
 		if (gramaje == null) {
 			gramaje = new JEditorPane();
-			gramaje.setBounds(new Rectangle(980, 250, 90, 20));
+			gramaje.setBounds(new Rectangle(985, 311, 90, 20));
 		}
 		return gramaje;
 	}
@@ -1008,7 +1035,7 @@ public class OrdenTrabajo extends JPanel {
 			jLabel25.setText("Poses por pliego");
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
-			jPanel.setBounds(new Rectangle(526, 275, 665, 35));
+			jPanel.setBounds(new Rectangle(534, 334, 665, 35));
 			jPanel.add(jLabel25, null);
 			jPanel.add(jLabel26, null);
 			jPanel.add(jLabel27, null);
@@ -1023,7 +1050,7 @@ public class OrdenTrabajo extends JPanel {
 	private JEditorPane getPosesXpliego() {
 		if (posesXpliego == null) {
 			posesXpliego = new JEditorPane();
-			posesXpliego.setBounds(new Rectangle(527, 313, 106, 22));
+			posesXpliego.setBounds(new Rectangle(536, 376, 106, 22));
 		}
 		return posesXpliego;
 	}
@@ -1035,7 +1062,7 @@ public class OrdenTrabajo extends JPanel {
 	private JEditorPane getPliegosEnDemasia() {
 		if (pliegosEnDemasia == null) {
 			pliegosEnDemasia = new JEditorPane();
-			pliegosEnDemasia.setBounds(new Rectangle(643, 313, 152, 23));
+			pliegosEnDemasia.setBounds(new Rectangle(651, 378, 152, 23));
 		}
 		return pliegosEnDemasia;
 	}
@@ -1047,9 +1074,88 @@ public class OrdenTrabajo extends JPanel {
 	private JEditorPane getPliegosXhoja() {
 		if (pliegosXhoja == null) {
 			pliegosXhoja = new JEditorPane();
-			pliegosXhoja.setBounds(new Rectangle(802, 314, 172, 22));
+			pliegosXhoja.setBounds(new Rectangle(807, 381, 172, 22));
 		}
 		return pliegosXhoja;
 	}
+	/**
+	 * This method initializes jScrollPane1	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setBounds(new Rectangle(48, 245, 172, 68));
+			jScrollPane1.setViewportView(getJTableElementos());
+		}
+		return jScrollPane1;
+	}
+	/**
+	 * This method initializes jTableElementos	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	DefaultTableModel modeloElem=new DefaultTableModel();
+	private JTable getJTableElementos() {
+		
+		modeloElem.setColumnCount(2);
+		Object[]nombreCol=new Object[2];
+		nombreCol[0]="Elemento";
+		nombreCol[1]="Cantidad";
+		modeloElem.setColumnIdentifiers(nombreCol);
+		if (jTableElementos == null) {
+			jTableElementos = new JTable(modeloElem);
+		}
+		return jTableElementos;
+	}
+	/**
+	 * This method initializes jTextFieldElemento	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getJTextFieldElemento() {
+		if (jTextFieldElemento == null) {
+			jTextFieldElemento = new JTextField();
+			jTextFieldElemento.setBounds(new Rectangle(52, 216, 60, 20));
+		}
+		return jTextFieldElemento;
+	}
+	/**
+	 * This method initializes jTextFieldCantidad	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getJTextFieldCantidad() {
+		if (jTextFieldCantidad == null) {
+			jTextFieldCantidad = new JTextField();
+			jTextFieldCantidad.setBounds(new Rectangle(121, 218, 57, 20));
+		}
+		return jTextFieldCantidad;
+	}
+	/**
+	 * This method initializes jButtonCargarElemento	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonCargarElemento() {
+		if (jButtonCargarElemento == null) {
+			jButtonCargarElemento = new JButton();
+			jButtonCargarElemento.setBounds(new Rectangle(211, 215, 145, 18));
+			jButtonCargarElemento.setText("Cargar Elemento");
+			jButtonCargarElemento.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Object[]eleCant=new Object[2];
+					eleCant[0]=getJTextFieldElemento().getText();
+					eleCant[1]=getJTextFieldCantidad().getText();
+					
+					modeloElem.addRow(eleCant);
+					
+					
+				}
+			});
+		}
+		return jButtonCargarElemento;
+	}
 
-}  //  @jve:decl-index=0:visual-constraint="-66,12"
+}  //  @jve:decl-index=0:visual-constraint="-185,-5"

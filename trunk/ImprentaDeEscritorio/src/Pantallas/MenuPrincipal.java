@@ -29,6 +29,7 @@ public class MenuPrincipal extends JFrame {
 	private JMenuItem jMenuItem1 = null;
 	private JMenuItem jMenuItem2 = null;
 	private JMenuItem Salir = null;
+	private JMenuItem ConsultaSC = null;
 
 	/**
 	 * This method initializes jPanel	
@@ -84,6 +85,7 @@ public class MenuPrincipal extends JFrame {
 			jMenu1 = new JMenu();
 			jMenu1.setText("Consultas");
 			jMenu1.add(getJMenuItem2());
+			jMenu1.add(getConsultaSC());
 		}
 		return jMenu1;
 	}
@@ -231,6 +233,26 @@ public class MenuPrincipal extends JFrame {
 		return Salir;
 	}
 	
+	/**
+	 * This method initializes ConsultaSC	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getConsultaSC() {
+		if (ConsultaSC == null) {
+			ConsultaSC = new JMenuItem();
+			ConsultaSC.setText("Consultar solicitudes de compra ");
+			ConsultaSC.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					CosultaDeOC OC=new CosultaDeOC();
+					OC.setVisible(true);
+					
+				}
+			});
+		}
+		return ConsultaSC;
+	}
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
