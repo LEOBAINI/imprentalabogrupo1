@@ -30,25 +30,13 @@ public  class Imprenta {
 		String nombreTrabajo=OT.getNombreTrabajo();
 		int alto=OT.getAlto();
 		int ancho=OT.getAncho();
-																String tipoProducto=OT.getTipoProducto();
-		String cantAentregar=OT.getCantidadAentregar();
+																
+		String cantAentregar=String.valueOf(OT.getProducto().getCantidad());
 		String estado=OT.getEstado();
         String apaisado=OT.getApaisado();
         String descripcion=OT.getDescripcion();
 		int cantPlanchas=OT.getCantidadPlanchas();
-																String medidaFinal=OT.getMedidaFinal();
-		String producto=OT.getProducto();
-		
-		
-		
-		
-		/*INSERT INTO `imprenta`.`ordentrabajo` (`NroOrden`, `Cliente`, `FechaEntrPautada`,
-		 *  `Descripcion`, `Estado`, `EsApaisado`, `idTipoProducto`, `FechaConfeccion`, `Nombre`,
-		 *   `Ancho`, `Alto`, `CantidadAEntregar`, `CantPlanchas`) VALUES (10, cliente, '2012-06-06',
-		 *    'descripcion', 'estado', 'apaisado', 1, '2012-06-09', 'nombre', ancho, alto, cantidadEntrgar, cantPlanchas);
-
-*/		
-		
+		String producto=OT.getProducto().getNombreProducto();
 		
 		
 		
@@ -65,48 +53,43 @@ public  class Imprenta {
 		
 		
 			
-		int nroProducto=metodos.dameNroProducto(OT.getProducto());
-		int nroElementoproducto=metodos.dameNroElementoproducto(OT.getTipoProducto());
-		JTable materiales=OT.getMateriales();
-		//int columnas=materiales.getModel().getColumnCount();
+		
+		
+		JTable materiales=OT.getProducto().getMateriales();
+		
 		int filas=materiales.getModel().getRowCount();
 		for(int fila=0;fila<filas;fila++){
 			
-				
-				//System.out.println(materiales.getModel().getValueAt(fila, columna));
-		status=status+	metodos.insertarOmodif("INSERT INTO `imprenta`.`materiaprimadelaot` (`NroOrdenTrabajo`, `NroDeProducto`, "+
-		  " `NroDeElemento`, `MarcaDescripcion`, `CalidadDescripcion`, `VarianteDescripcion`, "+
-		 "  `FormatoDescripcion`, `posesXpliego`, `pliegosnetos`, `pliegosEnDemasia`, `pliegosXhoja`," +
-		 "   `hojas`, `gramaje`, `CantidadXunidadTrabajo`) VALUES ("+numeroOrden+", "+nroProducto+", "+
-		 metodos.dameNroElementoproducto(materiales.getModel().getValueAt(fila, 0).toString())/*numeroDelelemento*/+", " +
-		 		" 'Definir',"+
-		" '"+materiales.getModel().getValueAt(fila, 1)/*calidad*/+"', '"
-			+materiales.getModel().getValueAt(fila, 2)/*variante*/+"', " 
-		+"'"+materiales.getModel().getValueAt(fila, 4)/*formato*/+"', "
-			+materiales.getModel().getValueAt(fila, 5)/*pporpliego*/+"," 
-		+" "+materiales.getModel().getValueAt(fila, 6)/*pliegosnetos*/
-	   +", "+materiales.getModel().getValueAt(fila, 7)/*pliegosenDemasia*/+","
-	     +""+materiales.getModel().getValueAt(fila, 8)/*plXhoja*/+", "
-			+materiales.getModel().getValueAt(fila, 9)/*hojas*/+", "
-			+materiales.getModel().getValueAt(fila, 3)/*Gramaje*/+","
-			+materiales.getModel().getValueAt(fila, 10)/*CantXunidad*/
-			+");");
+			
+			
+			
+			
+			
+			int NroOrdenTrabajo=OT.getNumeroOrdenDeTrabajo();
+			String ElementoDelProductoOT=OT.getProducto().getElementos().get(fila).getElemento();
+			String CalidadDescripcion=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getCalidad();
+			String VarianteDescripcion=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getVariante();
+			String FormatoDescripcion=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getFormato();
+			int posesXpliego=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getPosesXpliego();	
+			int pliegosnetos=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getPliegosnetos();
+			int pliegosEnDemasia=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getPliegosEnDemasia();
+			int pliegosXhoja=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getPliegosXhoja();
+			int hojas=OT.getProducto().getElementos().get(fila).getMateriales().get(0).getCantHojas();
+			int  gramaje=Integer.parseInt(OT.getProducto().getElementos().get(fila).getMateriales().get(0).getGramaje());
+			int CantidadXunidadTrabajo=OT.getProducto().getElementos().get(fila).getCantidad();
+			
+			status=status+metodos.insertarOmodif("INSERT INTO `imprenta`.`materiaprimadelaot` (`NroOrdenTrabajo`, `ElementoDelProducto`, " +
+					"`CalidadDescripcion`, `VarianteDescripcion`, `FormatoDescripcion`, `posesXpliego`, `pliegosnetos`, `pliegosEnDemasia`," +
+					" `pliegosXhoja`, `hojas`, `gramaje`, `CantidadXunidadTrabajo`) VALUES ("+NroOrdenTrabajo+", '"+ElementoDelProductoOT+"'," +
+							" '"+CalidadDescripcion+"', '"+VarianteDescripcion+"', " +
+					"'"+FormatoDescripcion+"', "+posesXpliego+", "+pliegosnetos+", "+pliegosEnDemasia+", "+pliegosXhoja+", "+hojas+", "+gramaje+"," +
+							" "+CantidadXunidadTrabajo+");");
+		
+			
 			
 		}
 		status=status-(filas-1);
 		
-		
-		/*INSERT INTO `imprenta`.`materiaprimadelaot` (`NroOrdenTrabajo`, `NroDeProducto`,
-		 *  `NroDeElemento`, `MarcaDescripcion`, `CalidadDescripcion`, `VarianteDescripcion`,
-		 *   `FormatoDescripcion`, `posesXpliego`, `pliegosnetos`, `pliegosEnDemasia`, `pliegosXhoja`,
-		 *    `hojas`, `gramaje`, `CantidadXunidadTrabajo`) VALUES (nroOrden, nroProducto, nroelemento, 'marca',
-		'calidad', 'variante', 'formato', poses, pliegosnetos, pliegosenDemasia, pliegosXhoja, hojas, gramaje, cantidadXunidadtrabajo);
-
-		 */
-		//*************************************************************
-		
-		
-		//*****************TareasOT*****************************
 	
 			JTable tareas=OT.getTareas();
 			int filasTarea=tareas.getModel().getRowCount();
@@ -118,41 +101,34 @@ public  class Imprenta {
 			status=status-(filasTarea-1);
 			
 			
+		if(status!=3){
+			try{
+			metodos.insertarOmodif("DELETE FROM `imprenta`.`materiaprimadelaot` WHERE `NroOrdenTrabajo`='"+numeroOrden+"';");
+			metodos.insertarOmodif("DELETE FROM `imprenta`.`ordentrabajo` WHERE `NroOrden`='"+numeroOrden+"';");
+			metodos.insertarOmodif("DELETE FROM `imprenta`.`tareaordtrabajo` WHERE `idOrdTrabajo`='"+numeroOrden+"';");
+			}catch(Exception sql){
+				JOptionPane.showMessageDialog(null, "Hubo un error no se pudo hacer rollback, ud tiene dados inconsistentes en nro orden "+numeroOrden);
 				
-			
-			
-		
-		/*INSERT INTO `imprenta`.`tareaordtrabajo` (`idOrdTrabajo`, `idTarea`, `idProveedor`,
-		 *  `Estado`) VALUES (ordenTrabajo, tarea, pproveedor, 'estado');*/
-		//*************************************************************
-		
+			}
+		}
 		}
 		catch(Exception e){
 			JOptionPane.showMessageDialog(null, e.getMessage());
 			System.out.println(e.getStackTrace());
 		}		
 		
-		/*ArrayList<String>errores=null;
-		ABM abms=new ABM();
-		Control cont=new Control();
 		
-		errores=cont.controlarCargaDeOT(OT);
-		if(errores.size()==0){//si no hay errores cargados
-			abms.darAltaOT(OT);
-			System.out.println("LlenarOrdenTrabajo se ha ejecutado correctamente");
-		}else{
-			//mostra los errores
-			for(int i=0;i<errores.size();i++){
-				System.out.println("Mostrando error numero "+(i+1));
-				System.out.println(errores.get(i));
-			}
-			
-		}
-		*/
 		
 		return status;
 		
 	}	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static int llenarOrdenCompra(OrdenDeCompra OC){
 		metodosSql metodos=new metodosSql();
@@ -174,8 +150,7 @@ public  class Imprenta {
 		
 		
 		
-		/*boolean paraStock=OC.getEsParaStock();
-		boolean loEnviaProveedor=OC.getLoEnviaProveedor();*/
+		
 		
 		
 		

@@ -6,15 +6,22 @@ import java.awt.GridBagLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import java.awt.GridBagConstraints;
+import java.awt.Rectangle;
+import java.awt.Color;
 
 public class FondoMenuPpal extends JPanel {
 	ImageIcon imagen;
 
 	private static final long serialVersionUID = 1L;
 
+	public static JProgressBar jProgressBar = null;
+
 	/**
 	 * This is the default constructor
 	 */
+	
 	public FondoMenuPpal(String nombre) {
 		super();
 		imagen=new ImageIcon(getClass().getResource(nombre));
@@ -35,8 +42,11 @@ public class FondoMenuPpal extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
-		this.setLayout(new GridBagLayout());
+		this.setSize(714, 200);
+		this.setLayout(null);
+		
 	}
 
-}
+	
+
+}  //  @jve:decl-index=0:visual-constraint="10,10"

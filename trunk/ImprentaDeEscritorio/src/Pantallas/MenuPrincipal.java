@@ -15,13 +15,13 @@ import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.Color;
 import Imagenes.*;
+import javax.swing.JProgressBar;
 
 @SuppressWarnings("unused")
 public class MenuPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
-	private JPanel jPanel = null;
 	private JMenuBar jJMenuBar = null;
 	private JMenu jMenu = null;
 	private JMenu jMenu1 = null;
@@ -30,21 +30,6 @@ public class MenuPrincipal extends JFrame {
 	private JMenuItem jMenuItem2 = null;
 	private JMenuItem Salir = null;
 	private JMenuItem ConsultaSC = null;
-
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			jPanel = new JPanel();
-			jPanel.setLayout(null);
-			jPanel.setBounds(new Rectangle(0, -1, 828, 351));
-		}
-		return jPanel;
-	}
-
 	/**
 	 * This method initializes jJMenuBar	
 	 * 	
@@ -100,13 +85,22 @@ public class MenuPrincipal extends JFrame {
 			jMenuItem = new JMenuItem();
 			jMenuItem.setText("Cargar una OT");
 			jMenuItem.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {				
-				JFrame frame =new JFrame();//frame
-				OrdenTrabajo ot=new OrdenTrabajo();//panel						
-				frame.add(ot);
+				public void actionPerformed(java.awt.event.ActionEvent e) {		
+				
+				
+					
+					
+			   JFrame frame =new JFrame();//frame
+				
+				
+				OrdenTrabajo ot=new OrdenTrabajo();//panel		
+				//ot.setVisible(true);
+				
+			    frame.add(ot);
 				frame.pack();
 				frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 				frame.setVisible(true);
+				
 				
 				
 					
@@ -120,16 +114,6 @@ public class MenuPrincipal extends JFrame {
 	
 	
 	
-	private OrdenTrabajo setContentPane() {
-		if (jContentPane == null) {
-			jContentPane = new OrdenTrabajo();
-			jContentPane.setLayout(new BorderLayout());
-			//jContentPane.add(getJPanel(), null);
-		}
-		return (OrdenTrabajo) jContentPane;
-		
-	}
-
 	/**
 	 * This method initializes jMenuItem1	
 	 * 	
@@ -141,7 +125,8 @@ public class MenuPrincipal extends JFrame {
 			jMenuItem1.setText("Cargar una OC");
 			jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JOptionPane.showMessageDialog(null,"Chau Ulises");
+					SoldeCompra sol=new SoldeCompra();
+					sol.setVisible(true);
 				}
 			});
 		}
@@ -167,7 +152,7 @@ public class MenuPrincipal extends JFrame {
 	 */
 	private void initialize() {
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);//para que inicie maximizado...   
-		this.setSize(1024,310);
+		this.setSize(1024, 316);
 		this.setBackground(new Color(238, 238, 238));
 		this.setJMenuBar(getJJMenuBar());
 		this.setContentPane(getJContentPane());
@@ -181,21 +166,12 @@ public class MenuPrincipal extends JFrame {
 	 */
 	private FondoMenuPpal getJContentPane() {
 		if (jContentPane == null) {
-			jContentPane = new FondoMenuPpal("cmykLogo.jpg");
+			jContentPane = new FondoMenuPpal("LogoOficialCMYK.png");
 			jContentPane.setLayout(new BorderLayout());
 			//jContentPane.add(getJPanel(), null);
 		}
 		return (FondoMenuPpal) jContentPane;
 	}
-	private OrdenTrabajo getJContentPaneOT() {
-			jContentPane = new OrdenTrabajo();
-			jContentPane.setLayout(new BorderLayout());
-			//jContentPane.add(getJPanel(), null);
-		
-		return (OrdenTrabajo) jContentPane;
-	}
-
-	
 	/**
 	 * This method initializes jMenuItem2	
 	 * 	
@@ -277,4 +253,4 @@ public class MenuPrincipal extends JFrame {
 		});
 	}*/
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}  //  @jve:decl-index=0:visual-constraint="69,65"

@@ -1,14 +1,9 @@
 package Imprenta;
 
-public class Material {
-	private int IdPapel;
-	public int getIdPapel() {
-		return IdPapel;
-	}
 
-	public void setIdPapel(int idPapel) {
-		IdPapel = idPapel;
-	}
+
+public class Material {
+	
 
 	private String calidad;
 	private String variante;
@@ -18,13 +13,24 @@ public class Material {
 	private int pliegosEnDemasia;
 	private int pliegosXhoja;
 	private int cantHojas;
+	private String formato;
 	
 	
-	public Material(String calidad, String variante, String gramaje,
+	
+	public String getFormato() {
+		return formato;
+	}
+
+	public void setFormato(String formato) {
+		this.formato = formato;
+	}
+
+	public Material(String calidad, String variante, String gramaje,String formato,
 			int posesXpliego, int pliegosnetos, int pliegosEnDemasia,
 			int pliegosXhoja, int cantHojas) {
 		super();
 		this.calidad = calidad;
+		this.formato=formato;
 		this.variante = variante;
 		this.gramaje = gramaje;
 		this.posesXpliego = posesXpliego;
@@ -98,6 +104,11 @@ public class Material {
 		this.cantHojas = cantHojas;
 	}
 	
-	
+	private void autocalcularPliegosNetos(){
+		
+	}
+	private void autocalcularCantidadHojas(){
+		
+	}
 
 }

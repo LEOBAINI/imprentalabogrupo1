@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import Formateador.MiModelo;
+
 public class metodosSql extends ConexionMySql {
 	
 	public metodosSql() {
@@ -47,8 +49,12 @@ public class metodosSql extends ConexionMySql {
 		
 	}
 	public int dameProveedorTeDoyId(String proveedor){
+		if(proveedor.equals(null)||proveedor.equals("")){
+			return 1000;
+		}
 		int idProveedor=0;
 		ArrayList<String> consulta=consultarUnaColumna("select idproveedor from imprenta.proveedor where razonsocial= '"+proveedor+"';");
+		
 		if(consulta.size()>0){
 		idProveedor=Integer.parseInt(consulta.get(0));
 		}
@@ -191,7 +197,7 @@ public class metodosSql extends ConexionMySql {
 		//TableColumnModel modeloColumnas = null;
 		java.sql.ResultSetMetaData metadatos;
 		
-		DefaultTableModel modelo=new DefaultTableModel();//voy a modelar mi jtable
+		MiModelo modelo=new MiModelo();//voy a modelar mi jtable
 		
 		JTable tablaDatos=new JTable(modelo);
 		

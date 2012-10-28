@@ -1,4 +1,4 @@
-package Pantallas;//
+package Pantallas;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;

@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import Pantallas.MenuPrincipal;
-
+ 
 public class Main {
 
 	/**
