@@ -80,8 +80,8 @@ public class Formato {
         		 int idTar= metodos.dameTareaTedoyElId(aux1.get(0));
         		 int idProv=metodos.dameProveedorTeDoyId(aux1.get(1));
         		 if(idProv!=0 && idProv!=0){
-        		 Tarea t=new Tarea(nroOrden,idTar, idProv, "ACTIVA");
-        		 tar.add(t);
+        		// Tarea t=new Tarea(nroOrden,idTar, idProv, "ACTIVA");
+        	//	 tar.add(t);
         		 }else{
         			 System.out.println("error la tarea o el proveedor no tienen id, ingrese datos válidos!!!\n Formato lin 83");
         		 }
@@ -112,6 +112,22 @@ public class Formato {
     	
     	
     	return resultado;
+      }
+      
+      public String[] enMascarar(String mascaraSucursal,String enMascarable){
+    	  String[] resultado=new String[2];
+    	  String resultadoAux;
+    	  int largoDeEnmascarable=enMascarable.length();
+    	  int totalDeCerosPosibles=8;
+    	  String aux="";
+    	  for(int i=0;i<totalDeCerosPosibles-largoDeEnmascarable;i++){
+    		  aux=aux+"0";
+    	  }
+    	  resultadoAux=mascaraSucursal+aux.concat(enMascarable); 
+    	  resultado[0]=resultadoAux;
+    	  resultado[1]=enMascarable;
+    	  return resultado;
+    	  
       }
        
 

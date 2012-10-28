@@ -1,22 +1,25 @@
 package Imprenta;
 
 
+import java.util.ArrayList;
+
 import javax.swing.JTable;
 public class OrdenDeTrabajo {
+	private ArrayList<ElementosDelProducto>elementos;
+	//Es la tabla elemento cantidad dentro de seccion elementos
+	
+	
 	private int numeroOrdenDeTrabajo;//
 	private String cliente;//
 	private String estado;//
 	private JTable tareas;//
-	private JTable materiales;
 	private String fechaEntrega;
 	private String fechaConfeccion;
 	private String descripcion;
 	private String nombreTrabajo;
 	private String medidaFinal;
 	private String apaisado;
-	private String cantidadAentregar;
-	private String producto;
-	private String elementoDelProducto;//
+	private Producto producto;
 	private int cantidadPlanchas;
 	private int ancho;
 	private int alto;
@@ -24,7 +27,11 @@ public class OrdenDeTrabajo {
 	public OrdenDeTrabajo(int numeroOrdenDeTrabajo) {
 		super();
 		this.numeroOrdenDeTrabajo = numeroOrdenDeTrabajo;
+		
 	}
+
+
+	
 
 	public int getNumeroOrdenDeTrabajo() {
 		return numeroOrdenDeTrabajo;
@@ -58,13 +65,7 @@ public class OrdenDeTrabajo {
 		this.tareas = tareas;
 	}
 
-	public JTable getMateriales() {
-		return materiales;
-	}
-
-	public void setMateriales(JTable materiales) {
-		this.materiales = materiales;
-	}
+	
 
 	public String getFechaEntrega() {
 		return fechaEntrega;
@@ -114,26 +115,17 @@ public class OrdenDeTrabajo {
 		this.apaisado = apaisado;
 	}
 
-	public String getCantidadAentregar() {
-		return cantidadAentregar;
-	}
+	
 
-	public void setCantidadAentregar(String cantidadAentregar) {
-		this.cantidadAentregar = cantidadAentregar;
-	}
-
-	public String getProducto() {
+	public Producto getProducto() {
 		return producto;
 	}
 
-	public void setProducto(String producto) {
+	public void setProducto(Producto producto) {
 		this.producto = producto;
 	}
 
-	public String getTipoProducto() {
-		return elementoDelProducto;
-	}
-
+	
 	
 
 	public int getCantidadPlanchas() {
@@ -160,12 +152,6 @@ public class OrdenDeTrabajo {
 		this.alto = alto;
 	}
 
-	public void setElementoDelProducto( String elementoDelProducto) {
-		this.elementoDelProducto = elementoDelProducto;
-		
-	}
-	
-	
 	
 	
 	

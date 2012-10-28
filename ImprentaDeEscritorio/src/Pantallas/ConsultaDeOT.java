@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 
 import Base.metodosSql;
+import javax.swing.JButton;
 
 public class ConsultaDeOT extends JFrame {
 
@@ -70,6 +71,7 @@ public class ConsultaDeOT extends JFrame {
 			jContentPane.add(jLabel, null);
 			jContentPane.add(jLabel1, null);
 			jContentPane.add(jLabel2, null);
+			jContentPane.add(getJButtonCambiarEstadoTarea(), null);
 		}
 		return jContentPane;
 	}
@@ -99,7 +101,7 @@ public class ConsultaDeOT extends JFrame {
 		
 		if (jTableOT == null) {
 			jTableOT = new JTable();
-			jTableOT=metodos.llenarJtable("Select * from imprenta.ordentrabajo");
+			jTableOT=metodos.llenarJtable("Select * from imprenta.ordentrabajo order by nroorden DESC");
 			jTableOT.setCellSelectionEnabled(false);
 			jTableOT.setColumnSelectionAllowed(false);
 			//jTableOT.is
@@ -110,15 +112,16 @@ public class ConsultaDeOT extends JFrame {
 					
 					//System.out.println(jTableOT.getModel().getValueAt(jTableOT.getSelectedRow(), jTableOT.getSelectedColumn()));// TODO Auto-generated Event stub mouseClicked()
 					jTableMaterialesOT.setModel(metodos2.llenarJtable("select * from imprenta.materiaprimadelaot  " +
-							"where nroordentrabajo= "+jTableOT.getModel().getValueAt(jTableOT.getSelectedRow(), jTableOT.getSelectedColumn())+";").getModel());
+							"where nroordentrabajo= "+jTableOT.getModel().getValueAt(jTableOT.getSelectedRow(), 0)+" ;").getModel());
 					jTableTareasOT.setModel(metodos.llenarJtable("SELECT idOrdTrabajo,Descripcion,razonSocial,estado FROM "+
-							"imprenta.tareaordtrabajo tao,imprenta.tarea t,imprenta.proveedor p where idOrdTrabajo= "+jTableOT.getModel().getValueAt(jTableOT.getSelectedRow(), jTableOT.getSelectedColumn())+" "+
+							"imprenta.tareaordtrabajo tao,imprenta.tarea t,imprenta.proveedor p where idOrdTrabajo= "+jTableOT.getModel().getValueAt(jTableOT.getSelectedRow(), 0)+" "+
 					" and "+
 					" tao.idTarea=t.idTarea "+
 					" and "+
 					" tao.idProveedor=p.idproveedor;").getModel()
 									
 								);	
+					jTableTareasOT.isCellEditable(0,0);
 				}
 			});
 		}
@@ -171,6 +174,7 @@ public class ConsultaDeOT extends JFrame {
 	 * @return javax.swing.JTable	
 	 */
 	DefaultTableModel modeloMaterialesOT=new DefaultTableModel();
+	private JButton jButtonCambiarEstadoTarea = null;
 	private JTable getJTableMaterialesOT() {
 		if (jTableMaterialesOT == null) {
 			jTableMaterialesOT = new JTable(modeloMaterialesOT);
@@ -182,6 +186,54 @@ public class ConsultaDeOT extends JFrame {
 			
 		return jTableMaterialesOT;
 		
+	}
+
+	/**
+	 * This method initializes jButtonCambiarEstadoTarea	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonCambiarEstadoTarea() {
+		if (jButtonCambiarEstadoTarea == null) {
+			jButtonCambiarEstadoTarea = new JButton();
+			jButtonCambiarEstadoTarea.setBounds(new Rectangle(939, 388, 294, 62));
+			jButtonCambiarEstadoTarea.setText("Cambiar estado de la tarea");
+			jButtonCambiarEstadoTarea
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							
+							
+							
+							try{
+							
+							
+							metodosSql metodos=new metodosSql();
+							for(int i=0;i<jTableTareasOT.getRowCount();i++){
+							String descripcion=jTableTareasOT.getValueAt(i, 1).toString();
+							
+							int idTarea=metodos.dameNombreTareaTeDoySuId(descripcion);
+							
+							String proveedor=jTableTareasOT.getValueAt(i, 2).toString();
+							
+							int nroProveedor=metodos.dameProveedorTeDoyId(proveedor);
+							
+							String estado=jTableTareasOT.getValueAt(i, 3).toString();//
+							
+							metodos.insertarOmodif("Update `imprenta`.`tareaOrdtrabajo` set `estado`= '"+estado+"'" +
+									" where `idProveedor`= '"+nroProveedor+"' and `idTarea`= '"+idTarea+"';");
+							}
+							}catch(Exception excep){}
+						
+						
+						
+						
+						
+						
+						
+						}
+					});
+		}
+		return jButtonCambiarEstadoTarea;
 	}
 	
 }

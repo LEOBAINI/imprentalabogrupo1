@@ -2,6 +2,8 @@ package Base;
 
 import java.sql.*;
 
+import javax.swing.JOptionPane;
+
 
 
 public class ConexionMySql {
@@ -10,7 +12,8 @@ public class ConexionMySql {
         private  Connection c;
         protected  Statement statemente;
         protected  ResultSet resulsete;
-        private static String cadena="jdbc:mysql://localhost/proyectoweb";
+        private static String cadena="jdbc:mysql://localhost/imprenta";
+        //private static String cadena="jdbc:mysql://laptop/imprenta";
         private static String driver="com.mysql.jdbc.Driver";
        
         
@@ -31,9 +34,11 @@ public class ConexionMySql {
 
             }catch(ClassNotFoundException e1){
              System.out.println("Error en los drivers");
+             JOptionPane.showMessageDialog(null, "Problema con los drivers");
             }
             catch(SQLException e2){
                 System.out.println("Error en la conexion");
+                JOptionPane.showMessageDialog(null, "Error en la conexión...");
 
             }
 
