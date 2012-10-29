@@ -595,13 +595,14 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					if(status==3){
 						JOptionPane.showMessageDialog(null, "datos cargados con éxito!");
 						
-						finalize(); 
+						
 					}else{
 						JOptionPane.showMessageDialog(null, "datos no se cargaron correctamente... revise la ot cargada");
 					}
+					
 					}
 					catch(Exception e3){
-						JOptionPane.showMessageDialog(null,"Hay campos vacios, complételos");
+						JOptionPane.showMessageDialog(null,e3.getMessage()+" linea 605 ordentrabajo");
 						
 						
 					} catch (Throwable e20) {
@@ -911,23 +912,35 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 		if (jButtonAgregarMaterial == null) {
 			jButtonAgregarMaterial = new JButton();
 			jButtonAgregarMaterial.setText("Agregar material");
-			jButtonAgregarMaterial.setBounds(new Rectangle(8, 194, 525, 21));
+			jButtonAgregarMaterial.setBounds(new Rectangle(8, 194, 206, 21));
 			jButtonAgregarMaterial.addActionListener(new java.awt.event.ActionListener() {
+				
+				
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
-					Object[]fila=new Object[8];
+					Object[]fila=new Object[11]; //faltan 3
 					fila[0]=choiceElementoDelProductoCargadoAMano.getSelectedItem();
 					fila[1]=choiceCalidad.getSelectedItem();
 					fila[2]=choiceVariante.getSelectedItem();
 					fila[3]=getGramaje().getText();
 					fila[4]=choiceFormato.getSelectedItem();
-					fila[5]=getPosesXpliego().getText();
-					fila[6]=getPliegosEnDemasia().getText();
-					fila[7]=getPliegosXhojas().getText();
+					fila[5]=getPosesXpliego().getText();					
+					fila[7]=getPliegosEnDemasia().getText();
+					fila[8]=getPliegosXhojas().getText();
+					fila[10]=jTableElementos.getValueAt(getChoiceElementoDelProductoCargadoAMano().getSelectedIndex(),1);
+					
+					int auxCantidadAEntregar=Integer.parseInt(getCantidadAEntregar().getText());
+					int auxPosesXPLiego=Integer.parseInt(fila[5].toString());
+					int auxCantidadElementos=Integer.parseInt(fila[10].toString());
+					fila[6]=(auxCantidadAEntregar*auxCantidadElementos)/auxPosesXPLiego;
+					int auxPliegosNetos=Integer.parseInt(fila[6].toString());
+					int auxPLiegosEnDemasia=Integer.parseInt(fila[7].toString());
+					int auxPliegosXhoja=Integer.parseInt(fila[8].toString());
+					fila[9]=(auxPliegosNetos+auxPLiegosEnDemasia)/auxPliegosXhoja;
 					int errores=0;
 					for(int i=0;i<fila.length;i++){
 						if(fila[i]==null || fila[i].equals("")){
-							JOptionPane.showMessageDialog(null, "No se pueden dejar campos vacios en ésta tabla.");
+							JOptionPane.showMessageDialog(null, "No se pueden dejar campos vacios en ésta tabla(Materiales).");
 							errores++;
 							break;
 						}
@@ -947,6 +960,20 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 		}
 		return jButtonAgregarMaterial;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private void llenarSeccionMateriales(String descripcionElementoProducto){
 		metodosSql metodos=new metodosSql();
 		int idPapel=metodos.dameQuePapelUsa(descripcionElementoProducto);
@@ -1067,6 +1094,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	private JTextField pliegosXhojas = null;
 	private JTextField CantidadPlanchas = null;
 	private JButton jButtonTest = null;
+	private JButton jButtonBorrarMaterial = null;
 	private JTable getJTableElementos() {
 		
 		modeloElem.setColumnCount(2);
@@ -1455,6 +1483,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 			jPanel5.add(getPosesXpliego(), null);
 			jPanel5.add(getPliegosEnDemasia(), null);
 			jPanel5.add(getPliegosXhojas(), null);
+			jPanel5.add(getJButtonBorrarMaterial(), null);
 		}
 		return jPanel5;
 	}
@@ -1602,6 +1631,36 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 			});
 		}
 		return jButtonTest;
+	}
+	/**
+	 * This method initializes jButtonBorrarMaterial	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonBorrarMaterial() {
+		if (jButtonBorrarMaterial == null) {
+			jButtonBorrarMaterial = new JButton();
+			jButtonBorrarMaterial.setBounds(new Rectangle(312, 194, 216, 21));
+			jButtonBorrarMaterial.setText("Borrar Material");
+			jButtonBorrarMaterial.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try{
+						/*try{DefaultTableModel tmp=(DefaultTableModel) jTableTarea.getModel();
+					tmp.removeRow(jTableTarea.getSelectedRow());}
+					catch(Exception ee){
+						System.out.println("Boludo no podes borrar la nada!!!");
+					}
+					}*/
+					DefaultTableModel tmp=(DefaultTableModel) jTableMateriales.getModel();
+					tmp.removeRow(jTableMateriales.getSelectedRow());
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(null, "No hay elementos seleccionados para borrar!");
+						
+					}
+				}
+			});
+		}
+		return jButtonBorrarMaterial;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="-27,10"
