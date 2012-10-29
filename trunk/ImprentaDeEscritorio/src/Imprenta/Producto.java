@@ -35,11 +35,11 @@ public class Producto {
 		String variante=(String) table.getValueAt(i, 2);
 		String gramaje=(String) table.getValueAt(i, 3);
 		String formato=(String) table.getValueAt(i, 4);
-		String posesXpliego=(String) table.getValueAt(i, 5);
-		String pliegosNetos=(String) table.getValueAt(i, 6);
+		String posesXpliego= table.getValueAt(i, 5).toString();
+		String pliegosNetos= table.getValueAt(i, 6).toString();
 		String pliegosEnDemasia=(String) table.getValueAt(i, 7);
 		String pliegosXhoja=(String) table.getValueAt(i, 8);
-		String cantidadHojas=(String) table.getValueAt(i, 9);
+		String cantidadHojas= table.getValueAt(i, 9).toString();
 		int cantidadDeEseElemento=Integer.parseInt( table.getValueAt(i, 10).toString());
 		
 		ElementosDelProducto elementoDelProducto=new ElementosDelProducto(elemento,cantidadDeEseElemento);//de la tabla
