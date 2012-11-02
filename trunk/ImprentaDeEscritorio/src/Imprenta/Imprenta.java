@@ -131,6 +131,7 @@ public  class Imprenta {
 	
 	
 	public static int llenarOrdenCompra(OrdenDeCompra OC){
+		int status=0;
 		metodosSql metodos=new metodosSql();
 		
 		
@@ -158,7 +159,7 @@ public  class Imprenta {
 		
 		
 		
-		metodos.insertarOmodif("INSERT INTO `imprenta`.`solicitudcompra` "+
+		status=metodos.insertarOmodif("INSERT INTO `imprenta`.`solicitudcompra` "+
 				 " (`idsolicitudCompra`, `idOrdTrabajo`, `FechaPedido`, `FechaEntrega`,"+
 						 "  `proveedor`, `vendedor`, `lugarDeEntrega`, `horarioDeEntrega`, `total`,`iva`) VALUES "+
 						 "  ("+nroOc+", "+nroOT+", '"+fechaConfeccion+"', '"+fechaEntrega+"', '"+proveedor+"', '"+vendedor+"', " +
@@ -186,13 +187,13 @@ public  class Imprenta {
 		//double importe=Double.parseDouble(modelo.getValueAt(i, 7).toString());
 		String unidadMedida=modelo.getValueAt(i, 8).toString();
 		double importeTotal=Double.parseDouble(modelo.getValueAt(i, 9).toString());
-		metodos.insertarOmodif("INSERT INTO `imprenta`.`MaterialesDeLaSolicitudDeCompra` "+
+		status=status+metodos.insertarOmodif("INSERT INTO `imprenta`.`MaterialesDeLaSolicitudDeCompra` "+
 	 " (`nroSolicitudDeCompra`, `Cantidad`, `Marca`, `Calidad`, `Variante`, `Gramaje`, `Alto`, `Ancho`,"+ 
 	 " `Umedida`, `costoTotal`, `entregado`)" +
 	 " VALUES  ("+OC.getNroOrdenCompra()+", "+cantidad+", '"+marca+"', '"+calidad+"', '"+variante+"', '"+gramaje+"',  "+
 	 " "+alto+", "+ancho+", '"+unidadMedida+"', "+importeTotal+", 'PENDIENTE');");
 		}
-		
+		status=status-(filas-1);
 		
 	
 		
@@ -200,11 +201,18 @@ public  class Imprenta {
 	 * (`nroSolicitudDeCompra`, `Cantidad`, `Marca`, `Calidad`, `Variante`, `Gramaje`, `Alto`, `Ancho`, 
 	 * `Umedida`, `costoTotal`, `entregado`) VALUES  (1, canti, 'marca', 'cali', 'varian', 'gramaje', 
 	 * alto, ancho, 'umdida', costotal, 'entregado');*/
-		
+		if(status!=2){
+			try{
+			metodos.insertarOmodif("DELETE FROM `imprenta`.`solicitudcompra` WHERE `idOrdTrabajo`='"+nroOT+"';");
+			metodos.insertarOmodif("DELETE FROM `imprenta`.`materialesdelasolicituddecompra` WHERE `nroSolicitudDeCompra`='"+nroOc+"' ;");
+			}catch(Exception e){
+				JOptionPane.showMessageDialog(null, e.getMessage()+" Error en rollBack, la base está inconsistente");
+			}
+		}
 		
 		
 		//completar en base de datos
-		return 0;
+		return status;
 	}
 	public static void verEstadoDeTrabajo(OrdenDeTrabajo ot){
 		//consultar con la bd..
