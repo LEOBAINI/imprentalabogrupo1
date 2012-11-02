@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.Color;
 
 public class SoldeCompra extends JFrame {
 
@@ -111,7 +112,7 @@ public class SoldeCompra extends JFrame {
 
 	private void inicializarCampos(){
 		metodosSql metodos=new metodosSql();
-		setChoiceRazonSocialproveedor(metodos.consultarUnaColumna("select razonSocial from imprenta.proveedor"));
+		setChoiceRazonSocialproveedor(metodos.consultarUnaColumna("select razonSocial from imprenta.proveedor where idProveedor != 1000"));
 		//modificar este select porque arrojará todos los proveedores y falta filtrar solo
 		//los que proveen papel...
 		
@@ -121,7 +122,9 @@ public class SoldeCompra extends JFrame {
 		setChoiceMarca(metodos.consultarUnaColumna("select marca from imprenta.marcapapel"));
 		setChoiceCalidad(metodos.consultarUnaColumna("select descripcion from imprenta.calidad"));
 		setChoiceVariante(metodos.consultarUnaColumna("select descripcion from imprenta.variante"));
-		setChoiceNroOrden(metodos.consultarUnaColumna("select nombre from imprenta.ordenTrabajo"));
+		setChoiceNroOrden(metodos.consultarUnaColumna("" +
+				"SELECT nombre FROM imprenta.ordentrabajo o where nroOrden not in(select idOrdTrabajo from imprenta.solicitudCompra) "+
+" and o.nombre!='';"));
 		int max=0;
 		ArrayList <String> aux=metodos.consultarUnaColumna("SELECT max(idsolicitudCompra) FROM imprenta.solicitudcompra;");
 		if(aux.get(0)==null){
@@ -214,7 +217,7 @@ public class SoldeCompra extends JFrame {
 			NroSolicitudCompra.setText("Numero");
 			jContentPane1 = new JPanel();
 			jContentPane1.setLayout(null);
-			jContentPane1.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			jContentPane1.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jContentPane1.add(NroSolicitudCompra, null);
 			jContentPane1.add(getNrosc(), null);
 			jContentPane1.add(NumeroOT, null);
@@ -235,6 +238,8 @@ public class SoldeCompra extends JFrame {
 			jContentPane1.add(jLabel2, null);
 			jContentPane1.add(getCampoVendedor(), null);
 			jContentPane1.add(getGuardar(), null);
+			jContentPane1.add(getCampoUnidadDeMedida(), null);
+			jContentPane1.add(getJButtonBorrar(), null);
 		}
 		return jContentPane1;
 	}
@@ -306,7 +311,7 @@ public class SoldeCompra extends JFrame {
 			jPanel.setLayout(null);
 			jPanel.setBounds(new Rectangle(16, 61, 1003, 41));
 			jPanel.setBackground(SystemColor.controlHighlight);
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			jPanel.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanel.add(getEnviaProv(), null);
 			jPanel.add(EnvVendedor, null);
 			jPanel.add(getTildeRetirar(), null);
@@ -481,7 +486,7 @@ public class SoldeCompra extends JFrame {
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(null);
 			jPanel1.setBackground(SystemColor.controlHighlight);
-			jPanel1.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			jPanel1.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanel1.setBounds(new Rectangle(17, 109, 1003, 46));
 			
 			jPanel1.add(getChoiceMarca(), null);
@@ -503,7 +508,7 @@ public class SoldeCompra extends JFrame {
 			jPanel1.add(jLabelimporteTotal, null);
 			jPanel1.add(getCampoCantidad(), null);
 			jPanel1.add(jLabel1, null);
-			jPanel1.add(getCampoUnidadDeMedida(), null);
+			jPanel1.add(getChoiceUnidadDeMedida(), null);
 		}
 		return jPanel1;
 	}
@@ -654,7 +659,8 @@ public class SoldeCompra extends JFrame {
 	private JTextField getCampoImporteTotal() {
 		if (campoImporteTotal == null) {
 			campoImporteTotal = new JTextField();
-			campoImporteTotal.setBounds(new Rectangle(917, 21, 87, 20));
+			campoImporteTotal.setBounds(new Rectangle(917, 21, 82, 20));
+			campoImporteTotal.setEditable(false);
 		}
 		return campoImporteTotal;
 	}
@@ -707,6 +713,7 @@ public class SoldeCompra extends JFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(null);
 			jPanel2.setBounds(new Rectangle(787, 273, 233, 97));
+			jPanel2.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanel2.add(jLabel22111121, null);
 			jPanel2.add(jLabel22111122, null);
 			jPanel2.add(jLabel221111221, null);
@@ -739,7 +746,7 @@ public class SoldeCompra extends JFrame {
 	private JTextField getCampoSubTotal() {
 		if (campoSubTotal == null) {
 			campoSubTotal = new JTextField();
-			campoSubTotal.setBounds(new Rectangle(134, 10, 86, 20));
+			campoSubTotal.setBounds(new Rectangle(136, 11, 86, 17));
 		}
 		return campoSubTotal;
 	}
@@ -752,7 +759,7 @@ public class SoldeCompra extends JFrame {
 	private JTextField getCampoIva() {
 		if (campoIva == null) {
 			campoIva = new JTextField();
-			campoIva.setBounds(new Rectangle(135, 32, 85, 19));
+			campoIva.setBounds(new Rectangle(136, 39, 86, 17));
 		}
 		return campoIva;
 	}
@@ -765,7 +772,7 @@ public class SoldeCompra extends JFrame {
 	private JTextField getCampoTotal() {
 		if (campoTotal == null) {
 			campoTotal = new JTextField();
-			campoTotal.setBounds(new Rectangle(136, 58, 86, 17));
+			campoTotal.setBounds(new Rectangle(136, 67, 86, 17));
 		}
 		return campoTotal;
 	}
@@ -778,11 +785,46 @@ public class SoldeCompra extends JFrame {
 	private JButton getCargar() {
 		if (cargar == null) {
 			cargar = new JButton();
-			cargar.setBounds(new Rectangle(1025, 109, 90, 46));
-			cargar.setText("Agregar");
+			cargar.setBounds(new Rectangle(1025, 109, 109, 31));
+			cargar.setText("Agregar Fila");
 			cargar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-				double sumaSubtotal=0;
+					
+					double cantidad=Double.parseDouble(getCampoCantidad().getText());
+					double importe=Double.parseDouble(getCampoImporte().getText());
+					double importeTotal=0;
+					if(getChoiceUnidadDeMedida().getSelectedItem().equals("Hojas")){
+						 					 
+						 importeTotal=cantidad*importe;
+						
+					}else if(getChoiceUnidadDeMedida().getSelectedItem().equals("KG")){
+						//((gramos/cm2 "es (alto*ancho)") *importe)*cantidad
+						double gramos=Double.parseDouble(getCampoGramaje().getText());
+						double alto=Double.parseDouble(getCampoAlto().getText());
+						double ancho=Double.parseDouble(getCampoAncho().getText());
+						
+						
+						importeTotal=(((gramos*((alto/100)*(ancho/100)))/1000)*importe)*cantidad;		
+						
+						
+						
+					}else if(getChoiceUnidadDeMedida().getSelectedItem().equals("Resma")){
+						//(cantidad /500)*importe
+						importeTotal=(cantidad/500)*importe;
+					}
+					
+					
+					
+					
+					
+					campoImporteTotal.setText(String.valueOf(importeTotal));	
+					System.out.println("El importe total es = "+importeTotal);
+					
+					
+					
+					
+					
+				
 				Object[]fila=new Object[10];
 				fila[0]=campoCantidad.getText();
 			    fila[1]=choiceMarca.getSelectedItem();
@@ -792,11 +834,12 @@ public class SoldeCompra extends JFrame {
 			    fila[5]=campoAlto.getText();
 			    fila[6]=campoAncho.getText();
 			    fila[7]=campoImporte.getText();
-			    fila[8]=campoUnidadDeMedida.getText();
+			    fila[8]=getChoiceUnidadDeMedida().getSelectedItem();//campoUnidadDeMedida.getText();
 			    fila[9]=campoImporteTotal.getText();
 				modeloTabla.addRow(fila);
+				double sumaSubtotal=0.0;
 				for(int i=0;i<modeloTabla.getRowCount();i++){
-					sumaSubtotal=sumaSubtotal+Integer.parseInt(modeloTabla.getValueAt(i, 9).toString());
+					sumaSubtotal=sumaSubtotal+Double.parseDouble(modeloTabla.getValueAt(i, 9).toString());
 					
 				}
 				campoSubTotal.setText(String.valueOf(sumaSubtotal));
@@ -833,6 +876,8 @@ public class SoldeCompra extends JFrame {
 	private JTextField campoVendedor = null;
 	private JTextField jTextFieldIva = null;
 	private JButton guardar = null;
+	private Choice choiceUnidadDeMedida = null;
+	private JButton jButtonBorrar = null;
 	private JTable getJTableMateriales() {
 		modeloTabla.addColumn("Cantidad");
 		modeloTabla.addColumn("Marca");
@@ -860,13 +905,36 @@ public class SoldeCompra extends JFrame {
 	private JTextField getCampoUnidadDeMedida() {
 		if (campoUnidadDeMedida == null) {
 			campoUnidadDeMedida = new JTextField();
-			campoUnidadDeMedida.setBounds(new Rectangle(796, 22, 106, 20));
-			campoUnidadDeMedida.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyTyped(java.awt.event.KeyEvent e) {
+			campoUnidadDeMedida.setBounds(new Rectangle(1030, 183, 106, 20));
+			campoUnidadDeMedida.setVisible(false);
+			
+				/*
 					double cantidad=Double.parseDouble(getCampoCantidad().getText());
 					double importe=Double.parseDouble(getCampoImporte().getText());
-					double importeTotal=cantidad*importe;
-					campoImporteTotal.setText(String.valueOf(importeTotal));
+					double importeTotal=0;
+					if(getChoiceUnidadDeMedida().getSelectedItem().equals("Hojas")){
+						 					 
+						 importeTotal=cantidad*importe;
+						
+					}else if(getChoiceUnidadDeMedida().getSelectedItem().equals("KG")){
+						//((gramos/cm2 "es (alto*ancho)") *importe)*cantidad
+						double gramos=Double.parseDouble(getCampoGramaje().getText());
+						double alto=Double.parseDouble(getCampoAlto().getText());
+						double ancho=Double.parseDouble(getCampoAncho().getText());
+						importeTotal=((gramos*(alto*ancho))*importe)*cantidad;						
+						
+					}else if(getChoiceUnidadDeMedida().getSelectedItem().equals("Resma")){
+						//(cantidad /500)*importe
+						importeTotal=(cantidad/500)*importe;
+					}
+					
+					
+					
+					
+					
+					*/
+			//campoImporteTotal.setText(String.valueOf(importeTotal));
+					
 					/*if(getCampoCantidad().getText().equals("0") || getCampoCantidad().getText().equals("")){
 						
 						JOptionPane.showMessageDialog(null, "Corrija la cantidad");
@@ -875,27 +943,10 @@ public class SoldeCompra extends JFrame {
 						
 						campoUnidadDeMedida=new JTextField();
 						
-						}*/
-				}
-			});
-			
-			
-					
-			
-					
-						
-					
-					
-					
-					
-					
-					
-					
-					
-					
+						}*/}					
 				
 			
-		}
+		//}
 		return campoUnidadDeMedida;
 	}
 
@@ -1003,6 +1054,8 @@ public class SoldeCompra extends JFrame {
 			guardar.setText("Guardar");
 			guardar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try{
+					int status=0;
 					Imprenta imp=new Imprenta();
 					
 					//OrdenDeCompra OC=new OrdenDeCompra(getChoiceNroOrden().getSelectedItem().toString(), Integer.parseInt(getNrosc().toString()), getFechadeldìa().toString());
@@ -1028,12 +1081,72 @@ public class SoldeCompra extends JFrame {
 					OC.setProveedor(getChoiceRazonSocialproveedor().getSelectedItem());
 					OC.setTotal(Double.parseDouble(getCampoTotal().getText()));
 					OC.setVendedor(getCampoVendedor().getText());
-					imp.llenarOrdenCompra(OC);
+					status=imp.llenarOrdenCompra(OC);
+					if(status==2){
+						JOptionPane.showMessageDialog(null, "Datos cargados con éxito!");
+						dispose();
+					}else{
+						JOptionPane.showMessageDialog(null, "Error al cargar los datos");
+						
+					}
+					}catch(Exception e20){
+						JOptionPane.showMessageDialog(null, e20.getMessage()+ "Error al setear OC linea 1072SolDeCompra");
+					}
+					
 					
 				}
 			});
 		}
 		return guardar;
+	}
+
+	/**
+	 * This method initializes choiceUnidadDeMedida	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceUnidadDeMedida() {
+		if (choiceUnidadDeMedida == null) {
+			choiceUnidadDeMedida = new Choice();
+			choiceUnidadDeMedida.setBounds(new Rectangle(795, 20, 107, 18));
+			choiceUnidadDeMedida.add("Resma");
+			choiceUnidadDeMedida.add("KG");
+			choiceUnidadDeMedida.add("Hojas");
+		}
+		return choiceUnidadDeMedida;
+	}
+
+	/**
+	 * This method initializes jButtonBorrar	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonBorrar() {
+		if (jButtonBorrar == null) {
+			jButtonBorrar = new JButton();
+			jButtonBorrar.setBounds(new Rectangle(1025, 157, 109, 31));
+			jButtonBorrar.setText("Borrar Fila");
+			jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try{
+					double sumaSubtotal=0.0;
+					DefaultTableModel tmp=(DefaultTableModel) jTableMateriales.getModel();
+					tmp.removeRow(jTableMateriales.getSelectedRow());
+					if(modeloTabla.getRowCount()>0){
+					for(int i=0;i<modeloTabla.getRowCount();i++){
+						sumaSubtotal=sumaSubtotal+Double.parseDouble(modeloTabla.getValueAt(i, 9).toString());
+						
+					}
+					}
+					campoSubTotal.setText(String.valueOf(sumaSubtotal));
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(null, "No hay elementos seleccionados para borrar!");
+						
+					}
+				}
+			});
+		}
+		return jButtonBorrar;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="-1,-3"

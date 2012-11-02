@@ -38,7 +38,7 @@ public class CosultaDeOC extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(807, 388);
+		this.setSize(1218, 421);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Consulta Solicitud de Compra");
 	}
@@ -74,7 +74,7 @@ public class CosultaDeOC extends JFrame {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setBounds(new Rectangle(12, 75, 756, 117));
+			jScrollPane.setBounds(new Rectangle(12, 75, 1160, 117));
 			jScrollPane.setViewportView(getJTableOCompras());
 		}
 		return jScrollPane;
@@ -97,7 +97,7 @@ public class CosultaDeOC extends JFrame {
 		DefaultTableModel modeloSC=new DefaultTableModel();	
 		
 		modeloSC=(DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra;").getModel();
-
+		
 		if (jTableOCompras == null) {
 			jTableOCompras = new JTable(modeloSC);
 			jTableOCompras.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -119,7 +119,7 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setBounds(new Rectangle(12, 226, 760, 88));
+			jScrollPane1.setBounds(new Rectangle(12, 226, 964, 88));
 			jScrollPane1.setViewportView(getJTableMaterialesOC());
 		}
 		return jScrollPane1;
@@ -137,4 +137,4 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 		return jTableMaterialesOC;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="-12,0"
+}  //  @jve:decl-index=0:visual-constraint="100,-51"

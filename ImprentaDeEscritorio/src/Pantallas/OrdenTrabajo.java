@@ -267,9 +267,10 @@ public class OrdenTrabajo extends JPanel {
 		jLabel = new JLabel();
 		jLabel.setText("Orden N°");
 		jLabel.setBounds(new Rectangle(6, 13, 51, 16));
-		this.setSize(1195, 600);
+		this.setSize(1215, 632);
 		this.setLayout(null);
 		this.setBackground(Color.white);
+		//this.setTitle("Orden de trabajo");
 		this.setName("contenedor");
 		this.setBackground(SystemColor.controlHighlight);
 		this.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
@@ -546,7 +547,10 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 			jButton1.setBounds(new Rectangle(961, 542, 229, 44));
 			jButton1.setText("Finalizar carga de OT");
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {					
+				public void actionPerformed(java.awt.event.ActionEvent e) {		
+					
+					/*guardar.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {*/
 					
 					try{
 					int status=0;
@@ -594,6 +598,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					status=Imprenta.llenarOrdenTrabajo(OT);
 					if(status==3){
 						JOptionPane.showMessageDialog(null, "datos cargados con éxito!");
+						
 						
 						
 					}else{
@@ -1022,6 +1027,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	private JCheckBox getApaisado() {
 		if (apaisado == null) {
 			apaisado = new JCheckBox();
+			apaisado.setSelected(false);
 			apaisado.setBounds(new Rectangle(149, 153, 19, 17));
 		}
 		return apaisado;
@@ -1604,6 +1610,7 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 			jButtonTest = new JButton();
 			jButtonTest.setBounds(new Rectangle(441, 542, 467, 37));
 			jButtonTest.setText("Llenado automático (Para testing)");
+			jButtonTest.setVisible(false);
 			jButtonTest.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					jTextFieldCliente.setText("Un cliente");
@@ -1663,4 +1670,4 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 		return jButtonBorrarMaterial;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="-27,10"
+}  //  @jve:decl-index=0:visual-constraint="-22,-2"
