@@ -21,8 +21,8 @@ public class OrdenDeTrabajo {
 	private String apaisado;
 	private Producto producto;
 	private int cantidadPlanchas;
-	private int ancho;
-	private int alto;
+	private double ancho;
+	private double alto;
 	
 	public OrdenDeTrabajo(int numeroOrdenDeTrabajo) {
 		super();
@@ -136,20 +136,20 @@ public class OrdenDeTrabajo {
 		this.cantidadPlanchas = cantidadPlanchas;
 	}
 
-	public int getAncho() {
+	public Double getAncho() {
 		return ancho;
 	}
 
-	public void setAncho(int ancho) {
-		this.ancho = ancho;
+	public void setAncho(double d) {
+		this.ancho = d;
 	}
 
-	public int getAlto() {
+	public double getAlto() {
 		return alto;
 	}
 
-	public void setAlto(int alto) {
-		this.alto = alto;
+	public void setAlto(double d) {
+		this.alto = d;
 	}
 
 	
