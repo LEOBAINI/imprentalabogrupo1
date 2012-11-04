@@ -102,9 +102,30 @@ En elementos de producto cargo sin problema, no deberia haber cargado nada.	En e
 		return errores;
 	}
 	*/
+
+	public boolean hayMasDeUnPunto(String caracteres){
+		int cont=0;
+		for(int i=0;i<caracteres.length();i++){
+			if(caracteres.charAt(i)=='.'){
+				cont++;
+			}
+		}
+		if(cont>1){
+			return true;
+			
+		}else{
+			return false;
+		}
+	}
+	
+	
+	public boolean esPunto(char caracter){
+		return caracter=='.';
+	}
+	
 	public boolean esNumero(char caracter){
 		int maxError=0;
-		char cara[] = new char[10];
+		char cara[] = new char[11];
 		cara[0]='0';
 		cara[1]='1';
 		cara[2]='2';
@@ -115,6 +136,7 @@ En elementos de producto cargo sin problema, no deberia haber cargado nada.	En e
 		cara[7]='7';
 		cara[8]='8';
 		cara[9]='9';
+		cara[10]='.';
 		
 		
 		
@@ -125,7 +147,7 @@ En elementos de producto cargo sin problema, no deberia haber cargado nada.	En e
 				
 			}			
 		}
-		if(maxError==10){
+		if(maxError==11){
 			return false;
 		}
 		System.out.println(maxError);

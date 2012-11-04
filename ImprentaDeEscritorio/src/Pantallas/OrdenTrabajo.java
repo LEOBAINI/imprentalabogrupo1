@@ -1,5 +1,6 @@
 package Pantallas;
 
+import java.math.*;
 import java.awt.Choice;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
@@ -18,7 +19,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import Base.metodosSql;
+import Formateador.CellNoEditableCol0y1;
 import Formateador.Formato;
+import Formateador.JtableNoEditable;
 import Imprenta.Control;
 import Imprenta.Imprenta;
 import Imprenta.OrdenDeTrabajo;
@@ -39,13 +42,14 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 
+@SuppressWarnings("unused")
 public class OrdenTrabajo extends JPanel {
 	
 	
 	public static int tiempoOrdenTrabajo;
 	private static final long serialVersionUID = 1L;
-	private DefaultTableModel modeloMateriales;
-	private DefaultTableModel modeloTareas;
+	private JtableNoEditable modeloMateriales;
+	private CellNoEditableCol0y1 modeloTareas;
 	public static JTextField FechaConfeccion = null;
 	private JLabel jLabel = null;
 	private JTextField OrdenNro = null;
@@ -159,9 +163,15 @@ public class OrdenTrabajo extends JPanel {
 		choiceProveedor.add(datos.get(i));
 			
 		}
+		datos=metodos.consultarUnaColumna("SELECT razonSocial FROM imprenta.cliente;");
+		for(int i=0;i<datos.size();i++){
+		choiceCliente.add(datos.get(i));
+			
+		}
 		
 		
 		modeloMateriales.addColumn("Elemento");
+		modeloMateriales.addColumn("Cantidad");
 		modeloMateriales.addColumn("Calidad");
 		modeloMateriales.addColumn("Variante");
 		modeloMateriales.addColumn("Gramaje");
@@ -171,7 +181,7 @@ public class OrdenTrabajo extends JPanel {
 		modeloMateriales.addColumn("PenDemasia");
 		modeloMateriales.addColumn("PXhoja");
 		modeloMateriales.addColumn("Hojas");
-		modeloMateriales.addColumn("Cantidad");
+		
 		
 		
 		/*Elemento (debe ser uno de los elementos del producto), Calidad, Variante, Gramaje,
@@ -202,7 +212,7 @@ public class OrdenTrabajo extends JPanel {
 		SecciónElementos.setBounds(new Rectangle(5, 5, 112, 16));
 		jLabel22 = new JLabel();
 		jLabel22.setText("Apaisado");
-		jLabel22.setBounds(new Rectangle(168, 149, 57, 19));
+		jLabel22.setBounds(new Rectangle(115, 130, 57, 19));
 		jLabel24 = new JLabel();
 		jLabel24.setText("Formato");
 		jLabel24.setBounds(new Rectangle(598, 24, 47, 16));
@@ -230,7 +240,7 @@ public class OrdenTrabajo extends JPanel {
 		jLabel16.setBounds(new Rectangle(7, 177, 161, 21));
 		jLabel15 = new JLabel();
 		jLabel15.setText("Sección PreImpresión");
-		jLabel15.setBounds(new Rectangle(7, 149, 133, 21));
+		jLabel15.setBounds(new Rectangle(4, 151, 133, 21));
 		jLabel14 = new JLabel();
 		jLabel14.setText("Sección de Materiales");
 		jLabel14.setBounds(new Rectangle(171, 5, 135, 23));
@@ -241,14 +251,14 @@ public class OrdenTrabajo extends JPanel {
 		jLabel9.setText("Producto");
 		jLabel9.setBounds(new Rectangle(9, 181, 61, 16));
 		jLabel8 = new JLabel();
-		jLabel8.setText("Alto");
-		jLabel8.setBounds(new Rectangle(268, 131, 25, 16));
+		jLabel8.setText("Alto Cm");
+		jLabel8.setBounds(new Rectangle(255, 130, 46, 16));
 		jLabel7 = new JLabel();
-		jLabel7.setText("Ancho");
-		jLabel7.setBounds(new Rectangle(172, 130, 38, 16));
+		jLabel7.setText("Ancho Cm");
+		jLabel7.setBounds(new Rectangle(178, 130, 60, 16));
 		jLabel6 = new JLabel();
 		jLabel6.setText("Medida Final.");
-		jLabel6.setBounds(new Rectangle(6, 130, 141, 16));
+		jLabel6.setBounds(new Rectangle(6, 130, 81, 16));
 		jLabel5 = new JLabel();
 		jLabel5.setBounds(new Rectangle(826, 41, 76, 16));
 		jLabel5.setText("Descripción");
@@ -354,7 +364,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getAncho() {
 		if (ancho == null) {
 			ancho = new JTextField();
-			ancho.setBounds(new Rectangle(171, 147, 50, 22));
+			ancho.setBounds(new Rectangle(189, 149, 50, 22));
 			ancho.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
 					try{
@@ -362,6 +372,11 @@ public class OrdenTrabajo extends JPanel {
 						int aux=ancho.getText().length();
 						if(c.esNumero(ancho.getText().charAt(aux-1))==false){
 							JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+							ancho.setText("");
+							
+						}
+						if(c.hayMasDeUnPunto(ancho.getText())){
+							JOptionPane.showMessageDialog(null, "Ingrese sólo un punto!");
 							ancho.setText("");
 							
 						}
@@ -381,7 +396,7 @@ public class OrdenTrabajo extends JPanel {
 	private JTextField getAlto() {
 		if (alto == null) {
 			alto = new JTextField();
-			alto.setBounds(new Rectangle(243, 148, 50, 21));
+			alto.setBounds(new Rectangle(251, 149, 50, 21));
 			alto.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
 					try{
@@ -389,6 +404,11 @@ public class OrdenTrabajo extends JPanel {
 						int aux=alto.getText().length();
 						if(c.esNumero(alto.getText().charAt(aux-1))==false){
 							JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+							alto.setText("");
+							
+						}
+						if(c.hayMasDeUnPunto(alto.getText())){
+							JOptionPane.showMessageDialog(null, "Ingrese sólo un punto!");
 							alto.setText("");
 							
 						}
@@ -499,8 +519,8 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	 * @return javax.swing.JTable	
 	 */
 	private JTable getJTableMateriales() {
-		modeloMateriales=new DefaultTableModel();
 		
+		modeloMateriales=new JtableNoEditable();
 		if (jTableMateriales == null) {
 			jTableMateriales = new JTable(modeloMateriales);
 			jTableMateriales.setCellSelectionEnabled(true);
@@ -558,9 +578,9 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					
 					OrdenDeTrabajo OT=new OrdenDeTrabajo(Integer.parseInt(getJTextFieldDesenmascarado().getText()));
 					
-					OT.setAlto(Integer.parseInt(getAlto().getText()));
+					OT.setAlto(Double.parseDouble((getAlto().getText())));
 					
-					OT.setAncho(Integer.parseInt(getAncho().getText()));
+					OT.setAncho(Double.parseDouble(getAncho().getText()));
 					
 					if(getApaisado().isEnabled()){
 					OT.setApaisado("Es apaisado");
@@ -570,7 +590,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					
 					OT.setCantidadPlanchas(Integer.parseInt(getCantidadPlanchas().getText()));
 					
-					OT.setCliente(getJTextFieldCliente().getText());
+					OT.setCliente(choiceCliente.getSelectedItem());
 					
 					OT.setDescripcion(getDescripcion().getText());
 					
@@ -718,7 +738,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	 * @return javax.swing.JTable	
 	 */
 	private JTable getJTableTarea() {
-		modeloTareas=new DefaultTableModel();	
+		modeloTareas=new CellNoEditableCol0y1();	
 		modeloTareas.addColumn("Tarea");
 		modeloTareas.addColumn("Proveedor");
 		
@@ -924,24 +944,55 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
 					Object[]fila=new Object[11]; //faltan 3
-					fila[0]=choiceElementoDelProductoCargadoAMano.getSelectedItem();
-					fila[1]=choiceCalidad.getSelectedItem();
-					fila[2]=choiceVariante.getSelectedItem();
-					fila[3]=getGramaje().getText();
-					fila[4]=choiceFormato.getSelectedItem();
-					fila[5]=getPosesXpliego().getText();					
-					fila[7]=getPliegosEnDemasia().getText();
-					fila[8]=getPliegosXhojas().getText();
-					fila[10]=jTableElementos.getValueAt(getChoiceElementoDelProductoCargadoAMano().getSelectedIndex(),1);
+					fila[0]=choiceElementoDelProductoCargadoAMano.getSelectedItem();//elemento
+					fila[1]=jTableElementos.getValueAt(getChoiceElementoDelProductoCargadoAMano().getSelectedIndex(),1);//cantidad
+					fila[2]=choiceCalidad.getSelectedItem();//calidad
+					fila[3]=choiceVariante.getSelectedItem();//Variante
+					fila[4]=getGramaje().getText();//gramaje
+					fila[5]=choiceFormato.getSelectedItem();//formato				
+					fila[6]=getPosesXpliego().getText();//posesXpliego
+					//fila[7]=//plnetos(AutoCalculado)
+					fila[8]=getPliegosEnDemasia().getText();//plEnDemasía					
+					fila[9]=getPliegosXhojas().getText();//plXhoja					
+					//fila[10]=;//hojas(AutoCalculado)
+					//
 					
 					int auxCantidadAEntregar=Integer.parseInt(getCantidadAEntregar().getText());
-					int auxPosesXPLiego=Integer.parseInt(fila[5].toString());
-					int auxCantidadElementos=Integer.parseInt(fila[10].toString());
-					fila[6]=(auxCantidadAEntregar*auxCantidadElementos)/auxPosesXPLiego;
-					int auxPliegosNetos=Integer.parseInt(fila[6].toString());
-					int auxPLiegosEnDemasia=Integer.parseInt(fila[7].toString());
-					int auxPliegosXhoja=Integer.parseInt(fila[8].toString());
-					fila[9]=(auxPliegosNetos+auxPLiegosEnDemasia)/auxPliegosXhoja;
+					int auxPosesXPLiego=Integer.parseInt(fila[6].toString());
+					int auxCantidadElementos=Integer.parseInt(fila[1].toString());
+					
+					int auxplieNet=0;
+					int auxCantAentXauxCantElem=auxCantidadAEntregar*auxCantidadElementos;//
+					if(auxCantAentXauxCantElem%auxPosesXPLiego>0){
+						auxplieNet=(auxCantidadAEntregar*auxCantidadElementos)/auxPosesXPLiego;
+						auxplieNet=auxplieNet+1;
+					}else{
+						auxplieNet=(auxCantidadAEntregar*auxCantidadElementos)/auxPosesXPLiego;
+					}
+					
+					
+					fila[7]=auxplieNet;
+					/*totalPliegosNetos = (cantidad a Entregar * cantidadElemento) / posesXpliego.*/			
+					
+					int auxPliegosNetos=Integer.parseInt(fila[7].toString());
+					int auxPLiegosEnDemasia=Integer.parseInt(fila[8].toString());
+					int auxPliegosXhoja=Integer.parseInt(fila[9].toString());
+					
+					/*hojas = (pliegosEnDemasia + pliegosNetos) / pliegosXhoja*/
+					int pliegosNetosMasPlEnDemasia=auxPliegosNetos+auxPLiegosEnDemasia;
+					
+					int auxiliarHojas=0;
+					
+					if(pliegosNetosMasPlEnDemasia%auxPliegosXhoja>0){
+						auxiliarHojas=pliegosNetosMasPlEnDemasia/auxPliegosXhoja;
+						auxiliarHojas=auxiliarHojas+1;
+					}else{
+						auxiliarHojas=pliegosNetosMasPlEnDemasia/auxPliegosXhoja;
+					}
+					fila[10]=auxiliarHojas;
+					
+					
+					
 					int errores=0;
 					for(int i=0;i<fila.length;i++){
 						if(fila[i]==null || fila[i].equals("")){
@@ -1028,7 +1079,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 		if (apaisado == null) {
 			apaisado = new JCheckBox();
 			apaisado.setSelected(false);
-			apaisado.setBounds(new Rectangle(149, 153, 19, 17));
+			apaisado.setBounds(new Rectangle(144, 154, 19, 17));
 		}
 		return apaisado;
 	}
@@ -1079,7 +1130,6 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	DefaultTableModel modeloElem=new DefaultTableModel();
 	private JTextField jTextFieldDesenmascarado = null;
 	private JTextField jTextFieldProducto = null;
-	private JTextField jTextFieldCliente = null;
 	private Choice choiceElementoDelProductoCargadoAMano = null;
 	private JLabel jLabel12 = null;
 	private JCheckBox jCheckBoxTerciariza = null;
@@ -1101,6 +1151,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	private JTextField CantidadPlanchas = null;
 	private JButton jButtonTest = null;
 	private JButton jButtonBorrarMaterial = null;
+	private Choice choiceCliente = null;
 	private JTable getJTableElementos() {
 		
 		modeloElem.setColumnCount(2);
@@ -1134,11 +1185,21 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 		if (jTextFieldCantidad == null) {
 			jTextFieldCantidad = new JTextField();
 			jTextFieldCantidad.setBounds(new Rectangle(78, 43, 57, 20));
+			
+				
 			jTextFieldCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
-						if(e.getKeyCode()==KeyEvent.VK_ENTER){
+					Control c=new Control();
+					int aux=jTextFieldCantidad.getText().length();
+					try{
+					if(c.esNumero(jTextFieldCantidad.getText().charAt(aux-1))==false){
+						JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+						jTextFieldCantidad.setText("");
 						
-						getJButtonCargarElemento().doClick();
+					}
+					}
+catch(Exception e1){
+						
 					}
 				}
 			});
@@ -1197,18 +1258,6 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 			jTextFieldProducto.setBounds(new Rectangle(82, 181, 211, 19));
 		}
 		return jTextFieldProducto;
-	}
-	/**
-	 * This method initializes jTextFieldCliente	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getJTextFieldCliente() {
-		if (jTextFieldCliente == null) {
-			jTextFieldCliente = new JTextField();
-			jTextFieldCliente.setBounds(new Rectangle(171, 35, 122, 21));
-		}
-		return jTextFieldCliente;
 	}
 	/**
 	 * This method initializes choiceElementoDelProductoCargadoAMano	
@@ -1393,7 +1442,6 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 			jPanel2.add(jLabel, null);
 			jPanel2.add(getOrdenNro(), null);
 			jPanel2.add(jLabel1, null);
-			jPanel2.add(getJTextFieldCliente(), null);
 			jPanel2.add(jLabel2, null);
 			jPanel2.add(getFechaConfeccion(), null);
 			jPanel2.add(jLabel3, null);
@@ -1410,6 +1458,10 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 			jPanel2.add(getJTextFieldProducto(), null);
 			jPanel2.add(jLabel10, null);
 			jPanel2.add(getCantidadAEntregar(), null);
+			jPanel2.add(getChoiceCliente(), null);
+			jPanel2.add(jLabel15, null);
+			jPanel2.add(getApaisado(), null);
+			jPanel2.add(jLabel22, null);
 		}
 		return jPanel2;
 	}
@@ -1432,9 +1484,6 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 			jPanel3.add(getJButtonCargarElemento(), null);
 			jPanel3.add(getJButtonBorrarElemento(), null);
 			jPanel3.add(getJScrollPane1(), null);
-			jPanel3.add(jLabel15, null);
-			jPanel3.add(getApaisado(), null);
-			jPanel3.add(jLabel22, null);
 			jPanel3.add(jLabel16, null);
 			jPanel3.add(getCantidadPlanchas(), null);
 		}
@@ -1503,6 +1552,19 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 			gramaje = new JTextField();
 			gramaje.setBounds(new Rectangle(377, 83, 70, 21));
 			gramaje.addKeyListener(new java.awt.event.KeyAdapter() {   
+				public void keyReleased(java.awt.event.KeyEvent e) {    
+					Control c=new Control();
+					int aux=gramaje.getText().length();
+					try{
+					if(c.esNumero(gramaje.getText().charAt(aux-1))==false){
+						JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+						gramaje.setText("");
+						
+					}
+					}catch(Exception e1){
+						
+					}
+				}   
 				public void keyPressed(java.awt.event.KeyEvent e) {    
 						if(e.getKeyCode()==KeyEvent.VK_ENTER){
 						
@@ -1516,6 +1578,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					}
 				}
 			});
+			
 		}
 		return gramaje;
 	}
@@ -1528,7 +1591,20 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 		if (posesXpliego == null) {
 			posesXpliego = new JTextField();
 			posesXpliego.setBounds(new Rectangle(27, 155, 107, 21));
-			posesXpliego.addKeyListener(new java.awt.event.KeyAdapter() {
+			posesXpliego.addKeyListener(new java.awt.event.KeyAdapter() {   
+				public void keyReleased(java.awt.event.KeyEvent e) {    
+					Control c=new Control();
+					int aux=posesXpliego.getText().length();
+					try{
+					if(c.esNumero(posesXpliego.getText().charAt(aux-1))==false){
+						JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+						posesXpliego.setText("");
+						
+					}
+					}catch(Exception e1){
+						
+					}
+				}
 				public void keyPressed(java.awt.event.KeyEvent e) {
 if(e.getKeyCode()==KeyEvent.VK_ENTER){
 						
@@ -1549,7 +1625,20 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 		if (pliegosEnDemasia == null) {
 			pliegosEnDemasia = new JTextField();
 			pliegosEnDemasia.setBounds(new Rectangle(161, 155, 148, 21));
-			pliegosEnDemasia.addKeyListener(new java.awt.event.KeyAdapter() {
+			pliegosEnDemasia.addKeyListener(new java.awt.event.KeyAdapter() {   
+				public void keyReleased(java.awt.event.KeyEvent e) {    
+					Control c=new Control();
+					int aux=pliegosEnDemasia.getText().length();
+					try{
+					if(c.esNumero(pliegosEnDemasia.getText().charAt(aux-1))==false){
+						JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+						pliegosEnDemasia.setText("");
+						
+					}
+					}catch(Exception e1){
+						
+					}
+				}
 				public void keyPressed(java.awt.event.KeyEvent e) {
 if(e.getKeyCode()==KeyEvent.VK_ENTER){
 						
@@ -1569,7 +1658,20 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 		if (pliegosXhojas == null) {
 			pliegosXhojas = new JTextField();
 			pliegosXhojas.setBounds(new Rectangle(336, 155, 180, 21));
-			pliegosXhojas.addKeyListener(new java.awt.event.KeyAdapter() {
+			pliegosXhojas.addKeyListener(new java.awt.event.KeyAdapter() {   
+				public void keyReleased(java.awt.event.KeyEvent e) {    
+					Control c=new Control();
+					int aux=pliegosXhojas.getText().length();
+					try{
+					if(c.esNumero(pliegosXhojas.getText().charAt(aux-1))==false){
+						JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+						pliegosXhojas.setText("");
+						
+					}
+					}catch(Exception e1){
+						
+					}
+				}
 				public void keyPressed(java.awt.event.KeyEvent e) {
 						if(e.getKeyCode()==KeyEvent.VK_ENTER){
 						
@@ -1589,7 +1691,20 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 		if (CantidadPlanchas == null) {
 			CantidadPlanchas = new JTextField();
 			CantidadPlanchas.setBounds(new Rectangle(173, 177, 95, 21));
-			CantidadPlanchas.addKeyListener(new java.awt.event.KeyAdapter() {
+			CantidadPlanchas.addKeyListener(new java.awt.event.KeyAdapter() {   
+				public void keyReleased(java.awt.event.KeyEvent e) {    
+					Control c=new Control();
+					int aux=CantidadPlanchas.getText().length();
+					try{
+					if(c.esNumero(CantidadPlanchas.getText().charAt(aux-1))==false){
+						JOptionPane.showMessageDialog(null, "Ingrese sólo números!!!");
+						CantidadPlanchas.setText("");
+						
+					}
+					}catch(Exception e1){
+						
+					}
+				}
 				public void keyPressed(java.awt.event.KeyEvent e) {
 					if(e.getKeyCode()==KeyEvent.VK_TAB || e.getKeyCode()==KeyEvent.VK_ENTER){
 						
@@ -1613,7 +1728,7 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 			jButtonTest.setVisible(false);
 			jButtonTest.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					jTextFieldCliente.setText("Un cliente");
+					//jTextFieldCliente.setText("Un cliente");
 					FechaPrometida.setText("2013-02-16");
 					nombreTrabajo.setText("Un nombre TEST");
 					ancho.setText("21");
@@ -1668,6 +1783,18 @@ if(e.getKeyCode()==KeyEvent.VK_ENTER){
 			});
 		}
 		return jButtonBorrarMaterial;
+	}
+	/**
+	 * This method initializes choiceCliente	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceCliente() {
+		if (choiceCliente == null) {
+			choiceCliente = new Choice();
+			choiceCliente.setBounds(new Rectangle(171, 36, 122, 20));
+		}
+		return choiceCliente;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="-22,-2"

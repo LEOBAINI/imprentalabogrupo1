@@ -28,8 +28,8 @@ public  class Imprenta {
 		String fechaConfeccion=OT.getFechaConfeccion();//parsear
 		String fechaEntrega=OT.getFechaEntrega();//parsear aaaa-mm-dd
 		String nombreTrabajo=OT.getNombreTrabajo();
-		int alto=OT.getAlto();
-		int ancho=OT.getAncho();
+		Double alto=OT.getAlto();
+		Double ancho=OT.getAncho();
 																
 		String cantAentregar=String.valueOf(OT.getProducto().getCantidad());
 		String estado=OT.getEstado();
