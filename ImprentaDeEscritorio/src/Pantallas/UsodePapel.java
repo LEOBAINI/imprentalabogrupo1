@@ -29,7 +29,7 @@ public class UsodePapel extends JFrame {
 	private JScrollPane jScrollPane = null;
 	private JTable jTableStock = null;
 	private JScrollPane jScrollPane1 = null;
-	private JTable jTableMaterialesDeLaSolicitudDeCompra = null;
+	private JTable jTableStock2 = null;
 	private JLabel jLabel1 = null;
 	private JTextField jTextFieldCantidadQueRetira = null;
 	private JLabel jLabel2 = null;
@@ -68,7 +68,7 @@ public class UsodePapel extends JFrame {
 		if (jContentPane == null) {
 			jLabel3 = new JLabel();
 			jLabel3.setBounds(new Rectangle(794, 14, 421, 35));
-			jLabel3.setText("Elementos que se van a utilizar ahora");
+			jLabel3.setText("Elementos utilizados hasta ahora");
 			jLabel2 = new JLabel();
 			jLabel2.setBounds(new Rectangle(17, 90, 120, 20));
 			jLabel2.setText("Cantidad que retira");
@@ -106,10 +106,8 @@ public class UsodePapel extends JFrame {
 			choice.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					metodosSql metodos=new metodosSql();
-					int numeroSC=Integer.parseInt(getChoice().getSelectedItem());
-jTableMaterialesDeLaSolicitudDeCompra.setModel(metodos.llenarJtable("SELECT idMatSolCompra,recibido,marca,calidad,variante,gramaje,alto,ancho,umedida FROM "+
-" imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= "+numeroSC+" and "+
-" entregado='ENTREGADO';").getModel());
+					int numeroOT=Integer.parseInt(getChoice().getSelectedItem());
+jTableStock2.setModel(metodos.llenarJtable("select * from imprenta.stock where nrosolicitudcompra ="+numeroOT).getModel());
 
 					/*SELECT recibido,marca,calidad,variante,gramaje,alto,ancho,umedida FROM 
 imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= 6 and
@@ -175,8 +173,8 @@ entregado='ENTREGADO';*/
 	 * @return javax.swing.JTable	
 	 */
 	private JTable getJTableMaterialesDeLaSolicitudDeCompra() {
-		if (jTableMaterialesDeLaSolicitudDeCompra == null) {
-			jTableMaterialesDeLaSolicitudDeCompra = new JTable();
+		if (jTableStock2 == null) {
+			jTableStock2 = new JTable();
 			/*jTableMaterialesDeLaSolicitudDeCompra
 					.addMouseListener(new java.awt.event.MouseAdapter() {
 						public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -201,7 +199,7 @@ entregado='ENTREGADO';*/
 						
 				
 		}
-		return jTableMaterialesDeLaSolicitudDeCompra;
+		return jTableStock2;
 	}
 
 	/**

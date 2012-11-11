@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import Formateador.CellEditableSoloLa10;
 import Formateador.MiModelo;
 
 public class metodosSql extends ConexionMySql {
@@ -190,14 +191,66 @@ public class metodosSql extends ConexionMySql {
 		}
 		}
 		
-		return mes;
+		return mes; 
 	}
-	public static JTable llenarJtable(String sentencia ){
+	public  JTable llenarJtable(String sentencia ){
 		ConexionMySql con = new ConexionMySql();
 		//TableColumnModel modeloColumnas = null;
 		java.sql.ResultSetMetaData metadatos;
 		
 		MiModelo modelo=new MiModelo();//voy a modelar mi jtable
+		
+		JTable tablaDatos=new JTable(modelo);
+		
+		try {
+		
+		con.conectar();
+		con.resulsete = con.statemente.executeQuery(sentencia);
+		metadatos=con.resulsete.getMetaData();//extraigo datos sobre el resulset
+		
+		int cantColumnas=metadatos.getColumnCount();// pido cant columnas
+		//no se como modelar tamaño de las columnas
+		//modeloColumnas.setSelectionModel((ListSelectionModel) tablaDatos);
+		
+		
+		
+		for(int i=1;i<=cantColumnas;i++){
+		modelo.addColumn(metadatos.getColumnName(i));
+		
+		
+		}
+		//avanzo por el resulset para mostrar resultado de consultas
+		  while(con.resulsete.next()){
+			// Bucle para cada resultado en la consulta
+			 
+			     // Se crea un array que será una de las filas de la tabla. 
+			     Object [] fila = new Object[cantColumnas]; // Hay tres columnas en la tabla
+
+			     // Se rellena cada posición del array con una de las columnas de la tabla en base de datos.
+			     for (int i=0;i<cantColumnas;i++)
+			        fila[i] = con.resulsete.getObject(i+1); // El primer indice en rs es el 1, no el cero, por eso se suma 1.
+
+			     // Se añade al modelo la fila completa.
+			     modelo.addRow(fila); 
+			  }
+
+		
+		} 
+		catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			e.printStackTrace();
+		}
+		con.desconectar();
+		return tablaDatos;
+		
+
+	}
+	public JTable llenarJtable2(String sentencia ){
+		ConexionMySql con = new ConexionMySql();
+		//TableColumnModel modeloColumnas = null;
+		java.sql.ResultSetMetaData metadatos;
+		
+		CellEditableSoloLa10 modelo=new CellEditableSoloLa10();//voy a modelar mi jtable
 		
 		JTable tablaDatos=new JTable(modelo);
 		

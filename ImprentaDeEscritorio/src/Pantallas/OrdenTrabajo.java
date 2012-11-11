@@ -240,7 +240,7 @@ public class OrdenTrabajo extends JPanel {
 		jLabel16.setBounds(new Rectangle(7, 177, 161, 21));
 		jLabel15 = new JLabel();
 		jLabel15.setText("Sección PreImpresión");
-		jLabel15.setBounds(new Rectangle(4, 151, 133, 21));
+		jLabel15.setBounds(new Rectangle(8, 151, 133, 21));
 		jLabel14 = new JLabel();
 		jLabel14.setText("Sección de Materiales");
 		jLabel14.setBounds(new Rectangle(171, 5, 135, 23));
@@ -283,7 +283,7 @@ public class OrdenTrabajo extends JPanel {
 		//this.setTitle("Orden de trabajo");
 		this.setName("contenedor");
 		this.setBackground(SystemColor.controlHighlight);
-		this.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
+		//this.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 		this.add(jLabel5, null);
 		this.add(getDescripcion(), null);
 		this.add(getJScrollPane(), null);
@@ -533,15 +533,26 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
+	private boolean estaLaTarea(String tarea){
+		int columna=0;
+		for(int fila=0;fila<modeloTareas.getRowCount();fila++){
+			if(modeloTareas.getValueAt(fila, columna).toString().equals(tarea)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setText("Agregar Tarea");
-			jButton.setBounds(new Rectangle(178, 187, 124, 21));
+			jButton.setBounds(new Rectangle(221, 68, 101, 21));
 			
 				
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(estaLaTarea(getChoiceTareas().getSelectedItem())==false){
 					Object[]fila=new Object[2];
 					fila[0]=getChoiceTareas().getSelectedItem();
 					if(jCheckBoxTerciariza.isSelected()){
@@ -550,6 +561,10 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 						fila[1]="";
 					}
 					modeloTareas.addRow(fila);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "No se puede repetir la tarea");
+					}
 				}
 			});
 		}
@@ -600,7 +615,11 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					
 					OT.setFechaEntrega(getFechaPrometida().getText());
 					
-					Producto producto=new Producto(getJTextFieldProducto().getText(), Integer.parseInt(getCantidadAEntregar().getText()), getJTableMateriales());
+					Producto producto=new Producto(getJTextFieldProducto().getText(),
+							
+							Integer.parseInt(CantidadAEntregar.getText()),
+							
+							jTableMateriales);
 					
 					OT.setProducto(producto);
 					OT.getProducto().setCantidad(Integer.parseInt(getCantidadAEntregar().getText()));
@@ -618,11 +637,13 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					status=Imprenta.llenarOrdenTrabajo(OT);
 					if(status==3){
 						JOptionPane.showMessageDialog(null, "datos cargados con éxito!");
+					//	dispose();
 						
 						
 						
 					}else{
 						JOptionPane.showMessageDialog(null, "datos no se cargaron correctamente... revise la ot cargada");
+						//dispose();
 					}
 					
 					}
@@ -1219,6 +1240,7 @@ catch(Exception e1){
 			jButtonCargarElemento.setBounds(new Rectangle(121, 5, 145, 18));
 			jButtonCargarElemento.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(jTextFieldElemento.getText().length()!=0&&jTextFieldCantidad.getText().length()!=0){
 					Object[]eleCant=new Object[2];
 					eleCant[0]=getJTextFieldElemento().getText();
 					eleCant[1]=getJTextFieldCantidad().getText();
@@ -1227,6 +1249,11 @@ catch(Exception e1){
 					jTextFieldCantidad.setText("");
 					
 					modeloElem.addRow(eleCant);
+					}else{
+						JOptionPane.showMessageDialog(null,"Complete elemento y cantidad correctamente");
+						jTextFieldElemento.requestFocus();
+						
+					}
 					
 					
 				}
@@ -1327,13 +1354,13 @@ catch(Exception e1){
 		if (jButtonBorrar == null) {
 			jButtonBorrar = new JButton();
 			jButtonBorrar.setText("Borrar");
-			jButtonBorrar.setBounds(new Rectangle(221, 98, 80, 26));
+			jButtonBorrar.setBounds(new Rectangle(221, 114, 80, 26));
 			jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{DefaultTableModel tmp=(DefaultTableModel) jTableTarea.getModel();
 					tmp.removeRow(jTableTarea.getSelectedRow());}
 					catch(Exception ee){
-						System.out.println("Boludo no podes borrar la nada!!!");
+						System.out.println("Se debe cargar al menos un elemento!!!");
 					}
 				}
 			});
@@ -1349,7 +1376,7 @@ catch(Exception e1){
 		if (jButtonSubir == null) {
 			jButtonSubir = new JButton();
 			jButtonSubir.setText("Subir");
-			jButtonSubir.setBounds(new Rectangle(221, 126, 80, 25));
+			jButtonSubir.setBounds(new Rectangle(221, 146, 80, 25));
 			jButtonSubir.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{DefaultTableModel tmp=(DefaultTableModel) jTableTarea.getModel();
@@ -1372,7 +1399,7 @@ catch(Exception e1){
 		if (jButtonBajar == null) {
 			jButtonBajar = new JButton();
 			jButtonBajar.setText("Bajar");
-			jButtonBajar.setBounds(new Rectangle(221, 152, 80, 27));
+			jButtonBajar.setBounds(new Rectangle(220, 176, 80, 27));
 			jButtonBajar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{DefaultTableModel tmp=(DefaultTableModel) jTableTarea.getModel();
@@ -1437,7 +1464,7 @@ catch(Exception e1){
 		if (jPanel2 == null) {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(null);
-			jPanel2.setBounds(new Rectangle(21, 57, 311, 236));
+			jPanel2.setBounds(new Rectangle(21, 57, 327, 236));
 			jPanel2.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanel2.add(jLabel, null);
 			jPanel2.add(getOrdenNro(), null);
@@ -1459,7 +1486,6 @@ catch(Exception e1){
 			jPanel2.add(jLabel10, null);
 			jPanel2.add(getCantidadAEntregar(), null);
 			jPanel2.add(getChoiceCliente(), null);
-			jPanel2.add(jLabel15, null);
 			jPanel2.add(getApaisado(), null);
 			jPanel2.add(jLabel22, null);
 		}
@@ -1486,6 +1512,7 @@ catch(Exception e1){
 			jPanel3.add(getJScrollPane1(), null);
 			jPanel3.add(jLabel16, null);
 			jPanel3.add(getCantidadPlanchas(), null);
+			jPanel3.add(jLabel15, null);
 		}
 		return jPanel3;
 	}
@@ -1498,7 +1525,7 @@ catch(Exception e1){
 		if (jPanel4 == null) {
 			jPanel4 = new JPanel();
 			jPanel4.setLayout(null);
-			jPanel4.setBounds(new Rectangle(22, 310, 308, 214));
+			jPanel4.setBounds(new Rectangle(22, 310, 327, 214));
 			jPanel4.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanel4.add(jLabel17, null);
 			jPanel4.add(jLabel18, null);

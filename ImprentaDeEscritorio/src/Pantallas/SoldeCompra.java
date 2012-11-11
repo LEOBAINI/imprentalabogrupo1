@@ -129,10 +129,13 @@ public class SoldeCompra extends JFrame {
 		//setChoiceMarca(metodos.consultarUnaColumna("select marca from imprenta.marcapapel"));
 		setChoiceCalidad(metodos.consultarUnaColumna("select descripcion from imprenta.calidad"));
 		setChoiceVariante(metodos.consultarUnaColumna("select descripcion from imprenta.variante"));
-		setChoiceNroOrden(metodos.consultarUnaColumna("" +
+		ArrayList<String> nroOrden=metodos.consultarUnaColumna("" +
 				"SELECT nombre FROM imprenta.ordentrabajo o where nroOrden "+
-" in(select NROORDEN from imprenta.ORDENTRABAJO where estado = 'ACTIVA') "+
-" and o.nombre!='';"));
+				" in(select NROORDEN from imprenta.ORDENTRABAJO where estado = 'ACTIVO') "+
+				" and nombre!='';");
+		nroOrden.add(0, "");
+		setChoiceNroOrden(nroOrden);
+		
 		int max=0;
 		ArrayList <String> aux=metodos.consultarUnaColumna("SELECT max(idsolicitudCompra) FROM imprenta.solicitudcompra;");
 		if(aux.get(0)==null){
@@ -757,32 +760,23 @@ public class SoldeCompra extends JFrame {
 					double cantidad=Double.parseDouble(getCampoCantidad().getText());
 					double importe=Double.parseDouble(getCampoImporte().getText());
 					double importeTotal=0;
+					
+					S_ancho=parseador.nextToken("X");
+					//System.out.println("este es el ancho = "+S_ancho);
+					S_alto=parseador.nextToken("X");
+					//System.out.println("este es el alto = "+S_alto);
+					
+					double alto=Double.parseDouble(S_alto);
+					
+					double ancho=Double.parseDouble(S_ancho);
+					
 					if(getChoiceUnidadDeMedida().getSelectedItem().equals("Hojas")){
 						 					 
 						 importeTotal=cantidad*importe;
-							S_ancho=parseador.nextToken("X");
-							//System.out.println("este es el ancho = "+S_ancho);
-							S_alto=parseador.nextToken("X");
-							//System.out.println("este es el alto = "+S_alto);
-							
-							double alto=Double.parseDouble(S_alto);
-							
-							double ancho=Double.parseDouble(S_ancho);
+						
 					}else if(getChoiceUnidadDeMedida().getSelectedItem().equals("KG")){
 						//((gramos/cm2 "es (alto*ancho)") *importe)*cantidad
- 						double gramos=Double.parseDouble(getCampoGramaje().getText());
-						
-						
-						S_ancho=parseador.nextToken("X");
-						//System.out.println("este es el ancho = "+S_ancho);
-						S_alto=parseador.nextToken("X");
-						//System.out.println("este es el alto = "+S_alto);
-						
-						double alto=Double.parseDouble(S_alto);
-						
-						double ancho=Double.parseDouble(S_ancho);
-						
-						
+ 						double gramos=Double.parseDouble(getCampoGramaje().getText());					
 						
 						importeTotal=(((gramos*((alto/100)*(ancho/100)))/1000)*importe)*cantidad;	
 						importeTotal=Math.rint(importeTotal*100)/100;  
@@ -790,15 +784,7 @@ public class SoldeCompra extends JFrame {
 						
 						
 					}else if(getChoiceUnidadDeMedida().getSelectedItem().equals("Resma")){
-						//(cantidad /500)*importe
-						S_ancho=parseador.nextToken("X");
-						//System.out.println("este es el ancho = "+S_ancho);
-						S_alto=parseador.nextToken("X");
-						//System.out.println("este es el alto = "+S_alto);
 						
-						double alto=Double.parseDouble(S_alto);
-						
-						double ancho=Double.parseDouble(S_ancho);
 						importeTotal=(cantidad/500)*importe;
 						importeTotal=Math.rint(importeTotal*100)/100;  
 					}
@@ -1149,6 +1135,9 @@ public class SoldeCompra extends JFrame {
 			jTextFieldIva.requestFocus();
 			errorCampos++;
 			
+		}if(choiceNroOrden.getSelectedItem().equals("")){
+			JOptionPane.showMessageDialog(null, "La carga se agregará para stockear");
+			jCheckBoxParaStock.setSelected(true);
 		}
 		return errorCampos==0;
 	}
@@ -1177,7 +1166,18 @@ public class SoldeCompra extends JFrame {
 					//OrdenDeCompra OC=new OrdenDeCompra(getChoiceNroOrden().getSelectedItem().toString(), Integer.parseInt(getNrosc().toString()), getFechadeldìa().toString());
 					OrdenDeCompra OC=new OrdenDeCompra();
 					
-					OC.setNombreDeLaOT(getChoiceNroOrden().getSelectedItem().toString());
+					
+					
+					if(jCheckBoxParaStock.isSelected()==true){
+					OC.setNombreDeLaOT("Para Stock");
+					}else{
+					OC.setNombreDeLaOT(getChoiceNroOrden().getSelectedItem());
+					}
+					
+					
+					
+					
+					
 					
 					OC.setNroOrdenCompra(Integer.parseInt(getNrosc().getText()));
 					

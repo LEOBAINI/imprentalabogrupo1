@@ -96,7 +96,7 @@ public class CosultaDeOC extends JFrame {
 		metodosSql metodos=new metodosSql();
 		DefaultTableModel modeloSC=new DefaultTableModel();	
 		
-		modeloSC=(DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra;").getModel();
+		modeloSC=(DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra order by idsolicitudCompra desc;").getModel();
 		
 		if (jTableOCompras == null) {
 			jTableOCompras = new JTable(modeloSC);
