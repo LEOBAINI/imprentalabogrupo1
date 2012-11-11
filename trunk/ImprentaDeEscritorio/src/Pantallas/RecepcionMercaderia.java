@@ -1,29 +1,27 @@
 package Pantallas;
 
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import java.awt.Dimension;
 import java.awt.Choice;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Rectangle;
+import java.awt.SystemColor;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import Base.metodosSql;
-import java.awt.Font;
-import java.awt.SystemColor;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.BorderFactory;
-import java.awt.Color;
 
 public class RecepcionMercaderia extends JFrame {
 
@@ -44,6 +42,7 @@ public class RecepcionMercaderia extends JFrame {
 	private JScrollPane jScrollPane1 = null;
 	private JTable jTableEstadoStock = null;
 	private JLabel jLabel4 = null;
+	private JTextField CantidadIngresada = null;
 
 	/**
 	 * This is the default constructor
@@ -111,6 +110,7 @@ public class RecepcionMercaderia extends JFrame {
 			jContentPane.add(getJPanel(), null);
 			jContentPane.add(getJScrollPane1(), null);
 			jContentPane.add(jLabel4, null);
+			jContentPane.add(getCantidadIngresada(), null);
 		}
 		return jContentPane;
 	}
@@ -120,6 +120,32 @@ public class RecepcionMercaderia extends JFrame {
 	 * 	
 	 * @return java.awt.Choice	
 	 */
+	private void refrescoTablas(){
+		int numeroDeOT=0;
+		int numeroDeSC=Integer.parseInt(getChoiceDescripcionSC().getSelectedItem());
+		
+		metodosSql metodos=new metodosSql();
+		numeroDeOT=Integer.parseInt(metodos.consultarUnaColumna("select idOrdTrabajo from imprenta.solicitudCompra where idSolicitudCompra = "+getChoiceDescripcionSC().getSelectedItem()).get(0));
+		if(numeroDeOT==0){
+			getJTextFieldOTnro().setText("Stockeo");
+		}else{
+		getJTextFieldOTnro().setText(metodos.consultarUnaColumna("select nombre from imprenta.ordenTrabajo where nroorden= "+numeroDeOT).get(0));
+		
+		} 
+		 
+		//esta tabla es la que tiene el campo editable de la cantidad que se recibe
+		jTableElementosPapel.setModel(metodos.llenarJtable2("SELECT" +
+				" idMatSolCompra,calidad,marca,variante,ancho,alto,gramaje,umedida,cantidad,recibido,A_RECIBIR,entregado FROM" +
+				" imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= "+numeroDeSC+" and entregado!= 'ENTREGADO';").getModel());
+		
+		
+		getJTextFieldComentario().setText(metodos.consultarUnaColumna("select comentario from imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra = "+numeroDeSC+";").get(0));
+		
+		jTableEstadoStock.setModel(metodos.llenarJtable("SELECT * FROM imprenta.stock where nroSolicitudCompra= "+numeroDeSC+" order by partida desc;").getModel());
+		
+		
+	}
+
 	private Choice getChoiceDescripcionSC() {
 		if (choiceDescripcionSC == null) {
 			choiceDescripcionSC = new Choice();
@@ -127,17 +153,7 @@ public class RecepcionMercaderia extends JFrame {
 			//choiceDescripcionSC.add("prueba");
 			choiceDescripcionSC.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-				int numeroDeOT=0;
-				int numeroDeSC=Integer.parseInt(getChoiceDescripcionSC().getSelectedItem());
-				String nombreDeLaOT=null;
-				metodosSql metodos=new metodosSql();
-				numeroDeOT=Integer.parseInt(metodos.consultarUnaColumna("select idOrdTrabajo from imprenta.solicitudCompra where idSolicitudCompra = "+getChoiceDescripcionSC().getSelectedItem()).get(0));
-				getJTextFieldOTnro().setText(metodos.consultarUnaColumna("select nombre from imprenta.ordenTrabajo where nroorden= "+numeroDeOT).get(0));
-				jTableElementosPapel.setModel(metodos.llenarJtable("SELECT" +
-						" idMatSolCompra,calidad,marca,variante,ancho,alto,gramaje,umedida,cantidad,recibido,entregado FROM" +
-						" imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= "+numeroDeSC+" and entregado!= 'ENTREGADO';").getModel());
-				getJTextFieldComentario().setText(metodos.consultarUnaColumna("select comentario from imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra = "+numeroDeSC+";").get(0));
-				jTableEstadoStock.setModel(metodos.llenarJtable("SELECT * FROM imprenta.stock where nroSolicitudCompra= "+numeroDeSC+";").getModel());
+					refrescoTablas();
 				}
 			});
 			
@@ -190,6 +206,13 @@ entregado*/
 		
 		if (jTableElementosPapel == null) {
 			jTableElementosPapel = new JTable(modelo);
+			jTableElementosPapel.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					metodosSql metodos=new metodosSql();
+					int idmaterial=Integer.parseInt(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(),0).toString());
+					jTextFieldComentario.setText(metodos.consultarUnaColumna("SELECT comentario FROM imprenta.materialesdelasolicituddecompra where idmatsolcompra="+idmaterial+";").get(0));
+				}
+			});
 		}
 		return jTableElementosPapel;
 	}
@@ -199,6 +222,43 @@ entregado*/
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
+	private boolean controlarGuardado(){
+		if(jTableElementosPapel.getSelectedRow()==-1){
+			JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una fila de la tabla");
+			return false;
+			
+		}if(CantidadIngresada.getText().equals("")||Integer.parseInt(CantidadIngresada.getText())<=0){
+			JOptionPane.showMessageDialog(null, "Ingrese un valor mayor que 0 para poder recibir!");
+			CantidadIngresada.setText("");
+			CantidadIngresada.requestFocus();
+			return false;
+		}if(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 10)==null){
+			//JOptionPane.showMessageDialog(null, "Fila A_RECIBIR está vacía!");
+			jTableElementosPapel.setValueAt(0, jTableElementosPapel.getSelectedRow(), 10);
+			//return false;
+			
+		}
+		if(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 9)==null){
+			//JOptionPane.showMessageDialog(null, "Fila A_RECIBIR está vacía!");
+			jTableElementosPapel.setValueAt(0, jTableElementosPapel.getSelectedRow(), 9);
+			//return false;
+			
+		}
+		if(Integer.parseInt(CantidadIngresada.getText()) +
+		Integer.parseInt(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 9).toString())>Integer.parseInt(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 8).toString())){
+			JOptionPane.showMessageDialog(null, "No se puede recibir más de lo que se pide!");
+			CantidadIngresada.setText("");
+			CantidadIngresada.requestFocus();
+			return false;
+			
+		}
+		
+		
+		return true;
+		
+	}
+	
+
 	private JButton getJButtonAceptar() {
 		if (jButtonAceptar == null) {
 			jButtonAceptar = new JButton();
@@ -210,90 +270,31 @@ entregado*/
 					/*Al recibir < que cantidad entregado poner el campo "Entregado" en parcial y borrar
 					 * comentarios si los hay*/
 					public void actionPerformed(java.awt.event.ActionEvent e) {
-						/*Al recibir < que cantidad entregado poner el campo "Entregado" en parcial y borrar
-						 * comentarios si los hay
-						 * */
+						
 						try{
+						if(controlarGuardado()){
 						metodosSql metodos=new metodosSql();
-						/*hacer el comit de lo que se haya modificado en la tabla (jtable)*/
 						
-						
-						String numeroDeSC=null;
-						numeroDeSC=getChoiceDescripcionSC().getSelectedItem();
-						int auxNumeroSC=Integer.parseInt(getChoiceDescripcionSC().getSelectedItem());
-						int numeroDeOT=Integer.parseInt(metodos.consultarUnaColumna("SELECT idOrdTrabajo FROM imprenta.solicitudcompra "+
-" where idSolicitudCompra="+auxNumeroSC+";").get(0));
-						
-						for(int i=0;i<jTableElementosPapel.getRowCount();i++){
-							String recibido=null;
-							String pedido=null;//si el recibido < cantidad ponerle parcial.(pedido es la cantidad en la tabla)
-							String uMedida=null;
-							String recibidoHastaAhora=metodos.consultarUnaColumna("SELECT recibido FROM imprenta.materialesdelasolicituddecompra "+
-" where idMatSolCompra="+getJTableElementosPapel().getValueAt(i, 0)+";").get(0);
-							String fechaRecepcion=metodos.dameFechaDeHoy();
-							Calendar Hora= Calendar.getInstance();
 
-							String hora=Hora.get(Calendar.HOUR_OF_DAY) +	":" + Hora.get(Calendar.MINUTE) ;
-							int auxCantidadPedida=0;
-							int auxCantidadRecibidaViaJtable=0;
-							int banderaParcial=0;
-							
-							recibido=getJTableElementosPapel().getValueAt(i, 9).toString();
-							pedido=getJTableElementosPapel().getValueAt(i, 8).toString();
-							uMedida=getJTableElementosPapel().getValueAt(i, 7).toString();
-							auxCantidadPedida=Integer.parseInt(pedido);//es lo que se pidio 
-							auxCantidadRecibidaViaJtable=Integer.parseInt(recibido)+Integer.parseInt(recibidoHastaAhora);//lo que entra
-							/////////////////////////////////////PARCIAL//////////////////////////////////////////
-							if(auxCantidadPedida>auxCantidadRecibidaViaJtable && Integer.parseInt(getJTableElementosPapel().getValueAt(i, 9).toString())!=0){//actualizar el estado en entregado y ponerle parcial
-								int status1=0;
-								//int tablarecibido=Integer.parseInt(recibido);
-								status1=status1+metodos.insertarOmodif("Update imprenta.materialesdelasolicituddecompra set `recibido`= "+auxCantidadRecibidaViaJtable+", `entregado` = 'PARCIAL'" +
-										",`comentario`= 'RECIBIDO EN FORMA PARCIAL' where idMatSolCompra="+getJTableElementosPapel().getValueAt(i, 0)+";");
-								                      status1=status1+metodos.insertarOmodif("INSERT INTO `imprenta`.`stock` (`nroSolicitudCompra`, `NroOT`, `cantidad`, `UnidadDeMedida`, `fechaRecepcion`, `hora`)" +
-		                        " VALUES ("+auxNumeroSC+", "+numeroDeOT+", "+auxCantidadRecibidaViaJtable+", '"+uMedida+"', '"+fechaRecepcion+"', '"+hora+"');");
-							if(status1!=2){
-								JOptionPane.showMessageDialog(null, "Error de grabado en tabla stock o materialesDeLaSolicitud...");
-								//hacer rollback
-								
-								
-							}
-							JOptionPane.showMessageDialog(null, "RECIBIDO EN FORMA PARCIAL Ejecutado OK!");
-							banderaParcial=1;
-							dispose();
-							}
-							
-							////////////////////////////////////////////////////////TOTAL///////////////////////////////////////////////////////////////////
-							
-							
-							if(auxCantidadPedida==auxCantidadRecibidaViaJtable && banderaParcial==0 && Integer.parseInt(getJTableElementosPapel().getValueAt(i, 9).toString())!=0){
-								metodos.insertarOmodif("Update imprenta.materialesdelasolicituddecompra set `entregado` = 'ENTREGADO'" +
-										",`comentario`= 'RECEPCIÓN COMPLETA' where idMatSolCompra="+getJTableElementosPapel().getValueAt(i, 0)+";");
-								
-								
-								metodos.insertarOmodif("INSERT INTO `imprenta`.`stock` (`nroSolicitudCompra`, `NroOT`, `cantidad`, `UnidadDeMedida`, `fechaRecepcion`, `hora`)" +
-										" VALUES ("+auxNumeroSC+", "+numeroDeOT+", "+recibido+", '"+uMedida+"', '"+fechaRecepcion+"', '"+hora+"');");
-								
-							
-							//redundante<<<<<-------------------------------
-							metodos.insertarOmodif("Update imprenta.materialesdelasolicituddecompra set `recibido` = '"+auxCantidadRecibidaViaJtable+"'" +
-									" where idMatSolCompra="+getJTableElementosPapel().getValueAt(i, 0)+";");
-							
-							JOptionPane.showMessageDialog(null, "RECEPCIÓN COMPLETA Ejecutado OK!");
-							dispose();
-							
-							}
-							
-							if(auxCantidadPedida<auxCantidadRecibidaViaJtable){
-								JOptionPane.showMessageDialog(null, "ERROR RECEPCIÓN MAYOR AL PEDIDO INTENTE DE NUEVO!");
-								dispose();
-							}
-							
+
+						int nroSolicitudCompra=Integer.parseInt(choiceDescripcionSC.getSelectedItem());
+                        int NroOT=Integer.parseInt(metodos.consultarUnaColumna("SELECT idOrdTrabajo" +
+		                " FROM imprenta.solicitudcompra where idsolicitudCompra= "+nroSolicitudCompra+";").get(0));
+						int cantidad=Integer.parseInt(CantidadIngresada.getText());
+						String UnidadDeMedida=jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 7).toString();//7 jtable
+						String fechaRecepcion=metodos.dameFechaDeHoy();
+						Calendar Hora= Calendar.getInstance();
+						String hora=Hora.get(Calendar.HOUR_OF_DAY) +	":" + Hora.get(Calendar.MINUTE) ;
+						
+						int iDmaterialesdelasol=Integer.parseInt(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 0).toString());//0Integer.P jtable;
+	                    metodos.insertarOmodif("INSERT INTO `imprenta`.`stock` (`nroSolicitudCompra`, `NroOT`, `cantidad`, `UnidadDeMedida`,"+
+						 " `fechaRecepcion`, `hora`, `iDmaterialesdelasol`) VALUES ("+nroSolicitudCompra+","+ NroOT+","+cantidad+", "+
+						 "  '"+UnidadDeMedida+"', '"+fechaRecepcion+"', '"+hora+"', "+iDmaterialesdelasol+");");				
+						
+	                   refrescoTablas();
 						}
-						
-						
-						
-						
-					}catch(Exception e2){
+						else{}
+						}catch(Exception e2){
 						JOptionPane.showMessageDialog(null, e2.getMessage());
 						JOptionPane.showMessageDialog(null, e2.getStackTrace());
 						JOptionPane.showMessageDialog(null, e2.getLocalizedMessage());
@@ -340,13 +341,23 @@ entregado*/
 			jButtonRechazar.setText("Rechazar");
 			jButtonRechazar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(jTableElementosPapel.getSelectedRow()!=-1){
+						
+					int idmaterial=0;
+					idmaterial=Integer.parseInt(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 0).toString());
 					String comentario=null;
 					metodosSql metodos=new metodosSql();
 					comentario=JOptionPane.showInputDialog(null, "Escriba motivo del rechazo");
-metodos.insertarOmodif("update materialesdelasolicituddecompra set `entregado`= 'RECHAZADO', `comentario` = '"+comentario+"' where nroSolicitudDeCompra = '"+Integer.parseInt(getChoiceDescripcionSC().getSelectedItem())+"';");
-metodos.insertarOmodif("Update imprenta.materialesdelasolicituddecompra set `recibido` = '0'" +
-		" where nroSolicitudDeCompra = "+Integer.parseInt(getChoiceDescripcionSC().getSelectedItem())+";");		
+					
+metodos.insertarOmodif("update materialesdelasolicituddecompra set `entregado`= 'RECHAZADO', `comentario` = '"+comentario+"' where" +
+		" nroSolicitudDeCompra = '"+Integer.parseInt(getChoiceDescripcionSC().getSelectedItem())+"' and idmatsolcompra = "+idmaterial+";");
+refrescoTablas();
+	
 					//dispose();
+					}else{
+						JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una fila de la tabla");
+						
+					}
 				}
 			});
 			
@@ -393,7 +404,7 @@ metodos.insertarOmodif("Update imprenta.materialesdelasolicituddecompra set `rec
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBounds(new Rectangle(842, 51, 247, 36));
+			jPanel.setBounds(new Rectangle(760, 51, 247, 36));
 			jPanel.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanel.add(jLabel3, gridBagConstraints);
 		}
@@ -424,6 +435,19 @@ metodos.insertarOmodif("Update imprenta.materialesdelasolicituddecompra set `rec
 			jTableEstadoStock = new JTable();
 		}
 		return jTableEstadoStock;
+	}
+
+	/**
+	 * This method initializes CantidadIngresada	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCantidadIngresada() {
+		if (CantidadIngresada == null) {
+			CantidadIngresada = new JTextField();
+			CantidadIngresada.setBounds(new Rectangle(1012, 52, 77, 32));
+		}
+		return CantidadIngresada;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

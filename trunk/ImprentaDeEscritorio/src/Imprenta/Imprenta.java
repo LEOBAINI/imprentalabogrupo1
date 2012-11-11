@@ -139,7 +139,11 @@ public  class Imprenta {
 		
 		int nroOc=OC.getNroOrdenCompra();
 		String nombreOt=OC.getNombreDeLaOT();
-		int nroOT=metodos.dameNombreOTteDoyNroOT(nombreOt); 
+		int nroOT=0;
+		
+		if(!nombreOt.equals("Para Stock"))
+			nroOT=metodos.dameNombreOTteDoyNroOT(nombreOt); 
+		
 		String fechaConfeccion=OC.getFechaConfeccion();
 		String fechaEntrega=OC.getFechaEntrega();
 		String proveedor=OC.getProveedor();
@@ -182,15 +186,15 @@ public  class Imprenta {
 		String calidad=modelo.getValueAt(i, 2).toString();
 		String variante=modelo.getValueAt(i,3).toString();
 		String gramaje=modelo.getValueAt(i, 4).toString();
-		int alto=Integer.parseInt(modelo.getValueAt(i, 5).toString());
-		int ancho=Integer.parseInt(modelo.getValueAt(i, 6).toString());
+		double ancho=Double.parseDouble(modelo.getValueAt(i, 5).toString());
+		double alto=Double.parseDouble(modelo.getValueAt(i, 6).toString());
 		//double importe=Double.parseDouble(modelo.getValueAt(i, 7).toString());
 		String unidadMedida=modelo.getValueAt(i, 8).toString();
 		double importeTotal=Double.parseDouble(modelo.getValueAt(i, 9).toString());
 		status=status+metodos.insertarOmodif("INSERT INTO `imprenta`.`MaterialesDeLaSolicitudDeCompra` "+
-	 " (`nroSolicitudDeCompra`, `Cantidad`, `Marca`, `Calidad`, `Variante`, `Gramaje`, `Alto`, `Ancho`,"+ 
+	 " (`nroSolicitudDeCompra`, `Cantidad`,`A_RECIBIR`, `Marca`, `Calidad`, `Variante`, `Gramaje`, `Alto`, `Ancho`,"+ 
 	 " `Umedida`, `costoTotal`, `entregado`)" +
-	 " VALUES  ("+OC.getNroOrdenCompra()+", "+cantidad+", '"+marca+"', '"+calidad+"', '"+variante+"', '"+gramaje+"',  "+
+	 " VALUES  ("+OC.getNroOrdenCompra()+", "+cantidad+","+cantidad+", '"+marca+"', '"+calidad+"', '"+variante+"', '"+gramaje+"',  "+
 	 " "+alto+", "+ancho+", '"+unidadMedida+"', "+importeTotal+", 'PENDIENTE');");
 		}
 		status=status-(filas-1);

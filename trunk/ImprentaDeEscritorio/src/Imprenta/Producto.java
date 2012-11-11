@@ -15,7 +15,7 @@ public class Producto {
 	 * @param cantidad
 	 */
 	public Producto(String nombreProducto, int cantidad,JTable tablaMateriales) {
-		super();
+		
 		this.nombreProducto = nombreProducto;
 		this.cantidad = cantidad;
 		this.elementos=new ArrayList<ElementosDelProducto>();
@@ -31,15 +31,16 @@ public class Producto {
 		
 		for(int i=0;i<table.getRowCount();i++){
 		String elemento=(String) table.getValueAt(i, 0);
-		String calidad=(String) table.getValueAt(i, 1);
-		String variante=(String) table.getValueAt(i, 2);
-		String gramaje=(String) table.getValueAt(i, 3);
-		String formato=(String) table.getValueAt(i, 4);
-		String posesXpliego= table.getValueAt(i, 5).toString();
-		String pliegosNetos= table.getValueAt(i, 6).toString();
-		String pliegosEnDemasia=(String) table.getValueAt(i, 7);
-		String pliegosXhoja=(String) table.getValueAt(i, 8);
-		String cantidadHojas= table.getValueAt(i, 9).toString();
+		String cantidadHojas= table.getValueAt(i, 1).toString();		
+		String calidad=(String) table.getValueAt(i, 2);
+		String variante=(String) table.getValueAt(i, 3);
+		String gramaje=(String) table.getValueAt(i, 4);
+		String formato=(String) table.getValueAt(i, 5);
+		String posesXpliego= table.getValueAt(i, 6).toString();
+		String pliegosNetos= table.getValueAt(i, 7).toString();
+		String pliegosEnDemasia=(String) table.getValueAt(i, 8);
+		String pliegosXhoja=(String) table.getValueAt(i, 9);
+		
 		int cantidadDeEseElemento=Integer.parseInt( table.getValueAt(i, 10).toString());
 		
 		ElementosDelProducto elementoDelProducto=new ElementosDelProducto(elemento,cantidadDeEseElemento);//de la tabla
