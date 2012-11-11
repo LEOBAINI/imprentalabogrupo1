@@ -13,6 +13,7 @@ import Base.metodosSql;
 
 
 
+@SuppressWarnings("unused")
 public  class Imprenta {
 	
 	

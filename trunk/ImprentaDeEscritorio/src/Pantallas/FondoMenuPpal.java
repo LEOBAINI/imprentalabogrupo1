@@ -11,6 +11,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
 import java.awt.Color;
 
+@SuppressWarnings("unused")
 public class FondoMenuPpal extends JPanel {
 	ImageIcon imagen;
 

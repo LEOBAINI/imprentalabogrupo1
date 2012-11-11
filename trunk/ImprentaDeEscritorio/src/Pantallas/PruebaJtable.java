@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 
+@SuppressWarnings("unused")
 public class PruebaJtable extends JFrame {
 
 	private static final long serialVersionUID = 1L;

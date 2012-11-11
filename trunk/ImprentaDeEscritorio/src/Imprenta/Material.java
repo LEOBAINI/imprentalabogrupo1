@@ -104,9 +104,11 @@ public class Material {
 		this.cantHojas = cantHojas;
 	}
 	
+	@SuppressWarnings("unused")
 	private void autocalcularPliegosNetos(){
 		
 	}
+	@SuppressWarnings("unused")
 	private void autocalcularCantidadHojas(){
 		
 	}

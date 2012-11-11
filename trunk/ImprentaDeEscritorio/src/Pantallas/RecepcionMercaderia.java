@@ -66,7 +66,7 @@ public class RecepcionMercaderia extends JFrame {
 		this.setTitle("Recepción de Mercadería");
 		ArrayList<String>numerosDeSC=null;
 		numerosDeSC=metodos.consultarUnaColumna("select idSolicitudCompra from imprenta.solicitudCompra where idsolicitudCompra  IN " +
-" (SELECT  nroSolicituddeCompra from imprenta.materialesDeLasolicituddeCompra where `entregado` != 'ENTREGADO');");
+" (SELECT  nroSolicituddeCompra from imprenta.materialesDeLasolicituddeCompra);");
 		for(int i=0;i<numerosDeSC.size();i++){
 			getChoiceDescripcionSC().add(numerosDeSC.get(i));
 			
@@ -136,7 +136,7 @@ public class RecepcionMercaderia extends JFrame {
 		//esta tabla es la que tiene el campo editable de la cantidad que se recibe
 		jTableElementosPapel.setModel(metodos.llenarJtable2("SELECT" +
 				" idMatSolCompra,calidad,marca,variante,ancho,alto,gramaje,umedida,cantidad,recibido,A_RECIBIR,entregado FROM" +
-				" imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= "+numeroDeSC+" and entregado!= 'ENTREGADO';").getModel());
+				" imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= "+numeroDeSC+";").getModel());
 		
 		
 		getJTextFieldComentario().setText(metodos.consultarUnaColumna("select comentario from imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra = "+numeroDeSC+";").get(0));

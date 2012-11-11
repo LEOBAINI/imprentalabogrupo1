@@ -10,6 +10,7 @@ import javax.swing.JList;
 import java.awt.Choice;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -19,6 +20,7 @@ import Base.metodosSql;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
+@SuppressWarnings("unused")
 public class UsodePapel extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -27,9 +29,9 @@ public class UsodePapel extends JFrame {
 	private Choice choice = null;
 	private JLabel jLabel = null;
 	private JScrollPane jScrollPane = null;
-	private JTable jTableStock = null;
+	private JTable jTableConsumosDeLaOT = null;
 	private JScrollPane jScrollPane1 = null;
-	private JTable jTableStock2 = null;
+	private JTable jTableStock1 = null;
 	private JLabel jLabel1 = null;
 	private JTextField jTextFieldCantidadQueRetira = null;
 	private JLabel jLabel2 = null;
@@ -99,6 +101,12 @@ public class UsodePapel extends JFrame {
 	 * 	
 	 * @return java.awt.Choice	
 	 */
+	private void refreshTablas(int numeroOT){
+		metodosSql metodos=new metodosSql();
+		jTableStock1.setModel(metodos.llenarJtable("select cantidad,unidadDemedida,fechaRecepcion,hora,partida,idmaterialesDeLaSol from imprenta.stock  where NroOT ="+numeroOT).getModel());
+		jTableConsumosDeLaOT.setModel(metodos.llenarJtable("select CantidadConsumida,fechaConsumo,idmaterialConsumido from imprenta.consumosdelaot where NroOT ="+numeroOT).getModel());
+		
+	}
 	private Choice getChoice() {
 		if (choice == null) {
 			choice = new Choice();
@@ -107,7 +115,8 @@ public class UsodePapel extends JFrame {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					metodosSql metodos=new metodosSql();
 					int numeroOT=Integer.parseInt(getChoice().getSelectedItem());
-jTableStock2.setModel(metodos.llenarJtable("select * from imprenta.stock where nrosolicitudcompra ="+numeroOT).getModel());
+jTableStock1.setModel(metodos.llenarJtable("select cantidad,unidadDemedida,fechaRecepcion,hora,partida,idmaterialesDeLaSol from imprenta.stock where NroOT ="+numeroOT).getModel());
+jTableConsumosDeLaOT.setModel(metodos.llenarJtable("select CantidadConsumida,fechaConsumo,idmaterialConsumido from imprenta.consumosdelaot where NroOT ="+numeroOT).getModel());
 
 					/*SELECT recibido,marca,calidad,variante,gramaje,alto,ancho,umedida FROM 
 imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= 6 and
@@ -127,30 +136,22 @@ entregado='ENTREGADO';*/
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
 			jScrollPane.setBounds(new Rectangle(790, 59, 433, 166));
-			jScrollPane.setViewportView(getJTableStock());
+			jScrollPane.setViewportView(getJTableConsumosDeLaOT());
 		}
 		return jScrollPane;
 	}
 
 	/**
-	 * This method initializes jTableStock	
+	 * This method initializes jTableConsumosDeLaOT	
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
-	private JTable getJTableStock() {
-		modeloTabla.addColumn("Cantidad");
-		modeloTabla.addColumn("Marca");
-		modeloTabla.addColumn("Calidad");
-		modeloTabla.addColumn("Variante");
-		modeloTabla.addColumn("Gramaje");
-		modeloTabla.addColumn("Alto");
-		modeloTabla.addColumn("Ancho");
-		modeloTabla.addColumn("Umedida");
-		modeloTabla.addColumn("id");
-		if (jTableStock == null) {
-			jTableStock = new JTable(modeloTabla);
+	private JTable getJTableConsumosDeLaOT() {
+		
+		if (jTableConsumosDeLaOT == null) {
+			jTableConsumosDeLaOT = new JTable(modeloTabla);
 		}
-		return jTableStock;
+		return jTableConsumosDeLaOT;
 	}
 
 	/**
@@ -173,8 +174,8 @@ entregado='ENTREGADO';*/
 	 * @return javax.swing.JTable	
 	 */
 	private JTable getJTableMaterialesDeLaSolicitudDeCompra() {
-		if (jTableStock2 == null) {
-			jTableStock2 = new JTable();
+		if (jTableStock1 == null) {
+			jTableStock1 = new JTable();
 			/*jTableMaterialesDeLaSolicitudDeCompra
 					.addMouseListener(new java.awt.event.MouseAdapter() {
 						public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -199,7 +200,7 @@ entregado='ENTREGADO';*/
 						
 				
 		}
-		return jTableStock2;
+		return jTableStock1;
 	}
 
 	/**
@@ -228,6 +229,41 @@ entregado='ENTREGADO';*/
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
+	private boolean hayErrores(int CantIN,int CantOUT){
+		try{
+		if(jTableStock1.getSelectedRow()==-1){
+			JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una fila de la tabla");
+			return true;			
+		}
+		if(CantIN==0){
+			JOptionPane.showMessageDialog(null, "No tiene sentido pedir 0! ingrese otro valor >0");
+			return true;
+			
+		}
+		if(CantOUT==0){
+			JOptionPane.showMessageDialog(null, "No hay suficiente STOCK");
+			return true;
+			
+		}
+		if(CantIN >CantOUT){
+			JOptionPane.showMessageDialog(null, "El valor ingresado es mayor al existente");
+			return true;				
+			
+		}
+		if(jTextFieldCantidadQueRetira.getText().length()<=0){
+			JOptionPane.showMessageDialog(null, "La cantidad está vacía!");
+			return true;				
+			
+		}
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "Ingrese valores válidos!....."+e.getMessage());
+			return true;
+		}
+		
+		
+		
+		return false;
+	}
 	private JButton getJButtonAceptar() {
 		if (jButtonAceptar == null) {
 			jButtonAceptar = new JButton();
@@ -235,24 +271,57 @@ entregado='ENTREGADO';*/
 			jButtonAceptar.setText("Cargar");
 			jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try{
+					metodosSql metodos=new metodosSql();
+					int cantidadIngresada=0;
+					int cantidadStockeado=0;
+					int partida=-1;
+					int numeroOT=-1;
+					int idMaterialConsumido=-1;
+					String fechaDeHoy=metodos.dameFechaDeHoy();
 					
-					Object[] fila=new Object[9];
-					int filaElegida=getJTableMaterialesDeLaSolicitudDeCompra().getSelectedRow();
-					fila[0]=getJTextFieldCantidadQueRetira().getText();//campito llenado a mano 
-					//datos que vienen de la tabla imprenta.materialesdelasolicituddecompra
-					//tambien hace falta el dato IdMatSolCompra
-					fila[1]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 2);//marca
-					fila[2]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 3);//calidad
-					fila[3]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 4);//variante
-					fila[4]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 5);//gramaje
-					fila[5]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 6);//alto
-					fila[6]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 7);//ancho
-					fila[7]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 8);//umedida
-					fila[8]=getJTableMaterialesDeLaSolicitudDeCompra().getValueAt(filaElegida, 0);//idmatsolCompra
+					if(jTextFieldCantidadQueRetira.getText().length()>0){
+					 cantidadIngresada=Integer.parseInt(jTextFieldCantidadQueRetira.getText());
+					}
+					//int cantidadStockeado=Integer.parseInt(metodos.consultarUnaColumna("select cantidad from imprenta.stock where partida="+partida+";").get(0));
 					
-					modeloTabla.addRow(fila);// carga en la tabla stock (la que está al lado de la de materiales)
 					
-					//cuando se le de finalizar tiene que guardar consumos de la ot y hacer la resta en stock
+					if(jTableStock1.getSelectedRow()!=-1){
+						
+					
+					partida=Integer.parseInt(jTableStock1.getValueAt(jTableStock1.getSelectedRow(), 4).toString());//columna 4 es partida
+					idMaterialConsumido=Integer.parseInt(jTableStock1.getValueAt(jTableStock1.getSelectedRow(), 5).toString());//columna 5 es idmaterial
+					
+					cantidadStockeado=Integer.parseInt(metodos.consultarUnaColumna("select cantidad from imprenta.stock where partida="+partida+";").get(0));
+					
+					
+					
+					numeroOT=Integer.parseInt(choice.getSelectedItem());
+					
+					
+					}else{
+						JOptionPane.showMessageDialog(null, "Elija una fila de la tabla");
+						return;
+					}
+					
+					if(hayErrores(cantidadIngresada,cantidadStockeado)==false && partida!=-1 && numeroOT!=-1 && idMaterialConsumido!=-1){
+						
+					
+					metodos.insertarOmodif("update imprenta.stock set cantidad=cantidad-"+cantidadIngresada+" where partida="+partida+"; ");//restar en stock
+					metodos.insertarOmodif("insert into imprenta.consumosdelaot(`NroOT`,`CantidadConsumida`,`FechaConsumo`,`idMaterialConsumido`)values("+numeroOT+","+cantidadIngresada+",'"+fechaDeHoy+"',"+idMaterialConsumido+");");//agregar en materiales consumidos por la ot
+					
+					
+					
+					refreshTablas(numeroOT);
+					}else{
+						
+					}
+					}
+					catch(Exception ee){
+						JOptionPane.showMessageDialog(null, ee.getMessage());
+						
+					}
+					
 					
 				}
 			});
@@ -270,54 +339,15 @@ entregado='ENTREGADO';*/
 			jButtonFinalizar = new JButton();
 			jButtonFinalizar.setBounds(new Rectangle(18, 203, 105, 19));
 			jButtonFinalizar.setText("Finalizar");
-		}
-			/*jButtonFinalizar.addActionListener(new java.awt.event.ActionListener() {
+			jButtonFinalizar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					metodosSql metodos=new metodosSql();
-					
-					//se puede cargar solo una ot a la vez
-					int nroDeOT=Integer.parseInt(choice.getSelectedItem());
-					int filas=jTableStock.getRowCount();
-					int cantidad=0;
-					String marca=null;
-					String calidad=null;
-					String variante=null;
-					int gramaje=0;
-					int alto=0;
-					int ancho=0;
-					String unidadMedida=null;
-					int identificadorDeMaterial;
-					for(int i=0;i<filas;i++){
-						cantidad=Integer.parseInt(jTableStock.getValueAt(i, 0).toString());
-						marca=jTableStock.getValueAt(i, 1).toString();
-						calidad=jTableStock.getValueAt(i,2).toString();
-						variante=jTableStock.getValueAt(i,3).toString();
-						gramaje=Integer.parseInt(jTableStock.getValueAt(i,4).toString());
-						alto=Integer.parseInt(jTableStock.getValueAt(i, 5).toString());
-						ancho=Integer.parseInt(jTableStock.getValueAt(i, 6).toString());
-						unidadMedida=jTableStock.getValueAt(i, 7).toString();
-						identificadorDeMaterial=Integer.parseInt(jTableStock.getValueAt(i, 8).toString());
-						System.out.println(cantidad + marca + calidad + variante + gramaje + alto + ancho + unidadMedida +identificadorDeMaterial);
-						//agregar en consumosDeLaOT con el id del elemento consumido
-						//INSERT INTO `imprenta`.`consumosdelaot` (`NroOT`, `CantidadConsumida`,
-						  // `FechaConsumo`, `idMaterialConsumido`)
-						   //VALUES (nroOt, Cantidad, 'Fecha', IdMaterialConsumido);*/
-/*metodos.insertarOmodif("INSERT INTO `imprenta`.`consumosdelaot` (`NroOT`, `CantidadConsumida`,"+
-" `FechaConsumo`, `idMaterialConsumido`)"+
-"  VALUES ("+nroDeOT+", "+cantidad+", '"+metodos.dameFechaDeHoy()+"',"+identificadorDeMaterial+");");*/
-						
-						//restar de stock la cantidad donde el idDelmaterial=a el id consumido
-//metodos.insertarOmodif("");*/
-						
-						
-						
-						
-						
-						
-				/*	}
+					dispose();
 				}
 			});
-		}*/
+			}				
+						
+						
+				
 		return jButtonFinalizar;
 	}
 	

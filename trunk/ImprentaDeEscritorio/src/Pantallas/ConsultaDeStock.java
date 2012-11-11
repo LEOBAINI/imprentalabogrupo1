@@ -14,6 +14,7 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import java.awt.Color;
 
+@SuppressWarnings("unused")
 public class ConsultaDeStock extends JFrame {
 
 	private static final long serialVersionUID = 1L;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Base.metodosSql;
 
+@SuppressWarnings("unused")
 public class ABM  {
 	
 	//ALT 96 = ` comilla para consulta SQL 
