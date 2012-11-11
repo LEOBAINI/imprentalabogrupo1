@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JTable;
 public class OrdenDeTrabajo {
+	@SuppressWarnings("unused")
 	private ArrayList<ElementosDelProducto>elementos;
 	//Es la tabla elemento cantidad dentro de seccion elementos
 	

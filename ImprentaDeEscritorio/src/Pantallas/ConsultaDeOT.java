@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import Base.metodosSql;
 import javax.swing.JButton;
 
+@SuppressWarnings("unused")
 public class ConsultaDeOT extends JFrame {
 
 	private static final long serialVersionUID = 1L;

@@ -5,6 +5,7 @@ import Formateador.Formato;
 
 import Base.metodosSql;
 
+@SuppressWarnings("unused")
 public class Control {
 /*Antes de crear una orden de trabajo en ordTrabajo se debe crear un cliente .
  * Antes de cargar en material debe estar creada la orden de trabajo en la tabla ordenDetrabajo							

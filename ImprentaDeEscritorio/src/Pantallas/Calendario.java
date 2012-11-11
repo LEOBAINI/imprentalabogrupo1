@@ -17,6 +17,7 @@ import com.toedter.calendar.JCalendar;
 import javax.swing.JButton;
 import javax.swing.text.JTextComponent;
 
+@SuppressWarnings("unused")
 public class Calendario extends JFrame {
 
 	

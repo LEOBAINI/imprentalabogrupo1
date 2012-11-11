@@ -13,6 +13,7 @@ import javax.swing.table.TableModel;
 import Base.metodosSql;
 import javax.swing.JLabel;
 
+@SuppressWarnings("unused")
 public class CosultaDeOC extends JFrame {
 
 	private static final long serialVersionUID = 1L;

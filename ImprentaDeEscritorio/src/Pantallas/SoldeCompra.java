@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 
+@SuppressWarnings("unused")
 public class SoldeCompra extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -1149,6 +1150,7 @@ public class SoldeCompra extends JFrame {
 			guardar.setText("Guardar");
 			guardar.setBounds(new Rectangle(1045, 441, 80, 26));
 			guardar.addActionListener(new java.awt.event.ActionListener() {
+				@SuppressWarnings("static-access")
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
 						if(controlarCamposParaBotonGuardar()){
