@@ -576,6 +576,23 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
+	private boolean estaTodoOK(){
+		if(jTableTarea.getRowCount()==0){
+			JOptionPane.showMessageDialog(null,"Cargue al menos una tarea!");
+			return false;
+			
+		}if(jTableMateriales.getRowCount()==0){
+			JOptionPane.showMessageDialog(null,"Cargue al menos un material!");
+			return false;
+			
+		}if(jTableElementos.getRowCount()==0){
+			JOptionPane.showMessageDialog(null,"Cargue al menos un elemento!");
+			return false;
+			
+		}
+		
+		return true;
+	}
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
@@ -588,6 +605,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 				public void actionPerformed(java.awt.event.ActionEvent e) {*/
 					
 					try{
+						if(estaTodoOK()==true){
 					int status=0;
 					Imprenta imprenta=new Imprenta();
 					
@@ -630,9 +648,7 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					
 					OT.setTareas(getJTableTarea());
 					int rows=getJTableElementos().getRowCount();
-					for(int i=0;i<rows;i++){
-				
-					}
+					
 				
 					status=Imprenta.llenarOrdenTrabajo(OT);
 					if(status==3){
@@ -646,6 +662,9 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 						//dispose();
 					}
 					
+					}else{
+						
+					}
 					}
 					catch(Exception e3){
 						JOptionPane.showMessageDialog(null,e3.getMessage()+" linea 605 ordentrabajo");

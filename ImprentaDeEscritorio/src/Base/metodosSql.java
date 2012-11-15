@@ -145,7 +145,7 @@ public class metodosSql extends ConexionMySql {
 		
 		
 		ConexionMySql con = new ConexionMySql();
-		System.out.println(SentenciaSql);
+		//System.out.println(SentenciaSql);
 		
 		try {
 			con.conectar();

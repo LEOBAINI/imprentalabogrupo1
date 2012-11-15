@@ -294,7 +294,7 @@ entregado*/
 	                    String cantidadViejaDeMaterialesDeLaSol=metodos.consultarUnaColumna("select recibido from imprenta.materialesdelasolicituddecompra where idmatsolcompra="+iDmaterialesdelasol).get(0);
 						int parsCantidadVieja=Integer.parseInt(cantidadViejaDeMaterialesDeLaSol);
 						int nuevoRecibido=parsCantidadVieja+cantidad;
-						metodos.insertarOmodif("UPDATE imprenta.materialesdelasolicituddecompra set recibido="+nuevoRecibido+", A_Recibir=Cantidad-Recibido");
+						metodos.insertarOmodif("UPDATE imprenta.materialesdelasolicituddecompra set recibido="+nuevoRecibido+", A_Recibir=Cantidad-Recibido where idmatsolcompra="+iDmaterialesdelasol);
 	                    metodos.insertarOmodif("CALL imprenta.setearEstadoMatSolComP();");
 	                    metodos.insertarOmodif("CALL imprenta.setearParcial();");
 	                    metodos.insertarOmodif("CALL imprenta.setNoRecibidoMatSC();");
