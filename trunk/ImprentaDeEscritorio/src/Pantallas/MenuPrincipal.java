@@ -33,6 +33,7 @@ public class MenuPrincipal extends JFrame {
 	private JMenuItem jMenuItem3 = null;
 	private JMenuItem jMenuItem4 = null;
 	private JMenuItem jMenuItem5 = null;
+	private JMenuItem jMenuItemCERRAROT = null;
 	/**
 	 * This method initializes jJMenuBar	
 	 * 	
@@ -59,6 +60,7 @@ public class MenuPrincipal extends JFrame {
 			jMenu.add(getJMenuItem());
 			jMenu.add(getJMenuItem1());
 			jMenu.add(getJMenuItem3());
+			jMenu.add(getJMenuItemCERRAROT());
 			jMenu.add(getJMenuItem5());
 			jMenu.add(getSalir());
 		}
@@ -290,6 +292,25 @@ public class MenuPrincipal extends JFrame {
 			});
 		}
 		return jMenuItem5;
+	}
+
+	/**
+	 * This method initializes jMenuItemCERRAROT	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemCERRAROT() {
+		if (jMenuItemCERRAROT == null) {
+			jMenuItemCERRAROT = new JMenuItem();
+			jMenuItemCERRAROT.setText("Cerrar OT");
+			jMenuItemCERRAROT.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					 CierreDeLaOT cierre=new CierreDeLaOT();
+					 cierre.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemCERRAROT;
 	}
 
 	public static void main(String[] args) {

@@ -199,6 +199,7 @@ public class ConsultaDeOT extends JFrame {
 			jButtonCambiarEstadoTarea = new JButton();
 			jButtonCambiarEstadoTarea.setBounds(new Rectangle(939, 388, 294, 62));
 			jButtonCambiarEstadoTarea.setText("Cambiar estado de la tarea");
+			jButtonCambiarEstadoTarea.setVisible(false);
 			jButtonCambiarEstadoTarea
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {

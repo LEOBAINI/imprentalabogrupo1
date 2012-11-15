@@ -132,7 +132,7 @@ public class SoldeCompra extends JFrame {
 		setChoiceVariante(metodos.consultarUnaColumna("select descripcion from imprenta.variante"));
 		ArrayList<String> nroOrden=metodos.consultarUnaColumna("" +
 				"SELECT nombre FROM imprenta.ordentrabajo o where nroOrden "+
-				" in(select NROORDEN from imprenta.ORDENTRABAJO where estado = 'ACTIVO') "+
+				" in(select NROORDEN from imprenta.ORDENTRABAJO where estado = 'ABIERTA') "+
 				" and nombre!='';");
 		nroOrden.add(0, "");
 		setChoiceNroOrden(nroOrden);
@@ -971,6 +971,16 @@ public class SoldeCompra extends JFrame {
 		if (jCheckBoxParaStock == null) {
 			jCheckBoxParaStock = new JCheckBox();
 			jCheckBoxParaStock.setBounds(new Rectangle(571, 8, 23, 16));
+			jCheckBoxParaStock.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if(jCheckBoxParaStock.isSelected()==true){
+						choiceNroOrden.setEnabled(false);
+					}else{
+						choiceNroOrden.setEnabled(true);
+						
+					}
+				}
+			});
 		}
 		return jCheckBoxParaStock;
 	}
