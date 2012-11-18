@@ -45,7 +45,7 @@ public class ConsultaDeOT extends JFrame {
 	private void initialize() {
 		this.setSize(1259, 555);
 		this.setContentPane(getJContentPane());
-		this.setTitle("JFrame");
+		this.setTitle("LISTADO DE OT ABIERTAS");
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class ConsultaDeOT extends JFrame {
 		
 		if (jTableOT == null) {
 			jTableOT = new JTable();
-			jTableOT=metodos.llenarJtable("Select * from imprenta.ordentrabajo order by nroorden DESC");
+			jTableOT=metodos.llenarJtable("Select * from imprenta.ordentrabajo where estado != 'CERRADA' order by nroorden DESC");
 			jTableOT.setCellSelectionEnabled(false);
 			jTableOT.setColumnSelectionAllowed(false);
 			//jTableOT.is

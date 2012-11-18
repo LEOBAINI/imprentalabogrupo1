@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import javax.swing.JList;
 import java.awt.Choice;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -17,6 +18,8 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
 import Base.metodosSql;
+import Formateador.JtableNoEditable;
+
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
@@ -69,7 +72,7 @@ public class UsodePapel extends JFrame {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jLabel3 = new JLabel();
-			jLabel3.setBounds(new Rectangle(794, 14, 421, 35));
+			jLabel3.setBounds(new Rectangle(203, 317, 421, 35));
 			jLabel3.setText("Elementos utilizados hasta ahora");
 			jLabel2 = new JLabel();
 			jLabel2.setBounds(new Rectangle(17, 90, 120, 20));
@@ -103,8 +106,16 @@ public class UsodePapel extends JFrame {
 	 */
 	private void refreshTablas(int numeroOT){
 		metodosSql metodos=new metodosSql();
-		jTableStock1.setModel(metodos.llenarJtable("select cantidad,unidadDemedida,fechaRecepcion,hora,partida,idmaterialesDeLaSol from imprenta.stock  where NroOT ="+numeroOT).getModel());
-		jTableConsumosDeLaOT.setModel(metodos.llenarJtable("select CantidadConsumida,fechaConsumo,idmaterialConsumido from imprenta.consumosdelaot where NroOT ="+numeroOT).getModel());
+		jTableStock1.setModel(metodos.llenarJtable("select nroot,s.cantidad,marca,calidad,variante,gramaje,concat(alto,'X',ancho),fechaRecepcion,hora,partida,idmaterialesDeLaSol "+
+				" from imprenta.stock s,imprenta.materialesdelasolicituddecompra m "+
+				" where idmatsolcompra=idmaterialesdelasol "+
+				" and nroOt="+numeroOT+" "+
+				" or nroot=0 "+
+				" group by partida;").getModel());
+		jTableConsumosDeLaOT.setModel(metodos.llenarJtable("SELECT cantidadConsumida,fechaconsumo,horaDelConsumo,marca,calidad,variante,gramaje,concat(alto,'X',ancho)" +
+				" FROM imprenta.consumosdelaot c,imprenta.materialesdelasolicituddecompra s "+
+				" where c.idMaterialConsumido=s.idMatSolCompra " +
+				" and  c.NroOT ="+numeroOT+";").getModel());
 		
 	}
 	private Choice getChoice() {
@@ -115,8 +126,17 @@ public class UsodePapel extends JFrame {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					metodosSql metodos=new metodosSql();
 					int numeroOT=Integer.parseInt(getChoice().getSelectedItem());
-jTableStock1.setModel(metodos.llenarJtable("select cantidad,unidadDemedida,fechaRecepcion,hora,partida,idmaterialesDeLaSol from imprenta.stock where NroOT ="+numeroOT).getModel());
-jTableConsumosDeLaOT.setModel(metodos.llenarJtable("select CantidadConsumida,fechaConsumo,idmaterialConsumido from imprenta.consumosdelaot where NroOT ="+numeroOT).getModel());
+jTableStock1.setModel(metodos.llenarJtable("select nroot,s.cantidad,marca,calidad,variante,gramaje,concat(alto,'X',ancho),fechaRecepcion,hora,partida,idmaterialesDeLaSol "+
+" from imprenta.stock s,imprenta.materialesdelasolicituddecompra m "+
+" where idmatsolcompra=idmaterialesdelasol "+
+" and nroOt="+numeroOT+" "+
+" or nroot=0 "+
+" group by partida;").getModel());
+
+jTableConsumosDeLaOT.setModel(metodos.llenarJtable("SELECT cantidadConsumida,fechaconsumo,horaDelConsumo,marca,calidad,variante,gramaje,concat(alto,'X',ancho)" +
+		" FROM imprenta.consumosdelaot c,imprenta.materialesdelasolicituddecompra s "+
+		" where c.idMaterialConsumido=s.idMatSolCompra " +
+		" and  c.NroOT ="+numeroOT+";").getModel());
 
 					/*SELECT recibido,marca,calidad,variante,gramaje,alto,ancho,umedida FROM 
 imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra= 6 and
@@ -135,7 +155,7 @@ entregado='ENTREGADO';*/
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setBounds(new Rectangle(790, 59, 433, 166));
+			jScrollPane.setBounds(new Rectangle(203, 359, 1028, 166));
 			jScrollPane.setViewportView(getJTableConsumosDeLaOT());
 		}
 		return jScrollPane;
@@ -162,7 +182,7 @@ entregado='ENTREGADO';*/
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setBounds(new Rectangle(201, 58, 582, 167));
+			jScrollPane1.setBounds(new Rectangle(201, 58, 1026, 167));
 			jScrollPane1.setViewportView(getJTableMaterialesDeLaSolicitudDeCompra());
 		}
 		return jScrollPane1;
@@ -176,22 +196,21 @@ entregado='ENTREGADO';*/
 	private JTable getJTableMaterialesDeLaSolicitudDeCompra() {
 		if (jTableStock1 == null) {
 			jTableStock1 = new JTable();
-			/*jTableMaterialesDeLaSolicitudDeCompra
-					.addMouseListener(new java.awt.event.MouseAdapter() {
-						public void mouseClicked(java.awt.event.MouseEvent e) {
-							System.out.println(jTableMaterialesDeLaSolicitudDeCompra.getValueAt(0, 0).toString());
-							Object[] fila=new Object[8];
-							fila[0]=jTableMaterialesDeLaSolicitudDeCompra.getValueAt(0, 0);
-							fila[1]=jTableMaterialesDeLaSolicitudDeCompra.getModel().getValueAt(0, 1);
-							fila[2]=jTableMaterialesDeLaSolicitudDeCompra.getModel().getValueAt(0, 2);
-							fila[3]=jTableMaterialesDeLaSolicitudDeCompra.getModel().getValueAt(0, 3);
-							fila[4]=jTableMaterialesDeLaSolicitudDeCompra.getModel().getValueAt(0, 4);
-							fila[5]=jTableMaterialesDeLaSolicitudDeCompra.getModel().getValueAt(0, 5);
-							fila[6]=jTableMaterialesDeLaSolicitudDeCompra.getModel().getValueAt(0, 6);
-							fila[7]=jTableMaterialesDeLaSolicitudDeCompra.getModel().getValueAt(0, 7);
-							modeloFila.setValueAt("hola", 1, 1);
-						}
-					});*/
+			jTableStock1.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if(modeloDetalle.getRowCount()!=0)
+					modeloDetalle.removeRow(0);
+					metodosSql metodos=new metodosSql();
+					ArrayList<ArrayList<String>>matriz=null;
+					int idMaterial=Integer.parseInt(jTableStock1.getValueAt(jTableStock1.getSelectedRow(),10 ).toString());
+					matriz=metodos.consultar("SELECT marca,calidad,variante,concat(ancho,'X',alto) FROM imprenta.materialesdelasolicituddecompra "+
+" where idmatSolCompra="+idMaterial+";");
+					
+					
+					
+				}
+			});
+			
 			
 							
 							
@@ -223,7 +242,6 @@ entregado='ENTREGADO';*/
 	 */DefaultTableModel modeloFila=new DefaultTableModel();
 	private JLabel jLabel3 = null;
 	private JButton jButtonFinalizar = null;
-	 
 	/**
 	 * This method initializes jButtonAceptar	
 	 * 	
@@ -289,8 +307,8 @@ entregado='ENTREGADO';*/
 					if(jTableStock1.getSelectedRow()!=-1){
 						
 					
-					partida=Integer.parseInt(jTableStock1.getValueAt(jTableStock1.getSelectedRow(), 4).toString());//columna 4 es partida
-					idMaterialConsumido=Integer.parseInt(jTableStock1.getValueAt(jTableStock1.getSelectedRow(), 5).toString());//columna 5 es idmaterial
+					partida=Integer.parseInt(jTableStock1.getValueAt(jTableStock1.getSelectedRow(), 9).toString());//columna 4 es partida
+					idMaterialConsumido=Integer.parseInt(jTableStock1.getValueAt(jTableStock1.getSelectedRow(), 10).toString());//columna 10 es idmaterial
 					
 					cantidadStockeado=Integer.parseInt(metodos.consultarUnaColumna("select cantidad from imprenta.stock where partida="+partida+";").get(0));
 					
@@ -305,10 +323,11 @@ entregado='ENTREGADO';*/
 					}
 					
 					if(hayErrores(cantidadIngresada,cantidadStockeado)==false && partida!=-1 && numeroOT!=-1 && idMaterialConsumido!=-1){
-						
+						Calendar Hora= Calendar.getInstance();
+						String hora=Hora.get(Calendar.HOUR_OF_DAY) +	":" + Hora.get(Calendar.MINUTE) ;
 					
 					metodos.insertarOmodif("update imprenta.stock set cantidad=cantidad-"+cantidadIngresada+" where partida="+partida+"; ");//restar en stock
-					metodos.insertarOmodif("insert into imprenta.consumosdelaot(`NroOT`,`CantidadConsumida`,`FechaConsumo`,`idMaterialConsumido`)values("+numeroOT+","+cantidadIngresada+",'"+fechaDeHoy+"',"+idMaterialConsumido+");");//agregar en materiales consumidos por la ot
+					metodos.insertarOmodif("insert into imprenta.consumosdelaot(`NroOT`,`CantidadConsumida`,`FechaConsumo`,`idMaterialConsumido`,`HoraDelConsumo`)values("+numeroOT+","+cantidadIngresada+",'"+fechaDeHoy+"',"+idMaterialConsumido+",'"+hora+"');");//agregar en materiales consumidos por la ot
 					
 					
 					
@@ -350,6 +369,13 @@ entregado='ENTREGADO';*/
 				
 		return jButtonFinalizar;
 	}
+
+	/**
+	 * This method initializes jTableDetalleElemento	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	JtableNoEditable modeloDetalle= new JtableNoEditable();
 	
 
 }  //  @jve:decl-index=0:visual-constraint="-7,-13"
