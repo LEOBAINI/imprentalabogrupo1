@@ -11,7 +11,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Base.metodosSql;
+import Formateador.JtableNoEditable;
+
 import javax.swing.JLabel;
+import javax.swing.JToggleButton;
+import javax.swing.JButton;
 
 @SuppressWarnings("unused")
 public class CosultaDeOC extends JFrame {
@@ -24,6 +28,8 @@ public class CosultaDeOC extends JFrame {
 	private JTable jTableMaterialesOC = null;
 	private JLabel jLabelTituloSolicituddeCompra = null;
 	private JLabel jLabelMaterialesdelasolicitud = null;
+	private JToggleButton jToggleButton = null;
+	private JButton jButtonSalir = null;
 
 	/**
 	 * This is the default constructor
@@ -63,6 +69,8 @@ public class CosultaDeOC extends JFrame {
 			jContentPane.add(getJScrollPane1(), null);
 			jContentPane.add(jLabelTituloSolicituddeCompra, null);
 			jContentPane.add(jLabelMaterialesdelasolicitud, null);
+			jContentPane.add(getJToggleButton(), null);
+			jContentPane.add(getJButtonSalir(), null);
 		}
 		return jContentPane;
 	}
@@ -97,7 +105,7 @@ public class CosultaDeOC extends JFrame {
 		metodosSql metodos=new metodosSql();
 		DefaultTableModel modeloSC=new DefaultTableModel();	
 		
-		modeloSC=(DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra order by idsolicitudCompra desc;").getModel();
+		modeloSC=(DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra where estado !='ENTREGADO' order by idsolicitudCompra desc;").getModel();
 		
 		if (jTableOCompras == null) {
 			jTableOCompras = new JTable(modeloSC);
@@ -120,7 +128,7 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setBounds(new Rectangle(12, 226, 964, 88));
+			jScrollPane1.setBounds(new Rectangle(12, 226, 1159, 88));
 			jScrollPane1.setViewportView(getJTableMaterialesOC());
 		}
 		return jScrollPane1;
@@ -130,12 +138,61 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 	 * This method initializes jTableMaterialesOC	
 	 * 	
 	 * @return javax.swing.JTable	
-	 */
+	 */JtableNoEditable mod=new JtableNoEditable();
 	private JTable getJTableMaterialesOC() {
 		if (jTableMaterialesOC == null) {
-			jTableMaterialesOC = new JTable();
+			jTableMaterialesOC = new JTable(mod);
 		}
 		return jTableMaterialesOC;
+	}
+
+	/**
+	 * This method initializes jToggleButton	
+	 * 	
+	 * @return javax.swing.JToggleButton	
+	 */
+	private JToggleButton getJToggleButton() {
+		if (jToggleButton == null) {
+			jToggleButton = new JToggleButton();
+			jToggleButton.setBounds(new Rectangle(926, 321, 244, 23));
+			jToggleButton.setText("Mostrar tambien SC cerradas");
+			jToggleButton.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					metodosSql metodos=new metodosSql();
+					if(jToggleButton.isSelected()){
+						jToggleButton.setText("Mostrar sólo SC abiertas");
+						jTableOCompras.setModel((DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra  order by idsolicitudCompra desc;").getModel());
+						jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra=-1;").getModel());
+						
+					}else{
+						jToggleButton.setText("Mostrar tambien SC cerradas");
+						jTableOCompras.setModel((DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra where estado !='ENTREGADO' order by idsolicitudCompra desc;").getModel());
+						
+						jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra=-1;").getModel());
+					}
+				}
+			});
+		}
+		return jToggleButton;
+	}
+
+	/**
+	 * This method initializes jButtonSalir	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonSalir() {
+		if (jButtonSalir == null) {
+			jButtonSalir = new JButton();
+			jButtonSalir.setBounds(new Rectangle(927, 350, 245, 24));
+			jButtonSalir.setText("Salir");
+			jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();//System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+		}
+		return jButtonSalir;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="100,-51"

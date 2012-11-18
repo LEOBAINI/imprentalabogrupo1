@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Base.metodosSql;
+import java.awt.Dimension;
 
 public class RecepcionMercaderia extends JFrame {
 
@@ -39,10 +40,8 @@ public class RecepcionMercaderia extends JFrame {
 	private JLabel jLabel1 = null;
 	private JLabel jLabel3 = null;
 	private JPanel jPanel = null;
-	private JScrollPane jScrollPane1 = null;
-	private JTable jTableEstadoStock = null;
-	private JLabel jLabel4 = null;
 	private JTextField CantidadIngresada = null;
+	private JButton jButtonSalir = null;
 
 	/**
 	 * This is the default constructor
@@ -61,12 +60,14 @@ public class RecepcionMercaderia extends JFrame {
 		metodosSql metodos=new metodosSql();
 		
 		
-		this.setSize(1181, 466);
+		this.setSize(1179, 298);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Recepción de Mercadería");
 		ArrayList<String>numerosDeSC=null;
-		numerosDeSC=metodos.consultarUnaColumna("select idSolicitudCompra from imprenta.solicitudCompra where idsolicitudCompra  IN " +
-" (SELECT  nroSolicituddeCompra from imprenta.materialesDeLasolicituddeCompra);");
+		/*numerosDeSC=metodos.consultarUnaColumna("select idSolicitudCompra from imprenta.solicitudCompra where idsolicitudCompra  IN " +
+" (SELECT  nroSolicituddeCompra from imprenta.materialesDeLasolicituddeCompra where entregado!= 'ENTREGADO');");*/
+		
+		numerosDeSC=metodos.consultarUnaColumna("select idSolicitudCompra from imprenta.solicitudCompra where estado != 'ENTREGADO';");
 		for(int i=0;i<numerosDeSC.size();i++){
 			getChoiceDescripcionSC().add(numerosDeSC.get(i));
 			
@@ -80,9 +81,6 @@ public class RecepcionMercaderia extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			jLabel4 = new JLabel();
-			jLabel4.setBounds(new Rectangle(17, 236, 262, 26));
-			jLabel4.setText("Material Recibido");
 			jLabel3 = new JLabel();
 			jLabel3.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 			jLabel3.setBackground(SystemColor.inactiveCaption);
@@ -108,11 +106,36 @@ public class RecepcionMercaderia extends JFrame {
 			jContentPane.add(getJTextFieldComentario(), null);
 			jContentPane.add(jLabel1, null);
 			jContentPane.add(getJPanel(), null);
-			jContentPane.add(getJScrollPane1(), null);
-			jContentPane.add(jLabel4, null);
 			jContentPane.add(getCantidadIngresada(), null);
+			jContentPane.add(getJButtonSalir(), null);
 		}
 		return jContentPane;
+	}
+	
+	private void setearEstadoDeUnaSC(int nroSC){
+		/*SELECT count(nroSolicitudDeCompra) FROM imprenta.materialesdelasolicituddecompra
+where nrosolicitudDeCompra=1;
+
+SELECT count(nroSolicitudDeCompra) FROM imprenta.materialesdelasolicituddecompra
+where nrosolicitudDeCompra=1
+and
+A_recibir=0;*/
+		try{
+		metodosSql metodos=new metodosSql();
+		int cantidadPedidos=Integer.parseInt(metodos.consultarUnaColumna("SELECT count(nroSolicitudDeCompra) FROM imprenta.materialesdelasolicituddecompra "+
+" where nrosolicitudDeCompra= "+nroSC+";").get(0).toString());
+		int cantidadEntregados=Integer.parseInt(metodos.consultarUnaColumna("SELECT count(nroSolicitudDeCompra) FROM imprenta.materialesdelasolicituddecompra" +
+				" where nrosolicitudDeCompra= "+nroSC+" and A_recibir=0;").get(0).toString());
+		
+		if(cantidadEntregados==cantidadPedidos){
+			metodos.insertarOmodif("UPDATE IMPRENTA.SOLICITUDCOMPRA SET ESTADO='ENTREGADO' WHERE IDSOLICITUDCOMPRA = "+nroSC+"; ");
+			
+		}
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null,"No se actualizó el estado de la solicitud de compra" );
+			JOptionPane.showMessageDialog(null,"Razón "+e.getMessage()+ "linea 134 recepción mercadería");
+		}
+		
 	}
 
 	/**
@@ -141,7 +164,7 @@ public class RecepcionMercaderia extends JFrame {
 		
 		getJTextFieldComentario().setText(metodos.consultarUnaColumna("select comentario from imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra = "+numeroDeSC+";").get(0));
 		
-		jTableEstadoStock.setModel(metodos.llenarJtable("SELECT * FROM imprenta.stock where nroSolicitudCompra= "+numeroDeSC+" order by partida desc;").getModel());
+		//jTableEstadoStock.setModel(metodos.llenarJtable("SELECT * FROM imprenta.stock where nroSolicitudCompra= "+numeroDeSC+" order by partida desc;").getModel());
 		
 		
 	}
@@ -262,7 +285,7 @@ entregado*/
 	private JButton getJButtonAceptar() {
 		if (jButtonAceptar == null) {
 			jButtonAceptar = new JButton();
-			jButtonAceptar.setBounds(new Rectangle(499, 196, 169, 30));
+			jButtonAceptar.setBounds(new Rectangle(499, 197, 163, 30));
 			jButtonAceptar.setText("Aceptar");
 			//tiene que sumar al stock
 			jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -294,10 +317,11 @@ entregado*/
 	                    String cantidadViejaDeMaterialesDeLaSol=metodos.consultarUnaColumna("select recibido from imprenta.materialesdelasolicituddecompra where idmatsolcompra="+iDmaterialesdelasol).get(0);
 						int parsCantidadVieja=Integer.parseInt(cantidadViejaDeMaterialesDeLaSol);
 						int nuevoRecibido=parsCantidadVieja+cantidad;
-						metodos.insertarOmodif("UPDATE imprenta.materialesdelasolicituddecompra set recibido="+nuevoRecibido+", A_Recibir=Cantidad-Recibido where idmatsolcompra="+iDmaterialesdelasol);
+						metodos.insertarOmodif("UPDATE imprenta.materialesdelasolicituddecompra set comentario= 'sin comentario', recibido="+nuevoRecibido+", A_Recibir=Cantidad-Recibido where idmatsolcompra="+iDmaterialesdelasol);
 	                    metodos.insertarOmodif("CALL imprenta.setearEstadoMatSolComP();");
 	                    metodos.insertarOmodif("CALL imprenta.setearParcial();");
 	                    metodos.insertarOmodif("CALL imprenta.setNoRecibidoMatSC();");
+	                    setearEstadoDeUnaSC(nroSolicitudCompra);//SI SE RECIBIERON TODOS LOS MATERIALES DARLA POR CERRADA SET=ENTREGADO
 	                   refrescoTablas();
 						}
 						else{}
@@ -344,7 +368,7 @@ entregado*/
 	private JButton getJButtonRechazar() {
 		if (jButtonRechazar == null) {
 			jButtonRechazar = new JButton();
-			jButtonRechazar.setBounds(new Rectangle(672, 196, 168, 30));
+			jButtonRechazar.setBounds(new Rectangle(672, 197, 163, 30));
 			jButtonRechazar.setText("Rechazar");
 			jButtonRechazar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -419,32 +443,6 @@ refrescoTablas();
 	}
 
 	/**
-	 * This method initializes jScrollPane1	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getJScrollPane1() {
-		if (jScrollPane1 == null) {
-			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setBounds(new Rectangle(18, 267, 524, 141));
-			jScrollPane1.setViewportView(getJTableEstadoStock());
-		}
-		return jScrollPane1;
-	}
-
-	/**
-	 * This method initializes jTableEstadoStock	
-	 * 	
-	 * @return javax.swing.JTable	
-	 */
-	private JTable getJTableEstadoStock() {
-		if (jTableEstadoStock == null) {
-			jTableEstadoStock = new JTable();
-		}
-		return jTableEstadoStock;
-	}
-
-	/**
 	 * This method initializes CantidadIngresada	
 	 * 	
 	 * @return javax.swing.JTextField	
@@ -455,6 +453,27 @@ refrescoTablas();
 			CantidadIngresada.setBounds(new Rectangle(1012, 52, 77, 32));
 		}
 		return CantidadIngresada;
+	}
+
+	/**
+	 * This method initializes jButtonSalir	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonSalir() {
+		if (jButtonSalir == null) {
+			jButtonSalir = new JButton();
+			jButtonSalir.setBounds(new Rectangle(846, 196, 163, 31));
+			jButtonSalir.setText("Salir");
+			jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					//System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				
+				dispose();
+				}
+			});
+		}
+		return jButtonSalir;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

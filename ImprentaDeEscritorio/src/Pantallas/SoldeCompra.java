@@ -132,7 +132,7 @@ public class SoldeCompra extends JFrame {
 		setChoiceVariante(metodos.consultarUnaColumna("select descripcion from imprenta.variante"));
 		ArrayList<String> nroOrden=metodos.consultarUnaColumna("" +
 				"SELECT nombre FROM imprenta.ordentrabajo o where nroOrden "+
-				" in(select NROORDEN from imprenta.ORDENTRABAJO where estado = 'ABIERTA') "+
+				" in(select NROORDEN from imprenta.ORDENTRABAJO where estado = 'ACTIVO') "+
 				" and nombre!='';");
 		nroOrden.add(0, "");
 		setChoiceNroOrden(nroOrden);

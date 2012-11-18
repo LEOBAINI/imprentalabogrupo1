@@ -157,7 +157,7 @@ public class CierreDeLaOT extends JFrame {
 		SentenciaSql="Select idOrdTrabajo,tao.idTarea,descripcion," +
 				" estado,fechaDeCierre from imprenta.tareaOrdTrabajo tao," +
 				"imprenta.tarea ta where tao.idTarea=ta.idtarea " +
-				"and idOrdTrabajo="+nroOrdenTrabajo+";";
+				"and idOrdTrabajo="+nroOrdenTrabajo+" ;";
 		
 		
 		matriz=metodos.consultar(SentenciaSql);
