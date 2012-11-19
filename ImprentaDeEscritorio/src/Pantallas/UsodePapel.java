@@ -57,7 +57,7 @@ public class UsodePapel extends JFrame {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Registro de Uso de Papel");
 		metodosSql metodos=new metodosSql();
-		ArrayList<String> numerosDeOT=metodos.consultarUnaColumna("SELECT NroOrden FROM imprenta.ordentrabajo where estado !='TERMINADO';");
+		ArrayList<String> numerosDeOT=metodos.consultarUnaColumna("SELECT NroOrden FROM imprenta.ordentrabajo where estado !='CERRADA';");
 		for(int i=0;i<numerosDeOT.size();i++){
 			choice.add(numerosDeOT.get(i));
 			
