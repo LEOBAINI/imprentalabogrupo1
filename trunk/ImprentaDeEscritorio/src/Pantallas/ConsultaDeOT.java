@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Base.metodosSql;
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
 @SuppressWarnings("unused")
 public class ConsultaDeOT extends JFrame {
@@ -45,7 +46,7 @@ public class ConsultaDeOT extends JFrame {
 	private void initialize() {
 		this.setSize(1259, 555);
 		this.setContentPane(getJContentPane());
-		this.setTitle("LISTADO DE OT ABIERTAS");
+		this.setTitle("LISTADO DE ORDENES DE TRABAJO");
 	}
 
 	/**
@@ -73,6 +74,8 @@ public class ConsultaDeOT extends JFrame {
 			jContentPane.add(jLabel1, null);
 			jContentPane.add(jLabel2, null);
 			jContentPane.add(getJButtonCambiarEstadoTarea(), null);
+			jContentPane.add(getJToggleButton(), null);
+			jContentPane.add(getJButtonSalir(), null);
 		}
 		return jContentPane;
 	}
@@ -176,6 +179,8 @@ public class ConsultaDeOT extends JFrame {
 	 */
 	DefaultTableModel modeloMaterialesOT=new DefaultTableModel();
 	private JButton jButtonCambiarEstadoTarea = null;
+	private JToggleButton jToggleButton = null;
+	private JButton jButtonSalir = null;
 	private JTable getJTableMaterialesOT() {
 		if (jTableMaterialesOT == null) {
 			jTableMaterialesOT = new JTable(modeloMaterialesOT);
@@ -236,6 +241,57 @@ public class ConsultaDeOT extends JFrame {
 					});
 		}
 		return jButtonCambiarEstadoTarea;
+	}
+
+	/**
+	 * This method initializes jToggleButton	
+	 * 	
+	 * @return javax.swing.JToggleButton	
+	 */
+	private JToggleButton getJToggleButton() {
+		if (jToggleButton == null) {
+			jToggleButton = new JToggleButton();
+			jToggleButton.setBounds(new Rectangle(942, 442, 213, 18));
+			jToggleButton.setText("Ver OT cerradas");
+			jToggleButton.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					metodosSql metodos=new metodosSql();
+					DefaultTableModel mod=new DefaultTableModel();
+				if(jToggleButton.isSelected()){
+					jToggleButton.setText("Ver OT abiertas");
+					jTableOT.setModel(metodos.llenarJtable("Select * from imprenta.ordentrabajo where estado = 'CERRADA' order by nroorden DESC").getModel());
+					jTableMaterialesOT.setModel(mod);
+					jTableTareasOT.setModel(mod);
+					
+				}else{
+					jToggleButton.setText("Ver OT cerradas");
+					jTableOT.setModel(metodos.llenarJtable("Select * from imprenta.ordentrabajo where estado != 'CERRADA' order by nroorden DESC").getModel());
+					jTableMaterialesOT.setModel(mod);
+					jTableTareasOT.setModel(mod);
+				}
+				}
+			});
+		}
+		return jToggleButton;
+	}
+
+	/**
+	 * This method initializes jButtonSalir	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonSalir() {
+		if (jButtonSalir == null) {
+			jButtonSalir = new JButton();
+			jButtonSalir.setBounds(new Rectangle(941, 476, 213, 18));
+			jButtonSalir.setText("Salir");
+			jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();//System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+		}
+		return jButtonSalir;
 	}
 	
 }
