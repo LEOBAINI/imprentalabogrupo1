@@ -1,38 +1,28 @@
 
-Registro de uso de papel, la tabla elementos usados hasta ahora tambièn usarla en el informe de la ot.
 
 
-Si en el Stock figura cantidad 0 de algùn elemento, no mostrarlo (Borralo de la base de datos, si no aporta al programa).
 
 
-Estado de las tareas de la orden de trabajop no estàn ordenadas.
 
 
-Borrar la tabla Stock real que hay actualmente comprado para esta OT.
 
 
-La hora al tener  un digito que se muestre con cero por ejemplo 15:09 hs no 15:9
 
 
-Consulta de solicitud de compra historial de ingresos no va el costo, ademàs que todo estè ordenado por fecha
 
 
-Revisar los nombres de las columnas, que los nombres se vean completos.
 
 
-Al cerrar una ot que todavìa tiene elementos para recibir, en el momento de recepciòn debe ser recibido para stock
 
 
-ya que al estar la ot original cerrada, si el material se recibe para esa ot, nunca se utilizarà.
 
 
-En informe de la ot mostrar el cuadro elemento cantidad...... usado al principio, en  la carga de la ot, la cuenta de lo 
 
 
-que usa y lo que usò, lo calcula a mano.
 
 
-En el informe de la ot no olvidarse colocar el nùmero de de ot al lado del nombre 
+
+
 
 
 Tratar de darle màs color, hacerlo màs lindo.
@@ -47,11 +37,10 @@ Tratar de darle màs color, hacerlo màs lindo.
 
 
 
-En Cosnulta de Solicitud cuando muestra las partidas recibidas no las separa por entrega sino que las engloba en un total de recibidas, hay que mostrar cada entrega hecha y tambien quiere que se muestren los rechazos que se hicieron. Hay que ordenarlo cronologhicamete.
 
-Si una OT esta cerrada y queda material por recibir se recibe normalmente pero se destina a remanante.
 
-en Informe de OT quiere que reptamos todos los datos de la  pantalla de carga de la OT solo hay que sacarle el agregar materiales y el agregar tareas. La lista de materiales queda, la lista de tareas queda pero se modifica con el avance y quiere que dejemos la lista de elementos con su cantidad sin multiplicar tambien. Hay que agregar el uso del papel por elementos. Mostrar la lista de tareas de acuerdo a como se cargaron originalmente. La tabla stock se borra. sacar cantidad pedido y recibido de la otra tabla.
+
+
 
 
 
