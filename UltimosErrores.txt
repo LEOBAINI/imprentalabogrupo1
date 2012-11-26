@@ -45,12 +45,7 @@ Tratar de darle màs color, hacerlo màs lindo.
 
 *********************************************************************************************************************
 
------Mensaje original-----
-De: Cedeme73 [mailto:cedeme73@gmail.com] 
-Enviado el: jueves, 22 de noviembre de 2012 10:32 p.m.
-Para: Fredy 2; Leonardo Baini
-CC: Facundo Ezequiel Sánchez
-Asunto: Clase de 22/11
+
 
 En Cosnulta de Solicitud cuando muestra las partidas recibidas no las separa por entrega sino que las engloba en un total de recibidas, hay que mostrar cada entrega hecha y tambien quiere que se muestren los rechazos que se hicieron. Hay que ordenarlo cronologhicamete.
 
@@ -58,18 +53,5 @@ Si una OT esta cerrada y queda material por recibir se recibe normalmente pero s
 
 en Informe de OT quiere que reptamos todos los datos de la  pantalla de carga de la OT solo hay que sacarle el agregar materiales y el agregar tareas. La lista de materiales queda, la lista de tareas queda pero se modifica con el avance y quiere que dejemos la lista de elementos con su cantidad sin multiplicar tambien. Hay que agregar el uso del papel por elementos. Mostrar la lista de tareas de acuerdo a como se cargaron originalmente. La tabla stock se borra. sacar cantidad pedido y recibido de la otra tabla.
 
-Borrar de stock los materiales en cero. (que no aparezcan en ningun lugar)
 
-En consulta de Syock en historial del ingreso no va el costo y ordenar cronoclogico.
 
-En funcionalidad completa cambiar titulo
-
-Corregir indicedel plan inicial.
-
-Explicar como instalasçr la sbases y el programa.
-
-Poner caratutla y encabezados y pie de pagina.
-
-E..E..E.E..SO ES TODO AMIGOS.
-
-Saludos
