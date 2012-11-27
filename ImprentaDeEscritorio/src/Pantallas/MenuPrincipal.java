@@ -34,6 +34,7 @@ public class MenuPrincipal extends JFrame {
 	private JMenuItem jMenuItem4 = null;
 	private JMenuItem jMenuItem5 = null;
 	private JMenuItem jMenuItemCERRAROT = null;
+	private JMenuItem jMenuItem6 = null;
 	/**
 	 * This method initializes jJMenuBar	
 	 * 	
@@ -60,8 +61,8 @@ public class MenuPrincipal extends JFrame {
 			jMenu.add(getJMenuItem());
 			jMenu.add(getJMenuItem1());
 			jMenu.add(getJMenuItem3());
-			jMenu.add(getJMenuItemCERRAROT());
 			jMenu.add(getJMenuItem5());
+			jMenu.add(getJMenuItemCERRAROT());
 			jMenu.add(getSalir());
 		}
 		return jMenu;
@@ -79,6 +80,7 @@ public class MenuPrincipal extends JFrame {
 			jMenu1.add(getJMenuItem2());
 			jMenu1.add(getConsultaSC());
 			jMenu1.add(getJMenuItem4());
+			jMenu1.add(getJMenuItem6());
 		}
 		return jMenu1;
 	}
@@ -286,7 +288,7 @@ public class MenuPrincipal extends JFrame {
 			jMenuItem5.setText("Salida de stock");
 			jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					UsodePapel uso=new UsodePapel();
+					RegistroUsodePapel uso=new RegistroUsodePapel();
 					uso.setVisible(true);
 				}
 			});
@@ -302,7 +304,7 @@ public class MenuPrincipal extends JFrame {
 	private JMenuItem getJMenuItemCERRAROT() {
 		if (jMenuItemCERRAROT == null) {
 			jMenuItemCERRAROT = new JMenuItem();
-			jMenuItemCERRAROT.setText("Cerrar OT");
+			jMenuItemCERRAROT.setText("Registro de Avance de OT");
 			jMenuItemCERRAROT.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					 CierreDeLaOT cierre=new CierreDeLaOT();
@@ -311,6 +313,25 @@ public class MenuPrincipal extends JFrame {
 			});
 		}
 		return jMenuItemCERRAROT;
+	}
+
+	/**
+	 * This method initializes jMenuItem6	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItem6() {
+		if (jMenuItem6 == null) {
+			jMenuItem6 = new JMenuItem();
+			jMenuItem6.setText("Informes de OT");
+			jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					InformeDeLaOT inf=new InformeDeLaOT();
+					inf.setVisible(true);
+				}
+			});
+		}
+		return jMenuItem6;
 	}
 
 	public static void main(String[] args) {

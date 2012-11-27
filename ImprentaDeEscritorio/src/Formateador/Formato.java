@@ -2,8 +2,10 @@ package Formateador;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 
 import Base.metodosSql;
@@ -127,6 +129,28 @@ public class Formato {
     	  resultado[0]=resultadoAux;
     	  resultado[1]=enMascarable;
     	  return resultado;
+    	  
+      }
+      
+      public String darHoraBonita(){
+    	  int largo=2;
+    	  Calendar Hora= Calendar.getInstance();
+  		  String hora=""+Hora.get(Calendar.HOUR_OF_DAY) ;
+  		  String  minuto=""+Hora.get(Calendar.MINUTE); 
+  		  if(hora.length()<largo){
+  			  hora="0"+hora;
+  		  }
+  		  if(minuto.length()<largo){
+  			  minuto="0"+minuto;
+  		  }
+  		  
+    	  String  horaBonita=hora+":"+minuto;
+    	 
+    	  
+    	  
+    	  
+    	  
+    	  return horaBonita;
     	  
       }
        

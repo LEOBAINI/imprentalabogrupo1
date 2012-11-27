@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
+import javax.swing.table.DefaultTableModel;
 
 import Base.metodosSql;
 import Formateador.JtableNoEditable;
@@ -55,10 +56,24 @@ public class CierreDeLaOT extends JFrame {
 	private void inicializar() {
 		metodosSql metodos=new metodosSql();
 		ArrayList<String> nombresOT=metodos.consultarUnaColumna("Select nombre from imprenta.ordenTrabajo where ESTADO!='CERRADA';");
-		
+		choiceNombreDeOT.add("");
 		for(int i=0;i<nombresOT.size();i++)
 		choiceNombreDeOT.add(nombresOT.get(i));
 		jTextFieldFecha.setText(metodos.dameFechaDeHoyConFormatoX("dd'-'MM'-'yyyy"));
+		
+	}
+	private void limpiartabla(JTable tabla){
+		try{
+		DefaultTableModel tmp=(DefaultTableModel) tabla.getModel();
+		
+		for(;tmp.getRowCount()!=0;){
+			
+			tmp.removeRow(tmp.getRowCount()-1);
+		
+		}
+		}catch(Exception e){
+			
+		}
 		
 	}
 
@@ -73,7 +88,7 @@ public class CierreDeLaOT extends JFrame {
 	
 		this.setLocationRelativeTo(null);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Cierre de Orden de Trabajo");
+		this.setTitle("Registro de Avance de la OT");
 		
 		
 	}
@@ -194,7 +209,7 @@ public class CierreDeLaOT extends JFrame {
 					else{
 						
 						
-							
+						limpiartabla(jTableTareas);	
 							
 						//JOptionPane.showMessageDialog(null, "Seleccone un elemento no vacio por favor.");
 						

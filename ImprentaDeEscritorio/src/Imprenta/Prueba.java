@@ -43,6 +43,8 @@ public class Prueba {
 	c.setLocationRelativeTo(null);
 	
 	*/
+		Formato f=new Formato();
+		System.out.println(f.darHoraBonita());
 	}
 		
 		

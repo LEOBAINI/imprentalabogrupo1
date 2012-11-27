@@ -9,11 +9,9 @@ public class CellEditableSoloLa10  extends DefaultTableModel{
 	   {
 	       // Aquí devolvemos true o false según queramos que una celda
 	       // identificada por fila,columna (row,column), sea o no editable
-	       if ( column == 10){
-	          return true;
-	       }else{
+	     
 	       return false;   
 	       }
 	   }
 
-}
+
