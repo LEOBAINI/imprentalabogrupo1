@@ -14,6 +14,7 @@ import Base.metodosSql;
 import Formateador.JtableNoEditable;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JButton;
 
@@ -45,7 +46,7 @@ public class CosultaDeOC extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(1218, 421);
+		this.setSize(1218, 582);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Consulta Solicitud de Compra");
 	}
@@ -57,6 +58,9 @@ public class CosultaDeOC extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			jLabel = new JLabel();
+			jLabel.setBounds(new Rectangle(13, 317, 237, 24));
+			jLabel.setText("Historial de ingresos");
 			jLabelMaterialesdelasolicitud = new JLabel();
 			jLabelMaterialesdelasolicitud.setBounds(new Rectangle(14, 199, 76, 16));
 			jLabelMaterialesdelasolicitud.setText("Materiales ");
@@ -71,6 +75,9 @@ public class CosultaDeOC extends JFrame {
 			jContentPane.add(jLabelMaterialesdelasolicitud, null);
 			jContentPane.add(getJToggleButton(), null);
 			jContentPane.add(getJButtonSalir(), null);
+			jContentPane.add(getJScrollPane2(), null);
+			jContentPane.add(jLabel, null);
+			jContentPane.add(getJButtonRechazo(), null);
 		}
 		return jContentPane;
 	}
@@ -113,7 +120,18 @@ public class CosultaDeOC extends JFrame {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					metodosSql metodos=new metodosSql();
 					int nroSolicitudDeCompra=Integer.parseInt(getJTableOCompras().getModel().getValueAt(jTableOCompras.getSelectedRow(), 0).toString());
-jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra="+nroSolicitudDeCompra+";").getModel());
+jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT cantidad as Cantidad ,recibido as Recibido ,A_Recibir as PorRecibir,Marca,calidad as Calidad,variante "+
+" as Variante,gramaje as Gramaje,concat(ancho,'X',alto) as Formato, "+
+" costototal as CostoTotal,entregado as Entregado,comentario as Comentario FROM imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra="+nroSolicitudDeCompra+";").getModel());
+				
+				
+jTableHistorialIngresos.setModel( metodos.llenarJtable("SELECT H.CANTIDADRECIBIDA as Recibido ,fecharecepcion as Fecha,horarecepcion as Hora, "+
+		" Marca,calidad as Calidad,variante  as Variante,gramaje as Gramaje,concat(ancho,'X',alto) as Formato "+
+  " FROM imprenta.historialrecepcion H,imprenta.materialesdelasolicituddecompra M "+
+" where idmaterial=idmatsolcompra and solicitudcompranro="+nroSolicitudDeCompra+" ;").getModel());				
+				
+				
+				
 				}
 			});
 		}
@@ -139,6 +157,10 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 	 * 	
 	 * @return javax.swing.JTable	
 	 */JtableNoEditable mod=new JtableNoEditable();
+	private JScrollPane jScrollPane2 = null;
+	private JTable jTableHistorialIngresos = null;
+	private JLabel jLabel = null;
+	private JButton jButtonRechazo = null;
 	private JTable getJTableMaterialesOC() {
 		if (jTableMaterialesOC == null) {
 			jTableMaterialesOC = new JTable(mod);
@@ -154,7 +176,7 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 	private JToggleButton getJToggleButton() {
 		if (jToggleButton == null) {
 			jToggleButton = new JToggleButton();
-			jToggleButton.setBounds(new Rectangle(926, 321, 244, 23));
+			jToggleButton.setBounds(new Rectangle(930, 461, 244, 23));
 			jToggleButton.setText("Mostrar tambien SC cerradas");
 			jToggleButton.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -163,12 +185,20 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 						jToggleButton.setText("Mostrar sólo SC abiertas");
 						jTableOCompras.setModel((DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra  order by idsolicitudCompra desc;").getModel());
 						jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra=-1;").getModel());
-						
+						jTableHistorialIngresos.setModel(metodos.llenarJtable("SELECT cantidad as CantidadPedida ,recibido as Recibido ,fecharecepcion as Fecha,horarecepcion as Hora,A_Recibir as PorRecibir," +
+		" Marca,calidad as Calidad,variante  as Variante,gramaje as Gramaje,concat(ancho,'X',alto) as Formato, "+
+ " costototal as CostoTotal,entregado as Entregado FROM imprenta.historialrecepcion,imprenta.materialesdelasolicituddecompra "+
+" where idmaterial=idmatsolcompra and solicitudcompranro=-1;").getModel());
 					}else{
 						jToggleButton.setText("Mostrar tambien SC cerradas");
 						jTableOCompras.setModel((DefaultTableModel) metodos.llenarJtable("SELECT * FROM imprenta.solicitudcompra where estado !='ENTREGADO' order by idsolicitudCompra desc;").getModel());
 						
 						jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materialesdelasolicituddecompra where nroSolicitudDeCompra=-1;").getModel());
+						jTableHistorialIngresos.setModel(metodos.llenarJtable("SELECT cantidad as CantidadPedida ,recibido as Recibido ,fecharecepcion as Fecha,horarecepcion as Hora,A_Recibir as PorRecibir," +
+		" Marca,calidad as Calidad,variante  as Variante,gramaje as Gramaje,concat(ancho,'X',alto) as Formato, "+
+ " costototal as CostoTotal,entregado as Entregado FROM imprenta.historialrecepcion,imprenta.materialesdelasolicituddecompra "+
+" where idmaterial=idmatsolcompra and solicitudcompranro=-1;").getModel());
+					
 					}
 				}
 			});
@@ -184,7 +214,7 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 	private JButton getJButtonSalir() {
 		if (jButtonSalir == null) {
 			jButtonSalir = new JButton();
-			jButtonSalir.setBounds(new Rectangle(927, 350, 245, 24));
+			jButtonSalir.setBounds(new Rectangle(930, 497, 245, 24));
 			jButtonSalir.setText("Salir");
 			jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -193,6 +223,59 @@ jTableMaterialesOC.setModel(metodos.llenarJtable("SELECT * FROM imprenta.materia
 			});
 		}
 		return jButtonSalir;
+	}
+
+	/**
+	 * This method initializes jScrollPane2	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane2() {
+		if (jScrollPane2 == null) {
+			jScrollPane2 = new JScrollPane();
+			jScrollPane2.setBounds(new Rectangle(13, 353, 1158, 92));
+			jScrollPane2.setViewportView(getJTableHistorialIngresos());
+		}
+		return jScrollPane2;
+	}
+
+	/**
+	 * This method initializes jTableHistorialIngresos	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	private JTable getJTableHistorialIngresos() {
+		if (jTableHistorialIngresos == null) {
+			jTableHistorialIngresos = new JTable();
+		}
+		return jTableHistorialIngresos;
+	}
+
+	/**
+	 * This method initializes jButtonRechazo	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonRechazo() {
+		if (jButtonRechazo == null) {
+			jButtonRechazo = new JButton();
+			jButtonRechazo.setBounds(new Rectangle(737, 493, 173, 27));
+			jButtonRechazo.setText("Ver Rechazos");
+			jButtonRechazo.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(jTableOCompras.getSelectedRow()!=-1){
+					int nroSolicitud=Integer.parseInt(jTableOCompras.getValueAt(jTableOCompras.getSelectedRow(), 0).toString());
+					
+					Rechazo r=new Rechazo(nroSolicitud);
+					r.setVisible(true);
+					r.setLocationRelativeTo(null);
+					}else{
+						JOptionPane.showMessageDialog(null, "Elija una Solicitud de compra para consultar");
+					}
+				}
+			});
+		}
+		return jButtonRechazo;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="100,-51"

@@ -93,7 +93,9 @@ where idmatsolcompra=idmaterialesdelasol  group by partida;*/
 	private JButton jButtonSalir = null;
 	private JTable getJTableConsultaStock() {
 		metodosSql metodos=new metodosSql();
-		mod.addColumn("OT");
+		mod.addColumn("Partida");
+		mod.addColumn("NroSC");
+		mod.addColumn("NroOT");
 		mod.addColumn("Cantidad");
 		mod.addColumn("Marca");
 		mod.addColumn("Calidad");
@@ -102,15 +104,16 @@ where idmatsolcompra=idmaterialesdelasol  group by partida;*/
 		mod.addColumn("Formato");
 		mod.addColumn("Fecha recepción");
 		mod.addColumn("Hora");
-		mod.addColumn("Partida");
+		
 		ArrayList<ArrayList<String>>matriz=null;
-		matriz=metodos.consultar("select nroot,s.cantidad,marca,calidad,variante,gramaje,concat(alto,'X',ancho),fechaRecepcion,hora,partida,"+
+		matriz=metodos.consultar("select partida,nroSolicitudCompra,nroot,s.cantidad,marca,calidad,variante,gramaje,concat(alto,'X',ancho),fechaRecepcion,hora,"+
 " idmaterialesDeLaSol from imprenta.stock s,imprenta.materialesdelasolicituddecompra m "+
-" where idmatsolcompra=idmaterialesdelasol  group by partida;");
+" where idmatsolcompra=idmaterialesdelasol and " +
+"s.cantidad !=0 group by partida;");
 		
 		int filas=matriz.size();
 		for(int i=0;i<filas;i++){
-		String [] fila=new String[10];
+		String [] fila=new String[11];
 		fila[0]=matriz.get(i).get(0);
 		fila[1]=matriz.get(i).get(1);
 		fila[2]=matriz.get(i).get(2);
@@ -121,6 +124,7 @@ where idmatsolcompra=idmaterialesdelasol  group by partida;*/
 		fila[7]=matriz.get(i).get(7);
 		fila[8]=matriz.get(i).get(8);
 		fila[9]=matriz.get(i).get(9);
+		fila[10]=matriz.get(i).get(10);
 		mod.addRow(fila);
 		}
 		

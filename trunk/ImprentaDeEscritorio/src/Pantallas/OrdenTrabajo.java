@@ -654,8 +654,16 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					if(status==3){
 						JOptionPane.showMessageDialog(null, "datos cargados con éxito!");
 					//	dispose();
-						
-						
+						jButton1.setEnabled(false);
+						jButton1.setText("Salir clickeando X");
+						jButtonBorrarMaterial.setEnabled(false);
+						jButtonAgregarMaterial.setEnabled(false);
+						jButton.setEnabled(false);
+						jButtonBorrarElemento.setEnabled(false);
+						jButtonCargarElemento.setEnabled(false);
+						jButtonBajar.setEnabled(false);
+						jButtonSubir.setEnabled(false);
+						jButtonBorrar.setEnabled(false);
 						
 					}else{
 						JOptionPane.showMessageDialog(null, "datos no se cargaron correctamente... revise la ot cargada");
@@ -984,8 +992,17 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
 					Object[]fila=new Object[11]; //faltan 3
+					int auxCantidadAEntregar=Integer.parseInt(getCantidadAEntregar().getText());
+					
+					
+					
+					int auxCantidadElementos=Integer.parseInt(jTableElementos.getValueAt(getChoiceElementoDelProductoCargadoAMano().getSelectedIndex(),1).toString());
+					
+					
+					
 					fila[0]=choiceElementoDelProductoCargadoAMano.getSelectedItem();//elemento
-					fila[1]=jTableElementos.getValueAt(getChoiceElementoDelProductoCargadoAMano().getSelectedIndex(),1);//cantidad
+					fila[1]=auxCantidadAEntregar*auxCantidadElementos;
+						//jTableElementos.getValueAt(getChoiceElementoDelProductoCargadoAMano().getSelectedIndex(),1);//cantidad
 					fila[2]=choiceCalidad.getSelectedItem();//calidad
 					fila[3]=choiceVariante.getSelectedItem();//Variante
 					fila[4]=getGramaje().getText();//gramaje
@@ -997,11 +1014,10 @@ if(e.getKeyCode()==KeyEvent.VK_TAB){
 					//fila[10]=;//hojas(AutoCalculado)
 					//
 					
-					int auxCantidadAEntregar=Integer.parseInt(getCantidadAEntregar().getText());
-					int auxPosesXPLiego=Integer.parseInt(fila[6].toString());
-					int auxCantidadElementos=Integer.parseInt(fila[1].toString());
+					
 					
 					int auxplieNet=0;
+					int auxPosesXPLiego=Integer.parseInt(fila[6].toString());
 					int auxCantAentXauxCantElem=auxCantidadAEntregar*auxCantidadElementos;//
 					if(auxCantAentXauxCantElem%auxPosesXPLiego>0){
 						auxplieNet=(auxCantidadAEntregar*auxCantidadElementos)/auxPosesXPLiego;

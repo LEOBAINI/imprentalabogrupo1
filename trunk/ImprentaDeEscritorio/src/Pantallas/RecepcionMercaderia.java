@@ -22,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Base.metodosSql;
+import Formateador.Formato;
+
 import java.awt.Dimension;
 
 public class RecepcionMercaderia extends JFrame {
@@ -68,6 +70,7 @@ public class RecepcionMercaderia extends JFrame {
 " (SELECT  nroSolicituddeCompra from imprenta.materialesDeLasolicituddeCompra where entregado!= 'ENTREGADO');");*/
 		
 		numerosDeSC=metodos.consultarUnaColumna("select idSolicitudCompra from imprenta.solicitudCompra where estado != 'ENTREGADO';");
+		getChoiceDescripcionSC().add("");
 		for(int i=0;i<numerosDeSC.size();i++){
 			getChoiceDescripcionSC().add(numerosDeSC.get(i));
 			
@@ -299,15 +302,23 @@ entregado*/
 						metodosSql metodos=new metodosSql();
 						
 
-
+						
 						int nroSolicitudCompra=Integer.parseInt(choiceDescripcionSC.getSelectedItem());
+						
                         int NroOT=Integer.parseInt(metodos.consultarUnaColumna("SELECT idOrdTrabajo" +
 		                " FROM imprenta.solicitudcompra where idsolicitudCompra= "+nroSolicitudCompra+";").get(0));
+                        if(NroOT!=0){
+                        String estadoDeLaOT=metodos.consultarUnaColumna("select estado from imprenta.ordentrabajo where NroOrden ="+NroOT).get(0);
+                        
+                        if(estadoDeLaOT.equals("CERRADA")){
+                        	NroOT=0;
+                        }
+                        }
 						int cantidad=Integer.parseInt(CantidadIngresada.getText());
 						String UnidadDeMedida=jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 7).toString();//7 jtable
 						String fechaRecepcion=metodos.dameFechaDeHoy();
-						Calendar Hora= Calendar.getInstance();
-						String hora=Hora.get(Calendar.HOUR_OF_DAY) +	":" + Hora.get(Calendar.MINUTE) ;
+						Formato f=new Formato();
+						String hora= f.darHoraBonita();
 						
 						int iDmaterialesdelasol=Integer.parseInt(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 0).toString());//0Integer.P jtable;
 	                    metodos.insertarOmodif("INSERT INTO `imprenta`.`stock` (`nroSolicitudCompra`, `NroOT`, `cantidad`, `UnidadDeMedida`,"+
@@ -321,6 +332,7 @@ entregado*/
 	                    metodos.insertarOmodif("CALL imprenta.setearEstadoMatSolComP();");
 	                    metodos.insertarOmodif("CALL imprenta.setearParcial();");
 	                    metodos.insertarOmodif("CALL imprenta.setNoRecibidoMatSC();");
+	                    metodos.insertarOmodif("CALL imprenta.RESTA();");
 	                    setearEstadoDeUnaSC(nroSolicitudCompra);//SI SE RECIBIERON TODOS LOS MATERIALES DARLA POR CERRADA SET=ENTREGADO
 	                   refrescoTablas();
 						}
@@ -378,10 +390,17 @@ entregado*/
 					idmaterial=Integer.parseInt(jTableElementosPapel.getValueAt(jTableElementosPapel.getSelectedRow(), 0).toString());
 					String comentario=null;
 					metodosSql metodos=new metodosSql();
+					Formato f=new Formato(); 
 					comentario=JOptionPane.showInputDialog(null, "Escriba motivo del rechazo");
 					
 metodos.insertarOmodif("update materialesdelasolicituddecompra set `entregado`= 'RECHAZADO', `comentario` = '"+comentario+"' where" +
 		" nroSolicitudDeCompra = '"+Integer.parseInt(getChoiceDescripcionSC().getSelectedItem())+"' and idmatsolcompra = "+idmaterial+";");
+
+
+
+metodos.insertarOmodif("INSERT INTO `imprenta`.`rechazo` (`NroSolicitudCompra`,  `MotivoRechazo`, " +
+		"`idMaterialRechazado`, `Fecha`, `Hora`) VALUES ('"+Integer.parseInt(getChoiceDescripcionSC().getSelectedItem())+"'" +
+				", '"+comentario+"', "+idmaterial+", '"+metodos.dameFechaDeHoy()+"', '"+f.darHoraBonita()+"');");
 refrescoTablas();
 	
 					//dispose();

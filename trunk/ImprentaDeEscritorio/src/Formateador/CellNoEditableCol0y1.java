@@ -10,9 +10,9 @@ public class CellNoEditableCol0y1 extends DefaultTableModel {
 	   {
 	       // Aquí devolvemos true o false según queramos que una celda
 	       // identificada por fila,columna (row,column), sea o no editable
-	       if (column == 0 || column == 1)
+	       
 	          return false;
-	       return true;
+	      
 	   }
 	
 
